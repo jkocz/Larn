@@ -8,22 +8,43 @@ function setGameConfig() {
     // TIME
     TIMELIMIT = ULARN ? 40000 : 30000;
 
-    // DUNGEON AND VOLCANO LEVELS
+    // DUNGEON, VOLCANO and FOREST LEVELS
     MAXLEVEL = ULARN ? 16 : 11;
     MAXVLEVEL = ULARN ? 5 : 3;
+    MAXFLEVEL = FOREST ? 5 : 0;
     DBOTTOM = (MAXLEVEL - 1);
     VBOTTOM = (MAXLEVEL + MAXVLEVEL - 1);
+    FBOTTOM = (MAXLEVEL + MAXVLEVEL + MAXFLEVEL - 1);
 
     // MAZES
-    LEVELS = new Array(MAXLEVEL + MAXVLEVEL);
+    LEVELS = new Array(MAXLEVEL + MAXVLEVEL + MAXFLEVEL);
     MAZES = COMMON_MAZES.concat(ULARN ? ULARN_MAZES : LARN_MAZES);
 
-    // MONSTERS
-    monsterlist = ULARN ? ULARN_monsterlist : LARN_monsterlist;
+    // ITEMS
+    FORTUNES = COMMON_FORTUNES.concat(ULARN ? ULARN_FORTUNES : LARN_FORTUNES);
 
-    // SPELLS
-    splev = ULARN ? ULARN_splev : LARN_splev;
-    spelweird = ULARN ? ULARN_spelweird : LARN_spelweird;
+    // Allow extra MAZES and FORTUNES for the FOREST
+    if (FOREST) {
+      MAZES = MAZES.concat(FOREST_MAZES);
+      FORTUNES = FORTUNES.concat(FOREST_FORTUNES);
+    }
+
+    // SETUP MONSTERS, SPELLS and FORTUNES
+    if (FOREST) {
+      monsterlist = FOREST_monsterlist;
+      splev = FOREST_splev;
+      spelweird = FOREST_spelweird;
+    }
+    else if (ULARN) {
+      monsterlist = ULARN_monsterlist;
+      splev = ULARN_splev;
+      spelweird = ULARN_spelweird;
+    } 
+    else {
+      monsterlist = LARN_monsterlist;
+      splev = LARN_splev;
+      spelweird = LARN_spelweird;
+    }
 
     // BUILDINGS
     STORE_INVENTORY = ULARN ? ULARN_STORE_INVENTORY : LARN_STORE_INVENTORY;
@@ -39,8 +60,7 @@ function setGameConfig() {
 
     if (ULARN) OTRADEPOST.desc = `the Ularn trading Post`;
 
-    // ITEMS
-    FORTUNES = COMMON_FORTUNES.concat(ULARN ? ULARN_FORTUNES : LARN_FORTUNES);
+
 
     if (ULARN) {
         DEATH_REASONS.set(DIED_BOTTOMLESS_TRAPDOOR, `fell through a trap door to HELL`);

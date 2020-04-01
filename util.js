@@ -354,6 +354,7 @@ function compareArrays(a1, a2) {
 
 function localStorageSetObject(key, value) {
   if (ULARN) key += `_ularn`;
+  if (FOREST) key += `_forest`;
   try {
     console.log(`setObject: ${key} ${value}`);
     localStorage.setObject(key, value);
@@ -370,6 +371,7 @@ function localStorageSetObject(key, value) {
 
 function localStorageGetObject(key, failValue) {
   if (ULARN) key += `_ularn`;
+  if (FOREST) key += `_forest`;
   try {
     console.log(`getObject: ${key}`);
     var retrievedObject = localStorage.getObject(key);
@@ -388,6 +390,7 @@ function localStorageGetObject(key, failValue) {
 
 function localStorageRemoveItem(key) {
   if (ULARN) key += `_ularn`;
+  if (FOREST) key += `_forest`;
   try {
     console.log(`removeItem: ${key}`);
     localStorage.removeItem(key);

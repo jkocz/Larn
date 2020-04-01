@@ -485,6 +485,86 @@ function speldamage(x) {
         forgetSpell(PER); /* forget */
       loseint();
       return;
+ 
+      /* ----- LEVEL 7 SPELLS ----- */
+
+    case 39:
+      /* portal */
+      newcavelevel(0);
+      positionplayer();
+      return;
+
+    case 40:
+      /* combine */
+      updateLog(`Enter your items:`);
+      //var indexOne = setCharCallback(spell_combine);
+      //var indexTwo = setCharCallback(spell_combine);
+
+      //var itemOne = player.inventory[indexOne]
+      //var itemTwo = player.inventory[indexTwo]
+      //var itemOne = player.inventory[0]
+      //var itemTwo = player.inventory[1]
+
+      //updateLog(`Do you wish to combine a ${itemOne}`)
+      //updateLog(`and a ${itemTwo}?`)
+        
+      //Print first object, ask for second. 
+      //Print second object, ask if sure.
+      //If two objects of same type, combine stats. 
+      //Add new item to inventory.
+      //Remove old items from inventory.
+      //Chance for fail.
+      //If items of different type:
+      //Some can be combined for special functionality. 
+      //Most fail and are destroyed.
+      return;
+
+    case 41:
+      /* break */
+      let xh = Math.min(player.x + 1, MAXX - 2);
+      let yh = Math.min(player.y + 1, MAXY - 2);
+      for (let i = Math.max(player.x - 1, 1); i <= xh; i++) {
+        for (let j = Math.max(player.y - 1, 1); j <= yh; j++) {
+          let item = itemAt(i, j);
+          if (item.matches(OWALL)) {
+            setItem(i, j, OEMPTY);
+          } else if (item.matches(OSTATUE)) {
+              setItem(i, j, createObject(OBOOK, level));
+          } else if (item.matches(OTHRONE)) {
+              setItem(i, j, OEMPTY);
+          } else if (item.matches(OALTAR)) {
+              setItem(i,j, OEMPTY);
+          } else if (item.matches(OFOUNTAIN)) {
+              setItem(i,j, OEMPTY);
+          }
+          player.level.know[i][j] = KNOWALL; // HACK fix for black tile
+        }
+      }
+      updateWalls(player.x, player.y, 2);
+      omnidirect(x, 500, `is tossed around by the earthquake`);
+      return;
+
+    case 42:
+      /* desiccate */
+      omnidirect(x, 1000, `is mummified by a shrill wind`);
+      return;
+
+    case 43:
+      /* burn */
+      prepare_direction_event(spell_burn);
+      return;
+
+    case 44:
+      /* freeze */
+      prepare_direction_event(spell_freeze);
+      return;
+    
+    case 45:
+      /* ghost */
+      player.updateWTW(50);
+      if (player.INVUN == 0) player.setMoreDefenses(player.MOREDEFENSES + 999);
+      player.INVUN += 50;
+      return;
 
     default:
       nomove = 0;
@@ -655,6 +735,25 @@ function spell_teleport(direction) {
   }
 }
 
+/* Forest of Larn spells */
+//function spell_combine(key) {
+//  no move = 1;
+//  return key
+//}
+
+function spell_burn(direction) {
+  /* upgraded version of BAL. Creates a stream of flame in a direction.
+     Monsters immune to BAL are damaged by this flame. */ 
+  var damage = rnd(1000 + player.LEVEL) + 750;
+  setup_godirect(20, BRN, direction, damage, '<');
+}
+
+function spell_freeze(direction) {
+  /* upgraded version of CLD. Cretes a ray of frost in a direction.
+     Monsters immune to CLD are damaged by this ray. */
+  var damage = rnd(750 + player.LEVEL) + 1000;
+  setup_godirect(20, FRZ, direction, damage, '^');
+}
 
 
 /*
@@ -1203,3 +1302,4 @@ function genmonst(key) {
   updateLog(`  You sense failure!`);
   return 1;
 }
+

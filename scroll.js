@@ -216,6 +216,7 @@ function read_scroll(scroll) {
       player.updateProtectionTime(player.PROTECTIONTIME);
       player.updateWTW(player.WTW); // BUGFIX in v12.4.5
       player.GLOBE <<= 1;
+      player.INVUN <<= 1;
       break;
 
     case 19:

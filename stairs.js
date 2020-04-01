@@ -146,3 +146,12 @@ function act_up_shaft() {
   newcavelevel(0);
   moveNear(OVOLDOWN, false);
 }
+
+
+function oforest() {
+  // instead of stairs down, have a spot on the bottom/top wall that is like the dungeon entrance? 
+  setMazeMode(true);
+  nomove = 1;
+  updateLog(` This is the bit where you enter the forest`);
+  return;
+}

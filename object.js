@@ -320,6 +320,7 @@ const OSCHOOL = new Item(10, `+`, `6`, `+`, `darkorange`, BOLD, `the College of 
 const OENTRANCE = new Item(54, `E`, `8`, `E`, `mediumseagreen`, BOLD, `the dungeon entrance`, NO_CARRY);
 const OVOLDOWN = new Item(55, `V`, `9`, `V`, `crimson`, BOLD, `a volcanic shaft leaning downward`, NO_CARRY);
 /* need amiga */ const OPAD = new Item(100, `@`, `@`, `@`, `lightgreen`, BOLD, `Dealer McDope's Hideout!`, NO_CARRY); // ULARN
+const OFOREST = new Item(101,`F`,`A`,`F`,`darkgreen`,BOLD,`a portal that seems to lead to a forest`,NO_CARRY); // FOREST
 
 // dungeon features
 const OWALL = new Item(21, `▒`, `▒`, `▒`, NO_COLOR, NO_BOLD, `a wall`, NO_CARRY);
@@ -415,7 +416,6 @@ const OORB = new Item(3, `o`, `~`, `o`, `plum`, BOLD, `an orb of enlightenment`,
 /* need amiga */ const OSPHTALISMAN = new Item(87, `.`, `.`, `.`, `skyblue`, BOLD, `The Talisman of the Sphere`, CARRY); // ULARN
 /* need amiga */ const OWWAND = new Item(88, `/`, `/`, `/`, `mediumseagreen`, BOLD, `a wand of wonder`, CARRY); // ULARN
 /* need amiga */ const OPSTAFF = new Item(89, `/`, `/`, `/`, `darkorange`, BOLD, `a staff of power`, CARRY); // ULARN
-
 // drugs
 /* need amiga */ const OSPEED = new Item(95, `:`, `:`, `:`, `paleblue`, BOLD, `some speed`, CARRY); // ULARN
 /* need amiga */ const OACID = new Item(96, `:`, `:`, `:`, `mediumpurple`, BOLD, `some LSD`, CARRY); // ULARN
@@ -423,6 +423,7 @@ const OORB = new Item(3, `o`, `~`, `o`, `plum`, BOLD, `an orb of enlightenment`,
 /* need amiga */ const OSHROOMS = new Item(98, `:`, `:`, `:`, `tan`, BOLD, `some magic mushrooms`, CARRY); // ULARN
 /* need amiga */ const OCOKE = new Item(99, `:`, `:`, `:`, `snow`, BOLD, `some cocaine`, CARRY); // ULARN
 
+const OMARK = new Item(102, '@','@','@',`darkorange`, BOLD,`the mark of Polinneaus`, CARRY); // FOREST
 
 
 function isItem(x, y, compareItem) {
@@ -917,13 +918,22 @@ function oteleport(err) {
       newLevel = DBOTTOM;
     if (newLevel < 1)
       newLevel = 1;
-  } else {
+  } else if (newLevel < MAXVLEVEL) {
     newLevel = rnd(ULARN ? 4 : 3) + level - 2;
     if (newLevel >= MAXLEVEL + MAXVLEVEL)
       newLevel = VBOTTOM;
     if (newLevel < MAXLEVEL)
       newLevel = MAXLEVEL;
+  } else {
+    newLevel = rnd(4) + level - 2;
+    if (newLevel >= MAXLEVEL + MAXVLEVEL + MAXFLEVEL)
+      newLevel = FBOTTOM;
+    if (newLevel < MAXVLEVEL)
+      newLevel = VBOTTOM;
+    if (newLevel < MAXLEVEL)
+      newLevel = MAXLEVEL;  
   }
+
   player.x = rnd(MAXX - 2);
   player.y = rnd(MAXY - 2);
 
@@ -960,6 +970,11 @@ function readbook(book) {
     spell = splev[lev] - 9;
     spellIndex = rnd((spell) ? spell : 1) + 9;
   }
+
+  // JXK: Rather than having a special case for each new spell, new spells 
+  //      could be of a higher level (forest only) and therefore should 
+  //      not be read early. 
+  //      MKW is special, as it is of a lower level than e.g. PER
 
   // original larn doesn't have make wall spell
   if (!ULARN && spellIndex == MKW) {
@@ -1001,6 +1016,7 @@ function adjtime(tim) {
 
   player.HERO = player.HERO > 0 ? Math.max(1, player.HERO - tim) : 0;
   player.GLOBE = player.GLOBE > 0 ? Math.max(1, player.GLOBE - tim) : 0;
+  player.INVUN = player.INVUN > 0 ? Math.max(1, player.INVUN - tim) : 0;
   player.AWARENESS = player.AWARENESS > 0 ? Math.max(1, player.AWARENESS - tim) : 0;
   player.SEEINVISIBLE = player.SEEINVISIBLE > 0 ? Math.max(1, player.SEEINVISIBLE - tim) : 0;
 

@@ -1,6 +1,8 @@
 'use strict';
 
 /* if (ULARN) This game is bad for you. It is evil. It will rot your brain. */
+/* if (FOREST) We decided that we were so far down the rabbit hole we might as
+   well keep digging. */
 
 /* create new game */
 function welcome() {
@@ -775,7 +777,15 @@ function wizardmode(password) {
             player.level.items[ix][--iy] = createObject(wizitem);
         }
       }
-
+      if (FOREST) {
+        // over 100 items now
+        while (wizi < OMARK.id) {
+          var wizitem = itemlist[++wizi];
+          if (wizitem && wizitem != OHOMEENTRANCE && wizitem != OUNKNOWN)
+            player.level.items[ix][--iy] = createObject(wizitem);
+        }
+      }
+        
     }
   } else {
     updateLog(`Sorry`);

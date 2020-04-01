@@ -1,3 +1,11 @@
+JS Forest/U/Larn 12.6.0 (currently pre-alpha)
+------------------------------------------
+
+Added the "Forest of Larn" area. New monsters to defeat, new items and some
+new spells. For the early game, it maintaines the balances of version 12.5.0 
+ULarn/Larn integration.
+
+
 
 JS U/Larn 12.5.0 (currently beta)
 ----------------

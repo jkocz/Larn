@@ -73,6 +73,7 @@ var Player = function Player() {
     this.CANCELLATION = 0;
     this.HASTESELF = 0;
     this.GLOBE = 0;
+    this.INVUN = 0;
     this.SCAREMONST = 0;
     this.HOLDMONST = 0;
     this.TIMESTOP = 0;
@@ -379,7 +380,7 @@ var Player = function Player() {
       if (oldStr != player.STREXTRA) changedSTR = millis();
       if (oldInt != player.INTELLIGENCE) changedINT = millis();
 
-      if (ULARN && item.matches(OLARNEYE) && player.BLINDCOUNT == 0) {
+      if ((ULARN || FOREST) && item.matches(OLARNEYE) && player.BLINDCOUNT == 0) {
         updateLog(`Your sight fades for a moment...`);
         //await nap(1000); // ULARN TODO, eventually
         if (pickup) {
@@ -1148,6 +1149,7 @@ function debug_stats(p, score) {
   s += `STP:   ` + p.TIMESTOP + `\n`;
   s += `WTW:   ` + p.WTW + `\n`;
   s += `PRO3:  ` + p.ALTPRO + `\n`;
+  s += `GHO:   ` + p.INVUN + '\n';
 
   s += `\nCurses:\n`;
   s += `AGGR:  ` + p.AGGRAVATE + `\n`;

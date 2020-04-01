@@ -253,6 +253,7 @@ function loadPlayer(saved) {
   newPlayer.HASTESELF = saved.HASTESELF;
   newPlayer.AGGRAVATE = saved.AGGRAVATE;
   newPlayer.GLOBE = saved.GLOBE;
+  newPlayer.INVUN = saved.INVUN;
   newPlayer.TELEFLAG = saved.TELEFLAG;
   newPlayer.SCAREMONST = saved.SCAREMONST;
   newPlayer.AWARENESS = saved.AWARENESS;

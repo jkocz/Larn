@@ -8,8 +8,10 @@
 var GAMENAME;  // ULARN   /* are we playing larn or ularn? */
 var MAXLEVEL;  // ULARN   /* max # levels in the dungeon  */
 var MAXVLEVEL; // ULARN   /* max # of levels in the temple of the luran */
+var MAXFLEVEL; // FOREST  /* max # of areas in the forest of larn */
 var DBOTTOM;   // ULARN
 var VBOTTOM;   // ULARN
+var FBOTTOM;   // FOREST
 const LOG_SIZE = 5;       /* number of log lines to show */
 const LOG_SAVE_SIZE = 20; /* number of log lines to save */
 const MAXINVEN = 26;      /* max number of items a player can carry */
@@ -18,6 +20,7 @@ const MAXY = 17;          /* maze height */
 const TAXRATE = 1 / 20;   /* amount of taxes owed after winning */
 const MAXPLEVEL = 100;    /* maximum player level allowed  */
 var TIMELIMIT; // ULARN   /* maximum number of moves before the game is called */
+var DHEALTHY = false;  // FOREST  /* Is the initial quest complete? */
 var MAX_BANK_BALANCE;
 
 
@@ -293,4 +296,8 @@ const ULARN_FORTUNES = [
 `Slayer has a grudge`,
 `Wonderful wands prevent you from falling`,
 `It is said that the king is never far from his throne`,
+];
+
+const FOREST_FORTUNES = [
+'Items can be combined, if you have the right attributes',
 ];

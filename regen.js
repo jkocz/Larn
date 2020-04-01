@@ -68,6 +68,7 @@ function regen() {
   if (player.PROTECTIONTIME) player.updateProtectionTime(-1);
 
   if (player.GLOBE)          if (--player.GLOBE <= 0)          player.setMoreDefenses(player.MOREDEFENSES - 10);
+  if (player.INVUN)          if (--player.INVUN <= 0)          player.setMoreDefenses(player.MOREDEFENSES - 999);
   if (player.BLINDCOUNT)     if (--player.BLINDCOUNT <= 0)     updateLog(`The blindness lifts`);
   if (player.CONFUSE)        if (--player.CONFUSE <= 0)        updateLog(`You regain your senses`);
   if (player.HALFDAM)        if (--player.HALFDAM <= 0)        updateLog(`You now feel better`);
