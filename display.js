@@ -43,7 +43,8 @@ function blt() {
 
 function bltDocument() {
   var output = ``;
-  for (var y = 0; y < 24; y++) {
+  //for (var y = 0; y < 24; y++) {
+  for (var y = 0; y < 29; y++) {
     for (var x = 0; x < 80; x++) {
       output += display[x][y] != null ? display[x][y] : ' ';
     } // inner for
@@ -137,9 +138,10 @@ function printStats() {
 function bottomline() {
   cursor(1, 18);
   lprcat(`${player.getStatString()}\n`);
-
+ 
   for (var logindex = LOG_SAVE_SIZE - LOG_SIZE; logindex < LOG.length; logindex++) {
     // less pretty code but more efficient for amiga mode, especially in firefox
+    //lprcat(`index: ${logindex}, length: ${LOG.length}`);
     lprcat(`${LOG[logindex]}`);
     cltoeoln();
     lprcat(`\n`);

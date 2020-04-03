@@ -3,7 +3,8 @@
 var cursorx = 1;
 var cursory = 1;
 
-var display = initGrid(80, 24);
+//var display = initGrid(80, 24);
+var display = initGrid(80, 29);
 
 
 
@@ -134,7 +135,8 @@ function lprc(ch, markup) {
 var HACK_URL_TEXT = `url`;
 
 function os_put_font(ch, x, y, markup) {
-  if (x >= 0 && x < 80 && y >= 0 && y < 24) {
+  //if (x >= 0 && x < 80 && y >= 0 && y < 24) {
+  if (x >= 0 && x < 80 && y >= 0 && y < 29) {
     if (!amiga_mode) {
 
       if (DEBUG_PROXIMITY) {

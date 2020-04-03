@@ -12,7 +12,7 @@ var MAXFLEVEL; // FOREST  /* max # of areas in the forest of larn */
 var DBOTTOM;   // ULARN
 var VBOTTOM;   // ULARN
 var FBOTTOM;   // FOREST
-const LOG_SIZE = 5;       /* number of log lines to show */
+const LOG_SIZE = 10;       /* number of log lines to show */
 const LOG_SAVE_SIZE = 20; /* number of log lines to save */
 const MAXINVEN = 26;      /* max number of items a player can carry */
 const MAXX = 67;          /* maze width */
