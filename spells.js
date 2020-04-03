@@ -17,6 +17,9 @@ function forgetSpell(spellnum) {
 
 var newSpellCode = null;
 
+/* JXK: This is a hack. There are better
+        ways to get this input! */
+var mergeObjectIndex = -1;
 
 
 function pre_cast() {
@@ -496,27 +499,8 @@ function speldamage(x) {
 
     case 40:
       /* combine */
-      updateLog(`Enter your items:`);
-      //var indexOne = setCharCallback(spell_combine);
-      //var indexTwo = setCharCallback(spell_combine);
-
-      //var itemOne = player.inventory[indexOne]
-      //var itemTwo = player.inventory[indexTwo]
-      //var itemOne = player.inventory[0]
-      //var itemTwo = player.inventory[1]
-
-      //updateLog(`Do you wish to combine a ${itemOne}`)
-      //updateLog(`and a ${itemTwo}?`)
-        
-      //Print first object, ask for second. 
-      //Print second object, ask if sure.
-      //If two objects of same type, combine stats. 
-      //Add new item to inventory.
-      //Remove old items from inventory.
-      //Chance for fail.
-      //If items of different type:
-      //Some can be combined for special functionality. 
-      //Most fail and are destroyed.
+      setCharCallback(spell_combine);
+      updateLog(`Enter your items (press <b>space</b> to show):`);
       return;
 
     case 41:
@@ -736,10 +720,61 @@ function spell_teleport(direction) {
 }
 
 /* Forest of Larn spells */
-//function spell_combine(key) {
-//  no move = 1;
-//  return key
-//}
+function spell_combine(index) {
+  //no move = 1;
+  if (index == '*' || index == ' ' || index == 'I') {
+    if (mazeMode) {
+      showinventory(true,spell_combine,showall, false, false, true); 
+    } else {
+      setMazeMode(true);
+    }
+    return 0;
+  }
+
+  if (index == '.') {
+    // Can not yet combine gold
+    setMazeMode(true);
+    updateLog(`You can't combine gold! `);    
+
+    //updateLog(`How much gold will you use? `);
+    // Lose the amount of gold
+    return 1;
+  }
+        
+  var useindex = getIndexFromChar(index);
+  var item = player.inventory[useindex];
+
+  if (!item) {
+    if (useindex >= 0 && useindex < 26) {
+      updateLog(`  You do not have item ${index}`);
+    }
+    if (useindex <= -1) {
+      appendLog(` cancelled`);
+    }
+    setMazeMode(true);
+    return 1;
+  }
+
+
+  if (mergeObjectIndex == -1) {
+     mergeObjectIndex = useindex;
+  }
+  else {
+    var itemA = player.inventory[mergeObjectIndex];
+    updateLog(` The ${itemA} and ${item} have been combined!`);
+
+    // player gains new item
+    // player loses current items
+
+    // reset the merge index for the next time
+    
+    mergeObjectIndex = -1;
+    setMazeMode(true);
+    return 1;
+  } 
+ 
+  return 0;
+}
 
 function spell_burn(direction) {
   /* upgraded version of BAL. Creates a stream of flame in a direction.
