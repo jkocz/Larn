@@ -17,8 +17,9 @@ function forgetSpell(spellnum) {
 
 var newSpellCode = null;
 
-/* JXK: This is a hack. There are better
-        ways to get this input! */
+/* JXK: This is a hack for the "combine" spell. 
+        There are nicer ways to get this input.
+        TODO: Update! */
 var mergeObjectIndex = -1;
 
 

@@ -248,7 +248,17 @@ const FOREST_monsterlist = [
   new Monster(OEMPTY.char, `type VI demon lord`,   17,  -65,  45, 13,  30,    0,   400,  175000),
   new Monster(OEMPTY.char, `type VII demon lord`,  18,  -70,  50,  6,  32,    0,   450,  200000),
   new Monster(OEMPTY.char, `demon prince`,         19, -100,  80,  6,  40,    0,  1000,  500000),
-  new Monster(OEMPTY.char, `God of Hellfire`,      20, -127, 127,  6, 100,    0, 32767, 1000000)
+  new Monster(OEMPTY.char, `God of Hellfire`,      20, -127, 127,  6, 100,    0, 32767, 1000000),
+  // JXK: Starting values only. All these attributes need to be reviewed for balance. 
+  new Monster(`!`, `Earth Guardian`,               22,  -80,  80, 6,  10,     0, 50000, 10000000),
+  new Monster(`!`, `Air Guardian`,                 22,  -50,  50, 6,  50,     0, 30000, 10000000),
+  new Monster(`!`, `Fire Guardian`,                22,  -50,  50, 6,  50,     0, 30000, 10000000),
+  new Monster(`!`, `Water Guardian`,               22,  -50,  50, 6,  50,     0, 30000, 10000000),
+  new Monster(`!`, `Time Guardian`,                23,  -50,  50, 6, 110,     0, 30000, 10000000),
+  new Monster(`!`, `Ethereal Guardian`,            23,  -150, 50, 6, 110,     0, 10000, 20000000),
+  //
+  new Monster(`*`, `Apprentice`,                   24,  -200,150,10, 120,     0, 50000, 30000000),
+  new Monster(`#`, `Mastern`,                      25,  -250,200,15, 120,     0,100000, 50000000),
 ];
 
 const demonchar = [`1`,`2`,`3`,`4`,`5`,`6`,`7`,`9`,`0`];
@@ -316,3 +326,11 @@ const REDDRAGON = 56;
 const DEMONLORD = 57;
 const DEMONPRINCE = 64;
 const LUCIFER = 65;
+const EARTHGUARDIAN = 66;
+const AIRGUARDIAN = 67;
+const FIREGUARDIAN = 68;
+const WATERGUARDIAN = 69;
+const TIMEGUARDIAN = 70;
+const ETHEREALGUARDIAN = 71;
+const APPRENTICE = 72;
+const MASTER = 73;
