@@ -60,6 +60,9 @@ function createLevelNames() {
   for (let i = 0; i < MAXVLEVEL; i++) {
     LEVELNAMES.push(`V${i+1}`);
   }
+  for (let i = 0; i < MAXFLEVEL; i++) {
+    LEVELNAMES.push(`F${i+1}`);
+  }
 }
 
 

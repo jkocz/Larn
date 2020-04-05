@@ -55,7 +55,7 @@ function enter() {
     return;
   }
   if (building.matches(OFOREST)) {
-    oforest();
+    forest();
     return;
   }
 
@@ -94,9 +94,24 @@ function dungeon() {
   showcell(player.x, player.y); /* to show around player */
 }
 
-
-
-
+/*
+ *  
+ *
+ * Forest Entrance
+ *
+ *
+ */
+function forest() {
+  setMazeMode(true);
+  // place player in front of the entrance of the forest. 
+  updateLog(`You enter the forest!`);
+  player.x = 33;
+  player.y = MAXY - 2;
+  newcavelevel(21);
+  player.level.know[33][MAXY - 1] = KNOWALL;
+  player.level.monsters[33][MAXY - 1] = null;
+  showcell(player.x, player.y);
+}
 
 
 

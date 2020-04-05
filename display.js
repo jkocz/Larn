@@ -359,6 +359,12 @@ function moveplayer(dir) {
     return 0;
   }
 
+  if (item.matches(OFORESTENTRANCE)) {
+    newcavelevel(0);
+    moveNear(OFOREST, false);
+    return 0;
+  }
+
   /* hit a monster */
   if (monster) {
     hitmonster(k, m);

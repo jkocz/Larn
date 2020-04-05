@@ -378,6 +378,7 @@ function makeobject(depth) {
     fillroom(OHOME, 0);      /*  the players home & family   */
     fillroom(OTRADEPOST, 0); /*  the trading post            */
     fillroom(OLRS, 0);       /*  the larn revenue service    */
+
     return;
   }
 
@@ -385,6 +386,10 @@ function makeobject(depth) {
     LEVELS[depth].items[Math.floor(MAXX / 2)][MAXY - 1] = createObject(OHOMEENTRANCE);
   }
 
+  if (depth == (MAXLEVEL + MAXVLEVEL)) {
+    LEVELS[depth].items[Math.floor(MAXX / 2)][MAXY - 1] = createObject(OFORESTENTRANCE);
+    LEVELS[depth].items[Math.floor(MAXX / 2)][0] = createObject(OFORESTDOWN);
+  }
   if (depth == MAXLEVEL) fillroom(OVOLUP, 0); /* volcano shaft up from the temple */
 
   if ((depth > 0) &&                         /* no stairs on home level */
@@ -393,8 +398,17 @@ function makeobject(depth) {
     fillroom(OSTAIRSDOWN, 0);
   }
 
-  if ((depth > 1) && (depth != MAXLEVEL)) {
+  if ((depth > 1) && (depth != MAXLEVEL) && (depth < MAXLEVEL + MAXVLEVEL)) {
     fillroom(OSTAIRSUP, 0);
+  }
+
+  if ((depth > MAXLEVEL + MAXVLEVEL) && (depth < FBOTTOM)) {
+    LEVELS[depth].items[Math.floor(MAXX / 2)][MAXY - 1] = createObject(OFORESTUP);
+    LEVELS[depth].items[Math.floor(MAXX / 2)][0] = createObject(OFORESTDOWN);
+  }
+
+  if ((depth > MAXLEVEL + MAXVLEVEL) && (depth == FBOTTOM)) {
+    LEVELS[depth].items[Math.floor(MAXX / 2)][MAXY - 1] = createObject(OFORESTUP);
   }
 
   if (ULARN) {

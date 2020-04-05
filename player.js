@@ -26,7 +26,8 @@ var Player = function Player() {
     // bottom line stats
     this.SPELLS = 1;
     this.SPELLMAX = 1;
-    this.AC = 0;
+    this.AC = 0; 
+    this.AC = 999;
     this.WCLASS = 0;
     this.LEVEL = 1; /* experience level, not cave level */
     this.EXPERIENCE = 0;
@@ -778,6 +779,9 @@ Gold: ${pad(Number(this.GOLD).toLocaleString(),1,changedGold)}            `;
       this.ramboflag = true;
       selected = true;
     }
+
+    /* 12.5.0 fix for ularn: potion of strength defaulted to min 12,
+              now default to the starting strength of the character 
 
     /* 12.5.0 fix for ularn: potion of strength defaulted to min 12,
               now default to the starting strength of the character 

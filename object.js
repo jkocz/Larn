@@ -321,6 +321,9 @@ const OENTRANCE = new Item(54, `E`, `8`, `E`, `mediumseagreen`, BOLD, `the dunge
 const OVOLDOWN = new Item(55, `V`, `9`, `V`, `crimson`, BOLD, `a volcanic shaft leaning downward`, NO_CARRY);
 /* need amiga */ const OPAD = new Item(100, `@`, `@`, `@`, `lightgreen`, BOLD, `Dealer McDope's Hideout!`, NO_CARRY); // ULARN
 const OFOREST = new Item(101,`F`,`A`,`F`,`darkgreen`,BOLD,`a portal that seems to lead to a forest`,NO_CARRY); // FOREST
+const OFORESTENTRANCE = new Item(102, OEMPTY.char, `8`, OEMPTY.char, NO_COLOR, NO_BOLD, `the exit to the home level`, NO_CARRY);
+const OFORESTDOWN = new Item(103, OEMPTY.char, `8`, OEMPTY.char, NO_COLOR, NO_BOLD, `go futher into the forest?`, NO_CARRY);
+const OFORESTUP = new Item(104, OEMPTY.char, `8`, OEMPTY.char, NO_COLOR, NO_BOLD, `go back the way you came?`, NO_CARRY);
 
 // dungeon features
 const OWALL = new Item(21, `▒`, `▒`, `▒`, NO_COLOR, NO_BOLD, `a wall`, NO_CARRY);
@@ -423,7 +426,7 @@ const OORB = new Item(3, `o`, `~`, `o`, `plum`, BOLD, `an orb of enlightenment`,
 /* need amiga */ const OSHROOMS = new Item(98, `:`, `:`, `:`, `tan`, BOLD, `some magic mushrooms`, CARRY); // ULARN
 /* need amiga */ const OCOKE = new Item(99, `:`, `:`, `:`, `snow`, BOLD, `some cocaine`, CARRY); // ULARN
 
-const OMARK = new Item(102, '@','@','@',`darkorange`, BOLD,`the mark of Polinneaus`, CARRY); // FOREST
+const OMARK = new Item(105, '@','@','@',`darkorange`, BOLD,`the mark of Polinneaus`, CARRY); // FOREST
 
 
 function isItem(x, y, compareItem) {
@@ -700,6 +703,16 @@ function lookforobject(do_ident, do_pickup, do_action) {
     updateLog(`You have found ${item}`);
     oelevator(-1);
   }
+  // FOREST
+  else if (item.matches(OFORESTUP)) {
+    updateLog(`You go back the way to came`);
+    oforest(0);
+  }
+  else if (item.matches(OFORESTDOWN)) {
+    updateLog(`You go deeper into the forest`);
+    oforest(1);
+  }
+
   //
   else if (item.matches(OBRASSLAMP)) {
     updateLog(`You find ${item}. [<b>R</b> to rub]`);
@@ -876,7 +889,23 @@ function oelevator(direction) {
   positionplayer();
 }
 
-
+function oforest(direction) {
+  if (direction == 1)  {
+    //setMazeMode(true);
+    player.x = 33;
+    player.y = MAXY - 2;
+    newcavelevel(level+1);
+    //player.level.know[33][MAXY - 1] = KNOWALL;
+    //player.level.monsters[33][MAXY - 1] = null;
+    //showcell(player.x, player.y);
+  }
+  else {
+    //setMazeMode(true);
+    player.x = 33;
+    player.y = 1;
+    newcavelevel(level-1);
+  }
+}
 
 function forget() {
   setItem(player.x, player.y, OEMPTY);

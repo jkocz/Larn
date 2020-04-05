@@ -250,6 +250,7 @@ const FOREST_monsterlist = [
   new Monster(OEMPTY.char, `demon prince`,         19, -100,  80,  6,  40,    0,  1000,  500000),
   new Monster(OEMPTY.char, `God of Hellfire`,      20, -127, 127,  6, 100,    0, 32767, 1000000),
   // JXK: Starting values only. All these attributes need to be reviewed for balance. 
+  // JXK: Do we want them to have the benefits of demons, or should they move up? 
   new Monster(`!`, `Earth Guardian`,               22,  -80,  80, 6,  10,     0, 50000, 10000000),
   new Monster(`!`, `Air Guardian`,                 22,  -50,  50, 6,  50,     0, 30000, 10000000),
   new Monster(`!`, `Fire Guardian`,                22,  -50,  50, 6,  50,     0, 30000, 10000000),
@@ -258,7 +259,7 @@ const FOREST_monsterlist = [
   new Monster(`!`, `Ethereal Guardian`,            23,  -150, 50, 6, 110,     0, 10000, 20000000),
   //
   new Monster(`*`, `Apprentice`,                   24,  -200,150,10, 120,     0, 50000, 30000000),
-  new Monster(`#`, `Mastern`,                      25,  -250,200,15, 120,     0,100000, 50000000),
+  new Monster(`#`, `Master`,                       25,  -250,200,15, 120,     0,100000, 50000000)
 ];
 
 const demonchar = [`1`,`2`,`3`,`4`,`5`,`6`,`7`,`9`,`0`];
