@@ -158,6 +158,7 @@ function botside() {
   botsideline(player.CHARMCOUNT, `Charm`, line++, changedCharmCount);
   botsideline(player.TIMESTOP, `Time Stop`, line++, changedTimeStop);
   botsideline(player.HOLDMONST, `Hold Monst`, line++, changedHoldMonst);
+  botsideline(player.STOPMONST, `Stop Monst`, line++, changedStopMonst);
   botsideline(player.GIANTSTR, `Giant Str`, line++, changedGiantStr);
   botsideline(player.FIRERESISTANCE, `Fire Resit`, line++, changedFireResistance);
   botsideline(player.DEXCOUNT, `Dexterity`, line++, changedDexCount);

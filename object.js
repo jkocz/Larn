@@ -1011,6 +1011,18 @@ function readbook(book) {
     return;
   }
 
+  if (FOREST) {
+    updateLog(`Playing forest spells`);
+    if (lev > 40) {
+      updateLog(`Spell index: ${lev}`);
+      spellIndex = lev;
+    } 
+    else {
+      updateLog(`Spell index: ${lev}`);
+    }
+  } 
+ 
+
   learnSpell(spelcode[spellIndex]);
   updateLog(`Spell '<b>${spelcode[spellIndex]}</b>': ${spelname[spellIndex]}`);
   updateLog(`  ${speldescript[spellIndex]}`);
@@ -1031,6 +1043,7 @@ function adjtime(tim) {
   if (player.CHARMCOUNT) player.updateCharmCount(-tim);
   // stop time
   if (player.HOLDMONST) player.updateHoldMonst(-tim);
+  if (player.STOPMONST) player.updateStopMonst(-tim);
   if (player.GIANTSTR) player.updateGiantStr(-tim);
   if (player.FIRERESISTANCE) player.updateFireResistance(-tim);
   if (player.DEXCOUNT) player.updateDexCount(-tim);

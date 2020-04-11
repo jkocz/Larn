@@ -543,8 +543,13 @@ function speldamage(x) {
       /* freeze */
       prepare_direction_event(spell_freeze);
       return;
-    
-    case 45:
+
+    case 45: 
+      /* time stop monster */
+      player.updateStopMonst(rnd(20) + (playerLev << 1));
+      return;
+
+    case 46:
       /* ghost */
       player.updateWTW(50);
       if (player.INVUN == 0) player.setMoreDefenses(player.MOREDEFENSES + 999);

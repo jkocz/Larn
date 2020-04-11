@@ -23,8 +23,12 @@ function movemonst() {
   // /* move the spheres of annihilation if any */
   // movsphere();
 
+  /* no action if monsters are stopped */
+  if (player.STOPMONST) return;
+
   /* no action if monsters are held */
   if (player.HOLDMONST) return;
+
 
   if (player.AGGRAVATE) {
     /* determine window of monsters to move */

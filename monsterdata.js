@@ -258,8 +258,8 @@ const FOREST_monsterlist = [
   new Monster(`!`, `Time Guardian`,                23,  -50,  50, 6, 110,     0, 30000, 10000000),
   new Monster(`!`, `Ethereal Guardian`,            23,  -150, 50, 6, 110,     0, 10000, 20000000),
   //
-  new Monster(`*`, `Apprentice`,                   24,  -200,150,10, 120,     0, 50000, 30000000),
-  new Monster(`#`, `Master`,                       25,  -250,200,15, 120,     0,100000, 50000000)
+  new Monster(`*`, `Apprentice`,                   24,  -200,150, 6, 120,     0, 50000, 30000000),
+  new Monster(`#`, `Master`,                       25,  -250,200, 6, 120,     0,100000, 50000000)
 ];
 
 const demonchar = [`1`,`2`,`3`,`4`,`5`,`6`,`7`,`9`,`0`];

@@ -77,6 +77,7 @@ var Player = function Player() {
     this.INVUN = 0;
     this.SCAREMONST = 0;
     this.HOLDMONST = 0;
+    this.STOPMONST = 0;
     this.TIMESTOP = 0;
     this.WTW = 0;
     this.ALTPRO = 0;
@@ -504,6 +505,20 @@ var Player = function Player() {
       }
       return this.HOLDMONST;
     };
+    this.updateStopMonst = function(x) {
+      var prev = this.STOPMONST;
+      this.STOPMONST = Math.max(0, this.STOPMONST + x);
+      changedStopMonst = getUpdateTime(prev, x, this.STOPMONST, changedStopMonst);
+      /* 12.4.5
+      fix for last hit monster chasing the player from across the maze
+      caused by hitting monster, holding, then running away
+      */
+      if (x > 0) {
+        lasthx = 0;
+        lasthy = 0;
+      }
+      return this.STOPMONST;
+    };
     this.updateGiantStr = function(x) {
       var prev = this.GIANTSTR;
       this.GIANTSTR = Math.max(0, this.GIANTSTR + x);
@@ -833,6 +848,7 @@ var changedUndeadPro = 0;
 var changedSpiritPro = 0;
 var changedCharmCount = 0;
 var changedTimeStop = 0;
+var changedStopMonst = 0;
 var changedHoldMonst = 0;
 var changedGiantStr = 0;
 var changedFireResistance = 0;
@@ -1150,6 +1166,7 @@ function debug_stats(p, score) {
   s += `GLO:   ` + p.GLOBE + `\n`;
   s += `SCA:   ` + p.SCAREMONST + `\n`;
   s += `HLD:   ` + p.HOLDMONST + `\n`;
+  s += `MST:   ` + p.STOPMONST + `\n`;
   s += `STP:   ` + p.TIMESTOP + `\n`;
   s += `WTW:   ` + p.WTW + `\n`;
   s += `PRO3:  ` + p.ALTPRO + `\n`;

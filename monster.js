@@ -114,7 +114,7 @@ Monster.prototype = {
   },
 
   isDemon: function () {
-    return this.arg >= DEMONLORD;
+    return (this.arg >= DEMONLORD && this.arg <= LUCIFER);
   },
 
   initInventory: function () {
@@ -143,6 +143,24 @@ Monster.prototype = {
       case LEPRECHAUN:
         if (rnd(101) >= 75) this.pickup(createGem());
         if (rnd(5) == 1) this.addInventory();
+        return;
+      case EARTHGUARDIAN:
+        this.pickup(createObject(OBOOK,41));
+        return;
+      case AIRGUARDIAN:
+        this.pickup(createObject(OBOOK,42));
+        return;
+      case FIREGUARDIAN:
+        this.pickup(createObject(OBOOK,43));
+        return;
+      case WATERGUARDIAN:
+        this.pickup(createObject(OBOOK,44));
+        return;
+      case TIMEGUARDIAN:
+        this.pickup(createObject(OBOOK,45));
+        return;
+      case ETHEREALGUARDIAN:
+        this.pickup(createObject(OBOOK,46));
         return;
     }
   },
@@ -880,6 +898,7 @@ function hitm(x, y, damage) {
   lasthy = y;
   monster.awake = true; /* make sure hitting monst breaks stealth condition */
   player.updateHoldMonst(-player.HOLDMONST); /* hit a monster breaks hold monster spell  */
+  // JXK: STOPMONST Note: hitting a stopped monster (mst) does NOT break the monster out
 
   /* if a dragon and orb of dragon slaying */
   if (isCarrying(OORBOFDRAGON)) {

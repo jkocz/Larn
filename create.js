@@ -74,15 +74,21 @@ function initNewLevel(depth) {
 }
 
 
-
-function loadcanned() {
+function loadcanned(d=0) {
   var mazeindex;
 
-  do {
-    mazeindex = rund(MAZES.length);
-  } while (USED_MAZES.indexOf(mazeindex) > -1);
-  USED_MAZES.push(mazeindex);
-  //debug(`loadcanned: used: ` + USED_MAZES);
+  if (d <= VBOTTOM) {
+    do {
+      mazeindex = rund(MAZES.length);
+    } while (USED_MAZES.indexOf(mazeindex) > -1);
+    USED_MAZES.push(mazeindex);
+    //debug(`loadcanned: used: ` + USED_MAZES);
+  }
+  else {
+    // We're in the Forest, only use Forest levels
+    mazeindex = rInterval(VBOTTOM+1, MAZES.length-1); 
+    USED_MAZES.push(mazeindex);
+  }
   return MAZES[mazeindex];
 }
 
@@ -90,7 +96,8 @@ function loadcanned() {
 
 function cannedlevel(depth) {
 
-  var canned = loadcanned();
+  // JXK: Make sure for forest only uses the maze, no placement
+  var canned = loadcanned(depth);
 
   var items = player.level.items;
   var monsters = player.level.monsters;
@@ -137,7 +144,7 @@ function cannedlevel(depth) {
 /* subroutine to make the caverns for a given level. only walls are made */
 function makemaze(k) {
   var useCanned = false;
-  if (k == DBOTTOM || k == VBOTTOM) {
+  if (k == DBOTTOM || k >= VBOTTOM) {
     useCanned = true;
   }
   else if (k > 1) {
@@ -507,9 +514,9 @@ function makeobject(depth) {
     created |= createArtifact(OHANDofFEAR,   player.HAND,         !created && rnd(120) < 8);
     created |= createArtifact(OORB,          player.ORB,          !created && rnd(120) < 8);
     created |= createArtifact(OELVENCHAIN,   player.ELVEN,        !created && rnd(120) < 8);
-    created |= createArtifact(OSLAYER,       player.SLAY,         !created && depth >= 10 && rnd(100) > (85 - (depth - 10)));
+    created |= createArtifact(OSLAYER,       player.SLAY,         !created && depth >= 10 && depth <= VBOTTOM && rnd(100) > (85 - (depth - 10)));
     created |= createArtifact(OVORPAL,       player.VORPAL,       !created && rnd(120) < 8);
-    created |= createArtifact(OPSTAFF,       player.STAFF,        !created && depth >= 8 && rnd(100) > (85 - (depth - 10)));
+    created |= createArtifact(OPSTAFF,       player.STAFF,        !created && depth >= 8 && depth <= VBOTTOM && rnd(100) > (85 - (depth - 10)));
   }
   else {
     createArtifact(OORBOFDRAGON,     player.SLAYING,      rnd(151) < 3);
@@ -698,7 +705,7 @@ function sethp(flg) {
     ** level V4 gets 4 demon princes
     ** level V5 gets 5 demon princes
     */
-    else if (level >= MAXLEVEL) {
+    else if ((level >= MAXLEVEL) && (level <= VBOTTOM)) {
       numdemons = level - MAXLEVEL + 1;
       for (let j = 1 ; j <= numdemons ; j++){
         if (!fillmonst(DEMONPRINCE)) {
@@ -706,6 +713,41 @@ function sethp(flg) {
         }
       }
     }
+    /*
+    ** level F3 gets Earth Guardian 
+    ** level F4 gets Air Guardian
+    ** level F5 gets Fire Guardian
+    ** level F6 gets Water Guardian
+    ** level F7 gets Time Guardian
+    ** level F8 gets Ethereal Guardian
+    ** level F9 gets Apprentice
+    ** level F10 gets Master
+    */
+    else if (level == FBOTTOM) {
+       fillmonst(MASTER)
+    }
+    else if (level == FBOTTOM - 1) {
+       fillmonst(APPRENTICE)
+    }
+    else if (level == FBOTTOM - 2) {
+      fillmonst(ETHEREALGUARDIAN)
+    }
+    else if (level == FBOTTOM - 3) {
+       fillmonst(TIMEGUARDIAN)
+    }
+    else if (level == FBOTTOM - 4) {
+       fillmonst(WATERGUARDIAN)
+    }
+    else if (level == FBOTTOM - 5) {
+       fillmonst(FIREGUARDIAN)
+    }
+    else if (level == FBOTTOM - 6) {
+       fillmonst(AIRGUARDIAN)
+    }
+    else if (level == FBOTTOM - 7) {
+       fillmonst(EARTHGUARDIAN)
+    }
+    
   }
 
 }

@@ -54,6 +54,7 @@ function regen() {
   if (player.SPIRITPRO)      player.updateSpiritPro(-1);
   if (player.CHARMCOUNT)     player.updateCharmCount(-1);
   if (player.HOLDMONST)      player.updateHoldMonst(-1);
+  if (player.STOPMONST)      player.updateStopMonst(-1);
   if (player.FIRERESISTANCE) player.updateFireResistance(-1);
   if (player.SCAREMONST)     player.updateScareMonst(-1);
   if (player.HASTESELF)      player.updateHasteSelf(-1);

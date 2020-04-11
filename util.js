@@ -17,6 +17,11 @@ function rund(value) {
 }
 
 
+function rInterval(min, max) {  
+  return Math.floor(Math.random() * (max - min + 1) + min);
+}
+
+
 
 /*
  *  vxy(x,y)       Routine to verify/fix coordinates for being within bounds
