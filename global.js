@@ -113,6 +113,8 @@ function recalc() {
     if (weapon.matches(OSLAYER)) player.WCLASS = 30 + extra;
     if (weapon.matches(OSWORD)) player.WCLASS = 32 + extra;
     if (weapon.matches(OHAMMER)) player.WCLASS = 35 + extra;
+    if (weapon.matches(ODESTROYER)) player.WCLASS = 500 + extra;
+    if (weapon.matches(OFLAWLESS)) player.WCLASS = 1000 + extra;
   }
   player.WCLASS += player.MOREDAM;
 

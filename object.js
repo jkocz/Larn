@@ -199,6 +199,8 @@ Item.prototype = {
     weapon |= this.matches(OVORPAL);
     weapon |= this.matches(OSLAYER);
     weapon |= this.matches(OPSTAFF);
+    weapon |= this.matches(ODESTROYER);
+    weapon |= this.matches(OFLAWLESS);
     return weapon;
   },
 
@@ -381,6 +383,10 @@ const OSWORDofSLASHING = new Item(26, `)`, `)`, `)`, `cornflowerblue`, BOLD, `a 
 const OHAMMER = new Item(27, `)`, `)`, `)`, `darkgoldenrod`, BOLD, `Bessman's flailing hammer`, CARRY);
 /* need amiga */ const OVORPAL = new Item(90, `)`, `)`, `)`, `darkorange`, BOLD, `the Vorpal Blade`, CARRY); // ULARN
 /* need amiga */ const OSLAYER = new Item(91, `)`, `)`, `)`, `crimson`, BOLD, `Slayer`, CARRY); // ULARN
+/* need amiga */ const ODESTROYER = new Item(105, `)`, `)`, `)`, `darkgray`, BOLD, `The Destroyer`, CARRY); // FOREST
+/* need amiga */ const OFLAWLESS = new Item(106, `)`, `)`, `)`, `black`, BOLD, `Flawless`, CARRY); // FOREST
+ 
+ 
 
 // armour
 const OLEATHER = new Item(25, `[`, `[`, `[`, `lightgray`, BOLD, `leather armor`, CARRY);
@@ -426,7 +432,7 @@ const OORB = new Item(3, `o`, `~`, `o`, `plum`, BOLD, `an orb of enlightenment`,
 /* need amiga */ const OSHROOMS = new Item(98, `:`, `:`, `:`, `tan`, BOLD, `some magic mushrooms`, CARRY); // ULARN
 /* need amiga */ const OCOKE = new Item(99, `:`, `:`, `:`, `snow`, BOLD, `some cocaine`, CARRY); // ULARN
 
-const OMARK = new Item(105, '@','@','@',`darkorange`, BOLD,`the mark of Polinneaus`, CARRY); // FOREST
+const OMARK = new Item(106, '@','@','@',`darkorange`, BOLD,`the mark of Polinneaus`, CARRY); // FOREST
 
 
 function isItem(x, y, compareItem) {

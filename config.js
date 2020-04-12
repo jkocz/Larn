@@ -34,20 +34,22 @@ function setGameConfig() {
       monsterlist = FOREST_monsterlist;
       splev = FOREST_splev;
       spelweird = FOREST_spelweird;
+      STORE_INVENTORY = FOREST_STORE_INVENTORY;
     }
     else if (ULARN) {
       monsterlist = ULARN_monsterlist;
       splev = ULARN_splev;
       spelweird = ULARN_spelweird;
+      STORE_INVENTORY = ULARN_STORE_INVENTORY;
     } 
     else {
       monsterlist = LARN_monsterlist;
       splev = LARN_splev;
       spelweird = LARN_spelweird;
+      STORE_INVENTORY = LARN_STORE_INVENTORY;
     }
 
     // BUILDINGS
-    STORE_INVENTORY = ULARN ? ULARN_STORE_INVENTORY : LARN_STORE_INVENTORY;
     MAXITM = STORE_INVENTORY.length;
 
     MAX_BANK_BALANCE = ULARN ? 1000000 : 500000;

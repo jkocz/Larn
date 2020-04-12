@@ -767,13 +767,36 @@ function spell_combine(index) {
   }
   else {
     var itemA = player.inventory[mergeObjectIndex];
+
     updateLog(` The ${itemA} and ${item} have been combined!`);
 
-    // player gains new item
-    // player loses current items
+    if (itemA.id == item.id) {
+      // create new item with combined stats
+      itemA.arg += item.arg; 
+      destroyInventory(item);
+      updateLog(` You have created a ${itemA}`);
+    }
+    else if (((itemA.id == OSLAYER.id)  && (item.id == OLANCE.id)) || ((itemA.id == OLANCE.id) && (item.id == OSLAYER.id))) {
+      updateLog(` You have created The Destroyer!`);
+      destroyInventory(itemA);
+      destroyInventory(item);
+      take(createObject(ODESTROYER));
+      // produce destroyer /
+    } 
+    else if (((itemA.id == ODESTROYER.id) && (item.id == OSWORDofSLASHING.id)) || ((item.id == ODESTROYER.id) && (itemA.id == OSWORDofSLASHING.id))) {
+      updateLog(` You have created Flawless!`);
+      destroyInventory(itemA);
+      destroyInventory(item);
+      take(createObject(OFLAWLESS)); 
+    }
+    else {
+      updateLog(` The items spark and explode!`);
+      // destroy both items
+      destroyInventory(itemA);
+      destroyInventory(item);
+    }
 
     // reset the merge index for the next time
-    
     mergeObjectIndex = -1;
     setMazeMode(true);
     return 1;
