@@ -85,9 +85,24 @@ function cast(key) {
   if (codeCheck !== newSpellCode) {
     return codeCheck;
   }
-  player.setSpells(player.SPELLS - 1);
-  player.SPELLSCAST++;
   var spellnum = player.knownSpells.indexOf(newSpellCode.toLowerCase());
+  if (spellnum < 39) {
+    player.setSpells(player.SPELLS - 1);
+  }
+  else {
+    // casting a high level spell
+    // if has less than 10 spells, cannot cast
+    if (player.SPELLS - 10 < 0) {
+      nomove = 0;
+      updateLog(` You do not have enough energy `);
+      newSpellCode = null;
+      return 1;
+    }
+    else {
+      player.setSpells(player.SPELLS - 10);
+    }
+  }
+  player.SPELLSCAST++;
   if (spellnum >= 0) {
     speldamage(spellnum);
   } else {
@@ -555,7 +570,12 @@ function speldamage(x) {
       if (player.INVUN == 0) player.setMoreDefenses(player.MOREDEFENSES + 999);
       player.INVUN += 50;
       return;
-
+    
+    case 47:
+      /* rebound */
+      player.REBOUND += 50;
+      return;
+    
     default:
       nomove = 0;
       appendLog(`  spell ${x} not available!`);
@@ -900,7 +920,12 @@ function nospell(x, monst) {
  */
 function fullhit(xx) {
   if (xx < 0 || xx > 20) return (0); /* fullhits are out of range */
-  if (player.WIELD && player.WIELD.matches(OLANCE)) return (10000); /* lance of death */
+  if (level <= VBOTTOM) {
+    if (player.WIELD && player.WIELD.matches(OLANCE)) return (10000); /* lance of death */
+  }
+  else {
+    if (player.WIELD && player.WIELD.matches(OLANCE)) return (300); /* the monsters in the forest are tough! */
+  }
   var i = xx * ((player.WCLASS >> 1) + player.STRENGTH + player.STREXTRA - getDifficulty() - 12 + player.MOREDAM);
   return ((i >= 1) ? i : xx);
 }

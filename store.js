@@ -1010,7 +1010,7 @@ async function ohome() {
       if (FOREST) {
         DHEALTHY = true;
         // Reset time limit
-        TIMELIMIT += 40000;
+        TIMELIMIT += 10000;
         // Draw forest entrance  on home screen
         fillroom(OFOREST,0);    
         lprcat(`\n\n\tPress <b>escape</b> to leave: `);

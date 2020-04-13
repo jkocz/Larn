@@ -162,6 +162,12 @@ Monster.prototype = {
       case ETHEREALGUARDIAN:
         this.pickup(createObject(OBOOK,46));
         return;
+      case APPRENTICE:
+        this.pickup(createObject(OBOOK,47));
+        return;
+      case MASTER:
+        this.pickup(createObject(OMARK));
+        return;
     }
   },
 

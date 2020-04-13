@@ -75,6 +75,7 @@ var Player = function Player() {
     this.HASTESELF = 0;
     this.GLOBE = 0;
     this.INVUN = 0;
+    this.REBOUND = 0;
     this.SCAREMONST = 0;
     this.HOLDMONST = 0;
     this.STOPMONST = 0;
@@ -1171,6 +1172,7 @@ function debug_stats(p, score) {
   s += `WTW:   ` + p.WTW + `\n`;
   s += `PRO3:  ` + p.ALTPRO + `\n`;
   s += `GHO:   ` + p.INVUN + '\n';
+  s += `RBD:   ` + p.REBOUND + '\n';
 
   s += `\nCurses:\n`;
   s += `AGGR:  ` + p.AGGRAVATE + `\n`;

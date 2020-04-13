@@ -390,7 +390,12 @@ function parse(key) {
   //
   if (key == 'v') {
     nomove = 1;
-    var larnString = ULARN ? `The Addiction of JS Ularn` : `JS Larn`;
+    if (FOREST) {
+      var larnString = `The Addiction of JS Forest of Larn`;
+    }
+    else {
+      var larnString = ULARN ? `The Addiction of JS Ularn` : `JS Larn`;
+    }
     updateLog(`${larnString}, Version ${VERSION} Build ${BUILD}`);
     updateLog(`  ${logname}`);
     if (ULARN) appendLog(`, ${player.char_picked}`);

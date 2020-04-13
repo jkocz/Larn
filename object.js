@@ -661,7 +661,7 @@ function lookforobject(do_ident, do_pickup, do_action) {
       updateLog(`You escape a trap door.`);
       return;
     }
-    if ((level == DBOTTOM) || (level == VBOTTOM)) {
+    if ((level == DBOTTOM) || (level >= VBOTTOM)) {
       var trapMessage = ``;
       if (ULARN) trapMessage = `leading straight to HELL`;
       updateLog(`You fell through a bottomless trap door ${trapMessage}!`);
@@ -1065,6 +1065,7 @@ function adjtime(tim) {
   player.HERO = player.HERO > 0 ? Math.max(1, player.HERO - tim) : 0;
   player.GLOBE = player.GLOBE > 0 ? Math.max(1, player.GLOBE - tim) : 0;
   player.INVUN = player.INVUN > 0 ? Math.max(1, player.INVUN - tim) : 0;
+  player.REBOUND = player.REBOUND > 0 ? Math.max(1, player.REBOUND - tim) : 0;
   player.AWARENESS = player.AWARENESS > 0 ? Math.max(1, player.AWARENESS - tim) : 0;
   player.SEEINVISIBLE = player.SEEINVISIBLE > 0 ? Math.max(1, player.SEEINVISIBLE - tim) : 0;
 

@@ -254,6 +254,7 @@ function loadPlayer(saved) {
   newPlayer.AGGRAVATE = saved.AGGRAVATE;
   newPlayer.GLOBE = saved.GLOBE;
   newPlayer.INVUN = saved.INVUN;
+  newPlayer.REBOUND = saved.REBOUND;
   newPlayer.TELEFLAG = saved.TELEFLAG;
   newPlayer.SCAREMONST = saved.SCAREMONST;
   newPlayer.AWARENESS = saved.AWARENESS;

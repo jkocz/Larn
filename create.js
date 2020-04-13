@@ -84,9 +84,14 @@ function loadcanned(d=0) {
     USED_MAZES.push(mazeindex);
     //debug(`loadcanned: used: ` + USED_MAZES);
   }
+  else if (d == FBOTTOM) {
+    // We're in the bottom level of the forest. Use specific level
+    mazeindex = MAZES.length - 1;
+    USED_MAZES.push(mazeindex);
+  }
   else {
     // We're in the Forest, only use Forest levels
-    mazeindex = rInterval(VBOTTOM+1, MAZES.length-1); 
+    mazeindex = rInterval(VBOTTOM+1, MAZES.length-2); 
     USED_MAZES.push(mazeindex);
   }
   return MAZES[mazeindex];
@@ -724,28 +729,28 @@ function sethp(flg) {
     ** level F10 gets Master
     */
     else if (level == FBOTTOM) {
-       fillmonst(MASTER)
+       create_guardian(MASTER,33,9);
     }
     else if (level == FBOTTOM - 1) {
-       fillmonst(APPRENTICE)
+       fillmonst(APPRENTICE);
     }
     else if (level == FBOTTOM - 2) {
-      fillmonst(ETHEREALGUARDIAN)
+      fillmonst(ETHEREALGUARDIAN);
     }
     else if (level == FBOTTOM - 3) {
-       fillmonst(TIMEGUARDIAN)
+       fillmonst(TIMEGUARDIAN);
     }
     else if (level == FBOTTOM - 4) {
-       fillmonst(WATERGUARDIAN)
+       fillmonst(WATERGUARDIAN);
     }
     else if (level == FBOTTOM - 5) {
-       fillmonst(FIREGUARDIAN)
+       fillmonst(FIREGUARDIAN);
     }
     else if (level == FBOTTOM - 6) {
-       fillmonst(AIRGUARDIAN)
+       fillmonst(AIRGUARDIAN);
     }
     else if (level == FBOTTOM - 7) {
-       fillmonst(EARTHGUARDIAN)
+       fillmonst(EARTHGUARDIAN);
     }
     
   }
