@@ -825,12 +825,24 @@ function hitmonster(x, y) {
   extra modifier is excessive
   */
   var difficultyModifier = 0 /* getDifficulty() */ ;
+  var drange = 0;
 
   if ((rnd(20) < hitSkill - difficultyModifier) || (rnd(71) < 5)) /* need at least random chance to hit */ {
     updateLog(`You hit the ` + (blind ? `monster` : monster));
     flag = 1;
     damage = fullhit(1);
-    if (damage < 9999) damage = rnd(damage) + 1;
+
+    // JXK: This is so the lance values aren't reduced. 
+    //      Modified for forest to be an interval 10% of damage, rather than 
+    //      a random number from 1 - damage.
+    //      TODO: Eval: 10% vs 20%, Eval: max as damage or damage+drange.
+    if (FOREST) {
+      drange = 0.1*damage;
+      if (damage < 9999) damage = rInterval(damage-drange, damage+drange);    
+    }
+    else {
+      if (damage < 9999) damage = rnd(damage) + 1;
+    } 
   } else {
     updateLog(`You missed the ` + (blind ? `monster` : monster));
     flag = 0;
@@ -840,7 +852,7 @@ function hitmonster(x, y) {
     if (monster.matches(RUSTMONSTER) || monster.matches(DISENCHANTRESS) || monster.matches(CUBE)) {
       if (weapon && weapon.isWeapon()) {
         if (weapon.arg > -10) {
-          if (!weapon.matches(OSWORDofSLASHING)) /* 12.4.5 -- impervious to rust */ {
+          if (!weapon.matches(OSWORDofSLASHING) && !weapon.matches(OFLAWLESS)) /* 12.4.5 -- impervious to rust */ {
             updateLog(`  Your weapon is dulled by the ${monster}`);
             beep();
             weapon.arg--;

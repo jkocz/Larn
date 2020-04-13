@@ -1043,13 +1043,30 @@ function readbook(book) {
 
 /* function to adjust time when time warping and taking courses in school */
 function adjtime(tim) {
+  
+  if (FOREST && tim == -99999) {
+  // make higher forest spells extended, but non-permanent
+    if (player.STOPMONST) player.updateStopMonst(-99);
+
+    //JXK temp make permanent for debug
+    //player.INVUN = player.INVUN > 0 ? Math.max(1, player.INVUN - (-99)) : 0;
+    player.INVUN = player.INVUN > 0 ? Math.max(1, player.INVUN - tim) : 0;
+    player.REBOUND = player.REBOUND > 0 ? Math.max(1, player.REBOUND - (-99)) : 0;
+  }
+  else {
+    if (player.STOPMONST) player.updateStopMonst(-tim);
+
+    player.INVUN = player.INVUN > 0 ? Math.max(1, player.INVUN - tim) : 0;
+    player.REBOUND = player.REBOUND > 0 ? Math.max(1, player.REBOUND - tim) : 0;
+
+  }
+
   if (player.STEALTH) player.updateStealth(-tim);
   if (player.UNDEADPRO) player.updateUndeadPro(-tim);
   if (player.SPIRITPRO) player.updateSpiritPro(-tim);
   if (player.CHARMCOUNT) player.updateCharmCount(-tim);
   // stop time
   if (player.HOLDMONST) player.updateHoldMonst(-tim);
-  if (player.STOPMONST) player.updateStopMonst(-tim);
   if (player.GIANTSTR) player.updateGiantStr(-tim);
   if (player.FIRERESISTANCE) player.updateFireResistance(-tim);
   if (player.DEXCOUNT) player.updateDexCount(-tim);
@@ -1064,11 +1081,8 @@ function adjtime(tim) {
 
   player.HERO = player.HERO > 0 ? Math.max(1, player.HERO - tim) : 0;
   player.GLOBE = player.GLOBE > 0 ? Math.max(1, player.GLOBE - tim) : 0;
-  player.INVUN = player.INVUN > 0 ? Math.max(1, player.INVUN - tim) : 0;
-  player.REBOUND = player.REBOUND > 0 ? Math.max(1, player.REBOUND - tim) : 0;
   player.AWARENESS = player.AWARENESS > 0 ? Math.max(1, player.AWARENESS - tim) : 0;
   player.SEEINVISIBLE = player.SEEINVISIBLE > 0 ? Math.max(1, player.SEEINVISIBLE - tim) : 0;
-
   player.AGGRAVATE = player.AGGRAVATE > 0 ? Math.max(1, player.AGGRAVATE - tim) : 0;
   player.HASTEMONST = player.HASTEMONST > 0 ? Math.max(1, player.HASTEMONST - tim) : 0;
   player.HALFDAM = player.HALFDAM > 0 ? Math.max(1, player.HALFDAM - tim) : 0;

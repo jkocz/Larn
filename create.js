@@ -73,13 +73,17 @@ function initNewLevel(depth) {
   level = depth;
 }
 
+/* JXK: Possibly better to not concat FOREST_MAZES in config.js
+        Requires less logic here.
+*/
 
 function loadcanned(d=0) {
   var mazeindex;
 
   if (d <= VBOTTOM) {
+    // We're not in the forest, use only other mazes
     do {
-      mazeindex = rund(MAZES.length);
+      mazeindex = rund(MAZES.length - FOREST_MAZES.length);
     } while (USED_MAZES.indexOf(mazeindex) > -1);
     USED_MAZES.push(mazeindex);
     //debug(`loadcanned: used: ` + USED_MAZES);
@@ -101,7 +105,6 @@ function loadcanned(d=0) {
 
 function cannedlevel(depth) {
 
-  // JXK: Make sure for forest only uses the maze, no placement
   var canned = loadcanned(depth);
 
   var items = player.level.items;
