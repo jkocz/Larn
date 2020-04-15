@@ -942,31 +942,31 @@ function oteleport(err) {
   if (player.TELEFLAG == 0 && level != 0) {
     changedDepth = millis(); // notify when depth changes to '?'
   }
-
   player.TELEFLAG = 1; /* show ? on bottomline if been teleported */
   var newLevel;
   if (level == 0) {
     newLevel = 0;
-  } else if (level < MAXLEVEL) {
+  } else if (level <= DBOTTOM) {
+    // in the dungeon
     newLevel = rnd(5) + level - 3;
-    if (newLevel >= MAXLEVEL)
+    if (newLevel > DBOTTOM)
       newLevel = DBOTTOM;
     if (newLevel < 1)
       newLevel = 1;
-  } else if (newLevel < MAXVLEVEL) {
+  } else if (level <= VBOTTOM) {
+    // in the volcano
     newLevel = rnd(ULARN ? 4 : 3) + level - 2;
-    if (newLevel >= MAXLEVEL + MAXVLEVEL)
+    if (newLevel > VBOTTOM)
       newLevel = VBOTTOM;
-    if (newLevel < MAXLEVEL)
+    else if (newLevel < MAXLEVEL)
       newLevel = MAXLEVEL;
   } else {
-    newLevel = rnd(4) + level - 2;
-    if (newLevel >= MAXLEVEL + MAXVLEVEL + MAXFLEVEL)
+    // in the forest
+    newLevel = rnd(5) + level - 3;
+    if (newLevel > FBOTTOM)
       newLevel = FBOTTOM;
-    if (newLevel < MAXVLEVEL)
-      newLevel = VBOTTOM;
-    if (newLevel < MAXLEVEL)
-      newLevel = MAXLEVEL;  
+    else if (newLevel <= VBOTTOM)
+      newLevel = VVOTTOM + 1;
   }
 
   player.x = rnd(MAXX - 2);
