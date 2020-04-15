@@ -535,6 +535,11 @@ function makeobject(depth) {
     createArtifact(OHAMMER,          player.BESSMANN,     rnd(151) < 4);
   }
 
+  // If we don't already have Slayer, create.
+  if (FOREST) {
+    createArtifact(OSLAYER,          player.SLAY,         !created && depth > VBOTTOM);
+  }
+
   if (getDifficulty() < 3 || (rnd(4) == 3)) {
     if (depth > 3) {
       froom(3, OSWORD, rund(6)); /* sunsword */

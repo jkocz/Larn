@@ -264,7 +264,12 @@ function showScores(newScore, local, showWinners, showLosers, offset) {
   clear();
 
   if (local) {
-    lprcat(`                    <b>${GAMENAME} Scoreboard</b> (Global scoreboard not available)\n`);
+    if (FOREST) {
+      lprcat(`                    <b>The Forest of Larn Scoreboard</b> (Global scoreboard not available)\n`);
+    }
+    else {
+      lprcat(`                    <b>${GAMENAME} Scoreboard</b> (Global scoreboard not available)\n`);
+    }
     winners = localStorageGetObject('winners', []);
     losers = localStorageGetObject('losers', []);
   } else {
