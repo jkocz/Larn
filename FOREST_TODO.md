@@ -6,7 +6,7 @@
     - Test amulet of invisibility 
     - ~~Change slayer probability so it appears on V5 (or F1?) if not already?~~
     - Amiga graphics?
-    - Forest maps need updating to be distinct 
+    - ~~Forest maps need updating to be distinct~~ 
 
 - Monsters/balance:
     - Make e.g. hellhound immune to fire? 
@@ -20,11 +20,12 @@
     - Reduce monster spawn rate in forest (at last forest level, is almost impossible to move due to monsters)
     - Make alters in Ularn more dangerour? (too easy to get high stats?)
     - Make alters crumble more easily?
-
+              
 - Spells:
     - Complete Rebound
     - Fix spell display for status effects
     - Should genie be able to grant forest spells? (If on forest levels, yes, but Only those that can be found?)
+    - Master dispells shpere even with talisman
 
 - Combining options:
     - New results from inventive combinations
@@ -35,6 +36,6 @@
 - Out and out bugs:
     - ~~Teleporting in volcano level 4 took into forest level 1 (multiple times)~~
     - Display attributes > 2 digits? (max them out at 99?)
-    - Combine breaks stats? (need to drop and pickup again for it to work?/create new item)
+    - ~~Combine breaks stats? (need to drop and pickup again for it to work?/create new item)~~
     - Ularn scoreboard --> Forest scoreboard (best way to incorporate Forest name throughout?)
     - End of game "press return". 

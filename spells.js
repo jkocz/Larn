@@ -792,9 +792,12 @@ function spell_combine(index) {
 
     if (itemA.id == item.id) {
       // create new item with combined stats
-      itemA.arg += item.arg; 
+      destroyInventory(itemA);
       destroyInventory(item);
+      // extra + 1 to account for the invisible +0 that actually gives +1
+      itemA.arg += item.arg + 1; 
       updateLog(` You have created a ${itemA}`);
+      take(createObject(itemA));
     }
     else if (((itemA.id == OSLAYER.id)  && (item.id == OLANCE.id)) || ((itemA.id == OLANCE.id) && (item.id == OSLAYER.id))) {
       updateLog(` You have created The Destroyer!`);
