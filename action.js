@@ -295,8 +295,8 @@ function wish(key) {
 
   var spellIndex = learnSpell(newSpellCode);
   newSpellCode = null;
-
-  if (spellIndex >= 0) {
+  
+  if (spellIndex >= 0 && spellIndex <= 38) {
     updateLog(`Spell '<b>${spelcode[spellIndex]}</b>': ${spelname[spellIndex]}`);
     updateLog(`  ${speldescript[spellIndex]}`);
   } else {

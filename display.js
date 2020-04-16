@@ -157,8 +157,12 @@ function botside() {
   botsideline(player.SPIRITPRO, `Spirit Pro`, line++, changedSpiritPro);
   botsideline(player.CHARMCOUNT, `Charm`, line++, changedCharmCount);
   botsideline(player.TIMESTOP, `Time Stop`, line++, changedTimeStop);
-  botsideline(player.HOLDMONST, `Hold Monst`, line++, changedHoldMonst);
-  botsideline(player.STOPMONST, `Stop Monst`, line++, changedStopMonst);
+  var altStopLabel = player.STOPMONST ? `Stop Monst ` : `Hold Monst`;
+  botsideline(player.HOLDMONST, altStopLabel, line++, changedHoldMonst);
+  // JXK: Changed to both be on the same line to keep 
+  //      everything in a single list
+  //botsideline(player.HOLDMONST, `Hold Monst`, line++, changedHoldMonst);
+  //botsideline(player.STOPMONST, `Stop Monst`, line, changedStopMonst);
   botsideline(player.GIANTSTR, `Giant Str`, line++, changedGiantStr);
   botsideline(player.FIRERESISTANCE, `Fire Resit`, line++, changedFireResistance);
   botsideline(player.DEXCOUNT, `Dexterity`, line++, changedDexCount);

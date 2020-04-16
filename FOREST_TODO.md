@@ -13,24 +13,25 @@
     - Increase monster damage in Forest
     - Increase monster toughness in Forest
     - Increase monster experience in Forest
-    - Guardians drain (keep/remove)?
+    - Guardians drain - keep, but use power staff comb with? 
     - ~~Guardian reduce HP~~
     - Guardians immune to scare?
     - Some monsters need to move faster than Our Hero
     - Make guardians invisible without eye of larn
     - Addition of other stats when fighting monsters - in particular guardians+
-    - Reduce monster spawn rate in forest (at last forest level, is almost impossible to move due to monsters)
+    - ~~Reduce monster spawn rate in forest (at last forest level, is almost impossible to move due to monsters)~~
     - Make alters in Ularn more dangerous? (too easy to get high stats?)
     - Make alters crumble more easily?
     - Too hard to hit master?
               
 - Spells:
     - ~~Complete Rebound~~
-    - Should rebound also reflect special attacks?
-    - Fix spell display for status effects
-    - Should genie be able to grant forest spells? (If on forest levels, yes, but Only those that can be found?)
+    - Should rebound also reflect special attacks? (No, should be cancelled with can/staff?)
+    - ~~Fix spell display for status effects (display.js)~~
+    - ~~Genie cannot grant forest spells~~ (enable for com/por?)
     - ~~Master dispells sphere even with talisman~~
     - BRK and Mirrors
+    - GEN and 1) Dragons, 2) Guardian/App/Master
 
 - Combining options:
     - New results from inventive combinations
@@ -45,3 +46,4 @@
     - Ularn scoreboard --> Forest scoreboard (best way to incorporate Forest name throughout?)
     - End of game "press return". 
     - Ularn bug: Vorpal blade sometimes beheads a monster that is killed by a spell.
+      (use same logic as rustmonster to not behead?)

@@ -1,7 +1,7 @@
 'use strict';
 
 const VERSION = '12.6.0 (pre-alpha)';
-const BUILD = '005';
+const BUILD = '006';
 
 //var ULARN = false; // are we playing LARN or ULARN?
 //var FOREST = false; // are we playing the FOREST?
