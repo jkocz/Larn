@@ -302,7 +302,12 @@ Monster.prototype = {
 function randmonst() {
   if (player.TIMESTOP) return; /*  don't make monsters if time is stopped  */
   if (--rmst <= 0) {
-    rmst = 120 - (level << 2);
+    if (FOREST && level > VBOTTOM) {
+      rmst = 120 - (VBOTTOM << 2)
+    }
+    else {
+      rmst = 120 - (level << 2);
+    }
     fillmonst(makemonst(level));
   }
 }
@@ -779,6 +784,31 @@ function hitplayer(x, y) {
   if (((dam + bias) > player.AC) || (rnd(((player.AC > 0) ? player.AC : 1)) == 1)) {
     updateLog(`  The ${monster} hit you`);
     playerHit = true;
+
+    /* if rebound is active */
+    if (player.REBOUND > 0) {
+      var reducedPercent = 0;
+      var monsterDamage = dam;
+      var reboundMod = 0.5 - rndDec();
+      if (reboundMod < 0) {
+          reboundMod = 0;
+      }
+      dam *= reboundMod;
+      reducedPercent = (1 - reboundMod) * 100;
+      updateLog(`Rebound reduces the damage you take by ${reducedPercent} percent`); 
+
+      monsterDamage = monsterDamage - dam;
+      monster.hitpoints -= monsterDamage;
+      updateLog(`The ${monster} was hit by the reflected attack`);
+      debug(`hitm(): ${monster.toString()} ${monster.hitpoints} / ${monsterlist[monster.arg].hitpoints}`);
+      if (monster.hitpoints <= 0) {
+        player.MONSTKILLED++;
+        updateLog(`  The ${monster} died!`);
+        player.raiseexperience(monster.experience);
+        monster.dropInventory(x, y);
+        killMonster(x, y);
+      }
+    }
     if ((dam -= player.AC) < 0) dam = 0;
     if (dam > 0) {
       player.losehp(dam);

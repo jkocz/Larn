@@ -553,8 +553,13 @@ function mmove(sx, sy, dx, dy) {
   let trap_msg;
 
   if (item.matches(OANNIHILATION)) {
+    /* master always dispels the sphere */
+    if (monster.matches(MASTER)) {
+      trap_msg = `The ${monster} dispels the sphere!`;
+      rmsphere(dx, dy);
+    } 
     /* demons dispel spheres */
-    if (monster.isDemon()) {
+    else if (monster.isDemon()) {
       let have_talisman = isCarrying(OSPHTALISMAN);
       if ((!have_talisman) ||
         // lucifer can't dispels 30% of the time if talisman
@@ -567,6 +572,11 @@ function mmove(sx, sy, dx, dy) {
         trap_msg = `The ${monster} is destroyed by the sphere of annihilation!`;
         killMonster(dx, dy);
         monst_killed = 1;
+      }
+    } else if (monster.matches(APPRENTICE)) {
+      if (!isCarrying(OSPHTALISMAN)) {
+        trap_msg = `The ${monster} dispels the sphere!`;
+        rmsphere(dx, dy); 
       }
     } else {
       if (monster.isCarrying(OSPHTALISMAN)) {

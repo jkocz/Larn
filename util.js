@@ -16,11 +16,15 @@ function rund(value) {
   return Math.floor(Math.random() * value);
 }
 
-
+/* generate random number in an interval min <= N <= max */
 function rInterval(min, max) {  
   return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
+/* generate random numbers 0 <= N <= 1 to two decimal places  */
+function rndDec() {
+    return Math.floor((Math.random() * 100)) / 100;
+}
 
 
 /*

@@ -36,7 +36,20 @@ function newsphere(x, y, dir, life, lev) {
 
   var monster = monsterAt(x, y);
 
+  if (monster && monster.matches(MASTER)) /* Master always dispels the sphere */ {
+    cursors();
+    updateLog(`The ${monster} dispels the sphere!`);
+    rmsphere(x, y); 
+    return;
+  }
+
   if (!isCarrying(OSPHTALISMAN)) { // talisman of the sphere negates many things
+    if (monster && monster.matches(APPRENTICE)) /* Apprentice cancels spheres */ {
+      cursors();
+      updateLog(`The ${monster} dispels the sphere!`);
+      rmsphere(x, y); /* remove any spheres that are here */
+      return;
+    }
     if (monster && monster.isDemon()) /* demons dispel spheres */ {
       show1cell(x, y); /* show the demon (ha ha) */
       cursors();
