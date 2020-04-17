@@ -254,6 +254,11 @@ Monster.prototype = {
       case DEMONLORD + 6:
       case DEMONPRINCE:
       case LUCIFER:
+      case AIRGUARDIAN:
+      case FIREGUARDIAN:
+      case TIMEGUARDIAN:
+      case ETHEREALGUARDIAN:
+      case MASTER:
         return true;
       default:
         return false;
@@ -781,8 +786,16 @@ function hitplayer(x, y) {
     return;
   }
 
+  if (level > VBOTTOM) {
+     // monsters in the forest are tough! 
+     if (monster.arg < DEMONLORD) {
+        dam = Math.floor(dam * 1.75);
+     }
+  }
+
   if (((dam + bias) > player.AC) || (rnd(((player.AC > 0) ? player.AC : 1)) == 1)) {
-    updateLog(`  The ${monster} hit you`);
+    //updateLog(`  The ${monster} hit you`);
+    updateLog(`  The ${monster} hit you for ${dam} damage`);
     playerHit = true;
 
     /* if rebound is active */
@@ -982,9 +995,17 @@ function hitm(x, y, damage) {
       damage = 10000;
     }
   }
+ 
+  if (level > VBOTTOM) {
+     // monsters in the forest are tough! 
+     if (monster.arg < DEMONLORD) {
+        damage = Math.floor(damage / 3);
+     }
+  }
 
   var hpoints = monster.hitpoints;
   monster.hitpoints -= damage;
+  //updateLog(`Damage: ${damage}, hitm(): ${monster.toString()} ${monster.hitpoints} / ${monsterlist[monster.arg].hitpoints}`);
   debug(`hitm(): ${monster.toString()} ${monster.hitpoints} / ${monsterlist[monster.arg].hitpoints}`);
   if (monster.hitpoints <= 0) {
     player.MONSTKILLED++;

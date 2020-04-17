@@ -927,7 +927,7 @@ function fullhit(xx) {
     if (player.WIELD && player.WIELD.matches(OLANCE)) return (10000); /* lance of death */
   }
   else {
-    if (player.WIELD && player.WIELD.matches(OLANCE)) return (300); /* the monsters in the forest are tough! */
+    if (player.WIELD && player.WIELD.matches(OLANCE)) return (100); /* the monsters in the forest are tough! */
   }
   var i = xx * ((player.WCLASS >> 1) + player.STRENGTH + player.STREXTRA - getDifficulty() - 12 + player.MOREDAM);
   return ((i >= 1) ? i : xx);
