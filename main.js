@@ -745,7 +745,7 @@ function wizardmode(password) {
         player.level.items[scrolli][0] = scroll;
       }
 
-      for (var potioni = MAXX - 1; potioni > MAXX - 1 - POTION_NAMES.length; potioni--) {
+      for (var potioni = MAXX - 15; potioni > MAXX - 1 - POTION_NAMES.length; potioni--) {
         var potion = createObject(OPOTION, MAXX - 1 - potioni);
         learnPotion(potion);
         player.level.items[potioni][0] = potion;
@@ -785,7 +785,7 @@ function wizardmode(password) {
         while (wizi < OMARK.id) {
           var wizitem = itemlist[++wizi];
           if (wizitem && wizitem != OHOMEENTRANCE && wizitem != OUNKNOWN)
-            player.level.items[ix][--iy] = createObject(wizitem);
+            player.level.items[--ix][0] = createObject(wizitem);
         }
       }
         

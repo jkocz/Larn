@@ -384,7 +384,7 @@ const OHAMMER = new Item(27, `)`, `)`, `)`, `darkgoldenrod`, BOLD, `Bessman's fl
 /* need amiga */ const OVORPAL = new Item(90, `)`, `)`, `)`, `darkorange`, BOLD, `the Vorpal Blade`, CARRY); // ULARN
 /* need amiga */ const OSLAYER = new Item(91, `)`, `)`, `)`, `crimson`, BOLD, `Slayer`, CARRY); // ULARN
 /* need amiga */ const ODESTROYER = new Item(105, `)`, `)`, `)`, `darkgray`, BOLD, `The Destroyer`, CARRY); // FOREST
-/* need amiga */ const OFLAWLESS = new Item(106, `)`, `)`, `)`, `black`, BOLD, `Flawless`, CARRY); // FOREST
+/* need amiga */ const OFLAWLESS = new Item(107, `)`, `)`, `)`, `black`, BOLD, `Flawless`, CARRY); // FOREST
  
  
 

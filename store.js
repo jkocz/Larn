@@ -924,19 +924,24 @@ async function ohome() {
 
   if (DHEALTHY) {
     if (hasMark && inTime) {
+      cursor(1, 7);
       lprint(`Congratulations. Your family is safe and you have\n`); 
       lprint(`solved the mystery of Polinneaus!\n\n`);
-      await nap(1000);
-      lprint(`Press <b> enter</b> to continue: `);
+      await nap(2000);
       // JXK: add blocking get key
-      cursor(1, 8);
-      cltoeoln();
-      lprint(`It is time to relax and regale your daughter with your stories.\n\n`);
+      //cltoeoln();
+      lprint(`It is time to relax for a while and regale your daughter with your stories\n`);
+      lprint(`while she recovers.\n\n`);
+      await nap(2000);
+      lprint(`\n\nAfteward, there will be plenty of time to explore beyond the borders of Larn...\n\n`);
       napping = false;
-      setCharCallback(win);
-      return;
+      died(DIED_WINNER, false); /* a winner! */
+      return 1;
+      //setCharCallback(win);
+      //return;
     }
     else if (hasMark && !inTime) {
+      cursor(1, 7);
       lprint(`Welcome home ${logname}.\n\n`);
       await nap(1000);
       lprint(`Congratulations on the success of your quest.\n\n`);
@@ -952,6 +957,7 @@ async function ohome() {
       return;
     }
     else if (!inTime) {
+      cursor(1, 7);
       lprint(`Welcome home ${logname}.\n\n`);
       await nap(1000);
       lprint(`While you were galavanting around, your daughter woke up.\n`);
@@ -987,10 +993,14 @@ async function ohome() {
       lprint(`The doctor is now administering the potion, and in a few moments\n`);
       lprint(`your daughter should be well on her way to recovery.\n\n`);
       await nap(1000);
-      lprint(`Press <b>enter</b> to continue: `);
-   
-      // JXK: add blocking get key/remove async function to here
- 
+
+      if (!FOREST) {
+        lprint(`Press <b>enter</b> to continue: `);
+        napping = false;
+        setCharCallback(win);
+        return;
+      }   
+
       napping = true;
       cursor(1, 8);
       cltoeoln();
@@ -1005,22 +1015,34 @@ async function ohome() {
       lprint(` working!\n\n`);
       lprintf(`The doctor thinks that your daughter will recover in a few days.\n`);
       lprintf(`Congratulations!\n\n`);
+      lprintf(`\n\n`);
       await nap(2000);
+      lprintf(`Suddenly you see a shimmer in the distance!\n\n`);
+      await nap(1000);
+      lprintf(`It looks like a\n\n`);
+      await nap(500);
+      lprint(`.`);
+      await nap(1000);
+      lprint(`.`);
+      await nap(2000);
+      lprintf(`portal?\n\n`);
       napping = false;
-      if (FOREST) {
-        DHEALTHY = true;
-        // Reset time limit
-        TIMELIMIT += 10000;
-        // Draw forest entrance  on home screen
-        fillroom(OFOREST,0);    
-        lprcat(`\n\n\tPress <b>escape</b> to leave: `);
-        paint();
-        napping = false;
-      }
-      else {
-        setCharCallback(win);
-        return;
-      }
+      //if (FOREST) {
+      DHEALTHY = true;
+      // Reset time limit
+      TIMELIMIT += 10000;
+      // Draw forest entrance  on home screen
+      fillroom(OFOREST,0);    
+      lprcat(`\n\n\tPress <b>escape</b> to leave: `);
+      paint();
+      napping = false;
+      //}
+      //else {
+      //  died(DIED_WINNER, false); /* a winner! */
+      //  return 1;
+        //setCharCallback(win);
+        //return;
+      //}
     }
 
     // has potion but ran out of time
@@ -1096,11 +1118,25 @@ async function win(key) {
     return 0;
   }
 
+  napping = true;
+  cursor(1, 8);
+  cltoeoln();
+  lprint(`The potion is`);
+  await nap(500);
+  lprint(`.`);
+  await nap(1000);
+  lprint(`.`);
+  await nap(1000);
+  lprint(`.`);
+  await nap(1000);
+  lprint(` working!\n\n`);
+  lprintf(`The doctor thinks that your daughter will recover in a few days.\n`);
+  lprintf(`Congratulations!\n\n`);
+  await nap(2000);
+  napping = false;
   died(DIED_WINNER, false); /* a winner! */
   return 1;
 }
-
-
 
 
 

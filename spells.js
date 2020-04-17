@@ -536,6 +536,8 @@ function speldamage(x) {
               setItem(i,j, OEMPTY);
           } else if (item.matches(OFOUNTAIN)) {
               setItem(i,j, OEMPTY);
+          } else if (item.matches(OMIRROR)) {
+              setItem(i,j, OEMPTY);
           }
           player.level.know[i][j] = KNOWALL; // HACK fix for black tile
         }

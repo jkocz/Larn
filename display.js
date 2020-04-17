@@ -355,7 +355,8 @@ function moveplayer(dir) {
     
      JXK: Extra change for forest so WTW does not work
    */
-  if ((item.matches(OCLOSEDDOOR) || item.matches(OWALL)) && (player.WTW == 0 || level > VBOTTOM)) {
+  //if ((item.matches(OCLOSEDDOOR) || item.matches(OWALL)) && (player.WTW == 0 || level > VBOTTOM)) {
+  if ((item.matches(OCLOSEDDOOR) || item.matches(OWALL)) && ((player.WTW == 0 && player.INVUN == 0) || ((level > VBOTTOM) && (player.INVUN == 0)))) {
     nomove = 1;
     return (0);
   }

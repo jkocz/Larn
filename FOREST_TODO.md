@@ -31,7 +31,7 @@
     - ~~Fix spell display for status effects (display.js)~~
     - ~~Genie cannot grant forest spells~~ (enable for com/por?)
     - ~~Master dispells sphere even with talisman~~
-    - BRK and Mirrors
+    - ~~BRK and Mirrors~~
     - GEN and 1) Dragons, 2) Guardian/App/Master
     - ~~WTW should not work in forest~~
 
@@ -45,7 +45,7 @@
     - ~~Teleporting in volcano level 4 took into forest level 1 (multiple times)~~
     - ~~Combine breaks stats? (need to drop and pickup again for it to work?/create new item)~~
     - ~~Ularn scoreboard --> Forest scoreboard~~ (best way to incorporate Forest name throughout?)
-    - End of game "press return". 
+    - ~~End of game "press return" in non-Forest mode.~~
     - Ularn bug: Vorpal blade sometimes beheads a monster that is killed by a spell.
       (use same logic as rustmonster to not behead?)
     - Ularn bug: Make stairs always take you to same place

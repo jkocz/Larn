@@ -3,11 +3,11 @@
 const VERSION = '12.6.0 (pre-alpha)';
 const BUILD = '007';
 
-//var ULARN = false; // are we playing LARN or ULARN?
-//var FOREST = false; // are we playing the FOREST?
+var ULARN = false; // are we playing LARN or ULARN?
+var FOREST = false; // are we playing the FOREST?
 
-var ULARN = true; // are we playing LARN or ULARN?
-var FOREST = true; // are we playing the FOREST?
+//var ULARN = true; // are we playing LARN or ULARN?
+//var FOREST = true; // are we playing the FOREST?
 
 const IMG_HEIGHT = 24;
 const IMG_WIDTH = 12;
@@ -72,12 +72,12 @@ function play() {
     bltDocument();
   }
 
-  //loadURLParameters();
+  loadURLParameters();
 
   no_intro = PARAMS.nointro ? PARAMS.nointro == `true` : false;
   mobile = PARAMS.mobile ? PARAMS.mobile == `true` : false;
-  //ULARN = PARAMS.ularn ? PARAMS.ularn == `true` : false;
-  //FOREST = PARAMS.forest ? PARAMS.forest == `true` : false;
+  ULARN = PARAMS.ularn ? PARAMS.ularn == `true` : false;
+  FOREST = PARAMS.forest ? PARAMS.forest == `true` : false;
 
   setGameConfig();
 
