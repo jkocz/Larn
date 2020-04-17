@@ -79,22 +79,25 @@ function loadSavedGame(savedState, isCheckPoint) {
   if (isCheckPoint) {
     updateLog(`Did you quit accidentally? I restored your last game just in case.`);
   } else {
-    updateLog(`Welcome back. (Your save file has now been been deleted)`);
+    //JXK: temp keep saved files
+    //updateLog(`Welcome back. (Your save file has now been been deleted)`);
+    updateLog(`Welcome back.`);
   }
 
   /* v304 -- disabling cheating funcionality for now. It's really more
      of a tool for me to check for savegame consistency at this point
   */
   if (cheat) {
-    // updateLog(`Have you been cheating?`);
-    updateLog(`*** Hey, you should tell <b>eye@larn.org</b> about this game`);
-    updateLog(`    ${GAMENAME} thinks you're cheating (but you're probably not)`);
+    updateLog(`Have you been cheating?`);
+    //updateLog(`*** Hey, you should tell <b>eye@larn.org</b> about this game`);
+    //updateLog(`    ${GAMENAME} thinks you're cheating (but you're probably not)`);
     cheat = false;
   }
 
   /* clear the saved game file */
-  localStorageRemoveItem(logname);
-  localStorageRemoveItem('checkpoint');
+  //JXK: temp keep saved files
+  //localStorageRemoveItem(logname);
+  //localStorageRemoveItem('checkpoint');
 
 }
 
