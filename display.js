@@ -352,8 +352,10 @@ function moveplayer(dir) {
 
   /* prevent the player from moving onto a wall, or a closed door when
      in command mode, unless the character has Walk-Through-Walls.
+    
+     JXK: Extra change for forest so WTW does not work
    */
-  if ((item.matches(OCLOSEDDOOR) || item.matches(OWALL)) && player.WTW == 0) {
+  if ((item.matches(OCLOSEDDOOR) || item.matches(OWALL)) && (player.WTW == 0 || level > VBOTTOM)) {
     nomove = 1;
     return (0);
   }

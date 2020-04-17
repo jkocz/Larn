@@ -928,8 +928,11 @@ function oteleport(err) {
       /*
       12.4.5 - you shouldn't get trapped in solid rock with WTW
       This was also added in ularn 1.6.3
+
+      12.6.0 - JXK: WTW does not work in forest (but GHO does).
       */
-      if (player.WTW == 0) {
+
+      if ((player.WTW == 0 && player.INVUN == 0) || ((level > VBOTTOM) && (player.INVUN == 0))) {
         updateLog(`You are trapped in solid rock!`)
         died(DIED_SOLID_ROCK, false); /* trapped in solid rock */
         return;

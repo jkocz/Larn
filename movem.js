@@ -161,6 +161,10 @@ function movemt(x, y) {
      */
     scared = (scared <= 1) ? 0 : (rnd(10) > 5);
   }
+  else if (monster.arg > LUCIFER) {
+    // Guardian or higher in forest
+    scared = (scared <= 1) ? 0 : (rnd(10) > 8);
+  }
 
   /* Call the appropriate move routine */
   if (scared) {

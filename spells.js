@@ -566,7 +566,8 @@ function speldamage(x) {
 
     case 46:
       /* ghost */
-      player.updateWTW(50);
+      //player.updateWTW(50);
+      // WTW now managed via INVUN
       if (player.INVUN == 0) player.setMoreDefenses(player.MOREDEFENSES + 999);
       player.INVUN += 50;
       return;
