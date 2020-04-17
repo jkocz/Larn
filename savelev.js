@@ -95,9 +95,8 @@ function loadSavedGame(savedState, isCheckPoint) {
   }
 
   /* clear the saved game file */
-  //JXK: temp keep saved files
-  //localStorageRemoveItem(logname);
-  //localStorageRemoveItem('checkpoint');
+  localStorageRemoveItem(logname);
+  localStorageRemoveItem('checkpoint');
 
 }
 

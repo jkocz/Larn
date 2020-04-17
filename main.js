@@ -121,6 +121,7 @@ function setname(name) {
     readmail();
     localStorageRemoveItem(logname); /* clear the mail flag */
     return 1;
+
   } else if (savegame || checkpoint) {
     if (savegame) {
       loadSavedGame(saveddata, false);
@@ -130,7 +131,7 @@ function setname(name) {
     clearBlinkingCursor(); // clear after setting name and loading savegame
     setGameDifficulty(getDifficulty());
 
-    return 1;
+    return 1; 
   } else {
     var difficultyString = `What difficulty would you like to play? [<b>${getDifficulty()}</b>]: `;
     lprcat(difficultyString);
