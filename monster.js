@@ -786,11 +786,9 @@ function hitplayer(x, y) {
     return;
   }
 
-  if (level > VBOTTOM) {
-     // monsters in the forest are tough! 
-     if (monster.arg < DEMONLORD) {
-        dam = Math.floor(dam * 1.75);
-     }
+  if ((level > VBOTTOM) && (monster.arg < DEMONLORD)) {
+    // monsters in the forest are tough! 
+    dam = Math.floor(dam * 1.75);
   }
 
   if (((dam + bias) > player.AC) || (rnd(((player.AC > 0) ? player.AC : 1)) == 1)) {
@@ -817,7 +815,13 @@ function hitplayer(x, y) {
       if (monster.hitpoints <= 0) {
         player.MONSTKILLED++;
         updateLog(`  The ${monster} died!`);
-        player.raiseexperience(monster.experience);
+        if ((level > VBOTTOM) && (monster.arg < DEMONLORD)) {
+           //JXK: Raise for < DEMONLORD only?
+           player.raiseexperience((monster.experience)*3);
+        }
+        else {
+           player.raiseexperience(monster.experience);
+        } 
         monster.dropInventory(x, y);
         killMonster(x, y);
       }
@@ -996,11 +1000,9 @@ function hitm(x, y, damage) {
     }
   }
  
-  if (level > VBOTTOM) {
-     // monsters in the forest are tough! 
-     if (monster.arg < DEMONLORD) {
-        damage = Math.floor(damage / 3);
-     }
+  if ((level > VBOTTOM) && (monster.arg < DEMONLORD)) {
+    // monsters in the forest are tough! 
+    damage = Math.floor(damage / 3);
   }
 
   var hpoints = monster.hitpoints;
@@ -1010,7 +1012,12 @@ function hitm(x, y, damage) {
   if (monster.hitpoints <= 0) {
     player.MONSTKILLED++;
     updateLog(`  The ${monster} died!`);
-    player.raiseexperience(monster.experience);
+    if ((level > VBOTTOM) && (monster.arg < DEMONLORD)) {
+      player.raiseexperience((monster.experience)*3);
+    }
+    else {
+      player.raiseexperience(monster.experience);
+    } 
     monster.dropInventory(x, y);
     killMonster(x, y);
 
