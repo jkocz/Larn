@@ -1051,9 +1051,9 @@ function adjtime(tim) {
   // make higher forest spells extended, but non-permanent
     if (player.STOPMONST) player.updateStopMonst(-99);
 
+    player.INVUN = player.INVUN > 0 ? Math.max(1, player.INVUN - (-99)) : 0;
     //JXK temp make permanent for debug
-    //player.INVUN = player.INVUN > 0 ? Math.max(1, player.INVUN - (-99)) : 0;
-    player.INVUN = player.INVUN > 0 ? Math.max(1, player.INVUN - tim) : 0;
+    //player.INVUN = player.INVUN > 0 ? Math.max(1, player.INVUN - tim) : 0;
     player.REBOUND = player.REBOUND > 0 ? Math.max(1, player.REBOUND - (-99)) : 0;
   }
   else {
