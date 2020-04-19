@@ -1000,7 +1000,7 @@ function oteleport(err) {
  */
 function readbook(book) {
   var lev = book.arg;
-  var spellIndex, spell;
+  var spellIndex, spell,spRedo;
   if (lev <= 3) {
     spell = splev[lev];
     spellIndex = rund((spell) ? spell : 1);
@@ -1021,14 +1021,25 @@ function readbook(book) {
   }
 
   if (FOREST) {
-    updateLog(`Playing forest spells`);
+    // book from Guardian is forced to be a specific spell
     if (lev > 40) {
-      updateLog(`Spell index: ${lev}`);
+      //updateLog(`Spell index: ${lev}`);
       spellIndex = lev;
     } 
-    else {
-      updateLog(`Spell index: ${lev}`);
+    else if (splev[lev] > 38) {
+      // we are in the forest, weight toward new spells
+      if (spellIndex < 38) {
+        spRedo = rnd(100);
+        updateLog(`Forest redo: Spell index: ${lev}, spRedo: ${spRedo}`);
+        if (spRedo > 75) 
+          spellIndex = 40;
+        else if (spRedo > 50)
+          spellIndex = 39;
+      } 
     }
+    //else {
+      //updateLog(`Spell index: ${lev}`);
+    //}
   } 
  
 
