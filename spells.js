@@ -812,13 +812,23 @@ function spell_combine(index) {
       destroyInventory(itemA);
       destroyInventory(item);
       take(createObject(ODESTROYER));
-      // produce destroyer /
     } 
     else if (((itemA.id == ODESTROYER.id) && (item.id == OSWORDofSLASHING.id)) || ((item.id == ODESTROYER.id) && (itemA.id == OSWORDofSLASHING.id))) {
       updateLog(` You have created Flawless!`);
       destroyInventory(itemA);
       destroyInventory(item);
       take(createObject(OFLAWLESS)); 
+    }
+    else if (((itemA.id == OELVENCHAIN.id) && (item.id == OSSPLATE.id)) || ((item.id == OELVENCHAIN.id) && (itemA.id == OSSPLATE.id))) {
+      updateLog(` You have diluted the Elvenchain!`);
+      if (item.id == OSSPLATE.id) {
+        destroyInventory(item);
+        itemA.arg=-10;
+      }
+      else {
+        destroyInventory(itemA);
+        item.arg=-10;
+      }
     }
     else {
       updateLog(` The items spark and explode!`);
