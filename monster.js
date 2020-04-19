@@ -254,10 +254,13 @@ Monster.prototype = {
       case DEMONLORD + 6:
       case DEMONPRINCE:
       case LUCIFER:
+      case EARTHGUARDIAN:
       case AIRGUARDIAN:
       case FIREGUARDIAN:
+      case WATERGUARDIAN:
       case TIMEGUARDIAN:
       case ETHEREALGUARDIAN:
+      case APPRENTICE:
       case MASTER:
         return true;
       default:
