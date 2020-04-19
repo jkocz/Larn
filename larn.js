@@ -31,11 +31,12 @@ function play() {
   AWS.config.secretAccessKey = "AWS_CONFIG_SECRETACCESSKEY";
 
   // real credentials are set here, and not committed
-  try {
-    initLambdaCredentials();
-  } catch (error) {
-    console.error(`not loading aws credentials: ${error}`);
-  }
+  // JXK: removed for offline 
+  //try {
+  //  initLambdaCredentials();
+  //} catch (error) {
+  //  console.error(`not loading aws credentials: ${error}`);
+  //}
 
   lambda = new AWS.Lambda({
     region: 'us-east-1',

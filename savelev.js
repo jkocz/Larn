@@ -4,7 +4,7 @@ function saveGame(isCheckPoint) {
 
   if (NOCOOKIES) {
     if (!isCheckPoint)
-    updateLog(`Cookies are disabled, games cannot be loaded or saved`);
+    //updateLog(`Cookies are disabled, games cannot be loaded or saved`);
     //JXK Temp testing hack for windows
     updateLog(`Storage does not seem to be functioning properly. Game may not load/save.`);
     //return;
@@ -38,6 +38,7 @@ function saveGame(isCheckPoint) {
   /* save an emergency backup */
   localStorageSetObject(saveName + 'backup', state);
 
+  //JXK Temp hack for testing
   var hash = forge.md.sha512.create();
   hash.update(bytes = JSON.stringify(state));
 

@@ -404,7 +404,9 @@ function setgender(genderpick) {
 function startgame(hard) {
 
   initFS();
-  getIP();
+
+  //JXK: Removed for offline
+  //getIP();
 
   makeplayer(); /*  make the character that will play  */
 
