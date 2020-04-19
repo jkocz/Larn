@@ -1,12 +1,14 @@
 - General:
     - ~~Make sure slayer/other items that only appear out of dungeon are still forced to appear in the volcano~~
     - Re-evaluate time limit
-    - Keep or remove longer text display? - Need to update in shops/bank/home if keep.
+    - Keep or remove longer text display? ~~- Need to update in shops/bank/home if keep.~~
     - ~~Test amulet of invisibility~~
     - ~~Change slayer probability so it appears on V5 (or F1?) if not already?~~
     - Amiga graphics?
     - ~~Forest maps need updating to be distinct~~ 
     - Need additional maps (even if only slight variations). Then ensure maps only used once.
+    - Ensure that combined items etc cannot appear on maps randomly 
+    - Puzzle of mark?
 
 - Monsters/balance:
     - Make e.g. hellhound immune to fire? 

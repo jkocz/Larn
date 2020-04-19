@@ -6,9 +6,6 @@ const BUILD = '008';
 var ULARN = false; // are we playing LARN or ULARN?
 var FOREST = false; // are we playing the FOREST?
 
-//var ULARN = true; // are we playing LARN or ULARN?
-//var FOREST = true; // are we playing the FOREST?
-
 const IMG_HEIGHT = 24;
 const IMG_WIDTH = 12;
 

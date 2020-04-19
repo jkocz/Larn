@@ -204,7 +204,9 @@ function cl_up(x, y) {
 
 
 function cl_dn(x, y) {
-  for (var i = y; i <= 24; i++) {
+  // JXK: extended log
+  //for (var i = y; i <= 24; i++) {
+  for (var i = y; i <= 29; i++) {
     cursor(1, i);
     cltoeoln();
   }
