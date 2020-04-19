@@ -5,15 +5,18 @@ function saveGame(isCheckPoint) {
   if (NOCOOKIES) {
     if (!isCheckPoint)
     updateLog(`Cookies are disabled, games cannot be loaded or saved`);
-    return;
+    //JXK Temp testing hack for windows
+    updateLog(`Storage does not seem to be functioning properly. Game may not load/save.`);
+    //return;
   }
 
-  if (wizard || cheat) {
+  //JXK: Temp remove for testing
+  /*if (wizard || cheat) {
     if (isCheckPoint) {
       // console.log(`not saving wizard/cheater checkpoint`);
       return;
     }
-  }
+  }*/
 
   var saveName = isCheckPoint ? 'checkpoint' : logname;
 
@@ -79,9 +82,7 @@ function loadSavedGame(savedState, isCheckPoint) {
   if (isCheckPoint) {
     updateLog(`Did you quit accidentally? I restored your last game just in case.`);
   } else {
-    //JXK: temp keep saved files
-    //updateLog(`Welcome back. (Your save file has now been been deleted)`);
-    updateLog(`Welcome back.`);
+    updateLog(`Welcome back. (Your save file has now been been deleted)`);
   }
 
   /* v304 -- disabling cheating funcionality for now. It's really more
