@@ -791,15 +791,20 @@ function spell_combine(index) {
   else {
     var itemA = player.inventory[mergeObjectIndex];
 
-    updateLog(` The ${itemA} and ${item} have been combined!`);
+    updateLog(` ${itemA} and ${item} have been combined!`);
 
-    if (itemA.id == item.id) {
+    if (mergeObjectIndex == useindex) {
+      updateLog(` Combining the item with itself causes it to overload from the feedback`);
+      updateLog(` ${itemA} explodes!`);
+      destroyInventory(itemA);
+    }
+    else if (itemA.id == item.id) {
       // create new item with combined stats
       destroyInventory(itemA);
       destroyInventory(item);
       // extra + 1 to account for the invisible +0 that actually gives +1
       itemA.arg += item.arg + 1; 
-      updateLog(` You have created a ${itemA}`);
+      updateLog(` You have created ${itemA}`);
       take(createObject(itemA));
     }
     else if (((itemA.id == OSLAYER.id)  && (item.id == OLANCE.id)) || ((itemA.id == OLANCE.id) && (item.id == OSLAYER.id))) {
