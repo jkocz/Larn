@@ -454,14 +454,20 @@ function makeobject(depth) {
 	/* because there are no stairs on those levels */
   if (ULARN && depth >= MAXLEVEL + MAXVLEVEL - 3) {
     fillroom(OPIT, 0);
-    fillroom(OIVTRAPDOOR,0);
+    // don't have trapdoors in the forest 
+    if (depth <= VBOTTOM) {
+      fillroom(OIVTRAPDOOR,0);
+    }
   }
   /* regular pits */ 
   fillmroom(rund(3), OPIT, 0);
 
-  if (ULARN || (depth != DBOTTOM) && (depth != VBOTTOM))
-    fillmroom(rund(2), OIVTRAPDOOR, 0);
-
+  if (ULARN || (depth != DBOTTOM) && (depth != VBOTTOM)) {
+    // don't have trapdoors in the forest
+    if (depth <= VBOTTOM) {
+      fillmroom(rund(2), OIVTRAPDOOR, 0);
+    }
+  }
   fillmroom(rund(2), OTRAPARROWIV, 0);
   fillmroom(rnd(3) - 2, OIVDARTRAP, 0);
   fillmroom(rnd(3) - 2, OIVTELETRAP, 0);

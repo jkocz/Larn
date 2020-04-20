@@ -9,6 +9,7 @@
     - Need additional maps (even if only slight variations). Then ensure maps only used once.
     - Ensure that combined items etc cannot appear on maps randomly 
     - Puzzle of mark?
+    - No trapdoors in forest
 
 - Monsters/balance:
     - Make e.g. hellhound immune to fire? 
@@ -51,3 +52,5 @@
     - Ularn bug: Vorpal blade sometimes beheads a monster that is killed by a spell.
       (use same logic as rustmonster to not behead?)
     - Ularn bug: Make stairs always take you to same place
+    - Investigate haste self. - Does not always work if monster hit by spell?
+    - Forest spells on bottom level of volcano

@@ -1022,6 +1022,8 @@ function readbook(book) {
 
   if (FOREST) {
     // book from Guardian is forced to be a specific spell
+    updateLog(`Forest level: ${level}, lev: ${lev}`);
+
     if (lev > 40) {
       //updateLog(`Spell index: ${lev}`);
       spellIndex = lev;
