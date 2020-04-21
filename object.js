@@ -1021,23 +1021,32 @@ function readbook(book) {
   }
 
   if (FOREST) {
-    // book from Guardian is forced to be a specific spell
     updateLog(`Forest level: ${level}, lev: ${lev}`);
 
+    // book from Guardian is forced to be a specific spell
     if (lev > 40) {
-      //updateLog(`Spell index: ${lev}`);
       spellIndex = lev;
     } 
-    else if (splev[lev] > 38) {
+    else if (splev[lev] > 38 && level > VBOTTOM) {
       // we are in the forest, weight toward new spells
-      if (spellIndex < 38) {
+      // VBOTTOM check is a hack, as lev is sometimes level+N
+      // resulting in higher level spells outside of the forest.
+      // This can happen in treasure rooms, in a canned level,
+      // and chests. 
+      if (spellIndex < 39) {
         spRedo = rnd(100);
-        updateLog(`Forest redo: Spell index: ${lev}, spRedo: ${spRedo}`);
+        updateLog(`Forest redo: Spell index: ${spellIndex}, spRedo: ${spRedo}`);
         if (spRedo > 75) 
           spellIndex = 40;
         else if (spRedo > 50)
           spellIndex = 39;
       } 
+    }
+    else if (spellIndex > 38) {
+      // forest spell outside the forest
+      updateLog(`Forest spell early redo: splev: ${splev[lev]}, spellIndex: ${spellIndex} `);
+      readbook(book);
+      return;
     }
     //else {
       //updateLog(`Spell index: ${lev}`);
