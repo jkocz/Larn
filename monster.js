@@ -791,7 +791,7 @@ function hitplayer(x, y) {
 
   if ((level > VBOTTOM) && (monster.arg < DEMONLORD)) {
     // monsters in the forest are tough! 
-    dam = Math.floor(dam * 2);
+    dam = Math.floor(dam * 3);
   }
 
   if (((dam + bias) > player.AC) || (rnd(((player.AC > 0) ? player.AC : 1)) == 1)) {
