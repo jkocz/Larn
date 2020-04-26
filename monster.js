@@ -795,8 +795,12 @@ function hitplayer(x, y) {
   }
 
   if (((dam + bias) > player.AC) || (rnd(((player.AC > 0) ? player.AC : 1)) == 1)) {
-    //updateLog(`  The ${monster} hit you`);
-    updateLog(`  The ${monster} hit you for ${dam} damage`);
+    if (!FOREST) {
+      updateLog(`  The ${monster} hit you`);
+    }
+    else {
+      updateLog(`  The ${monster} hit you for ${dam} damage`);
+    }
     playerHit = true;
 
     /* if rebound is active */
@@ -885,7 +889,6 @@ function hitmonster(x, y) {
     // JXK: This is so the lance values aren't reduced. 
     //      Modified for forest to be an interval 10% of damage, rather than 
     //      a random number from 1 - damage.
-    //      TODO: Eval: 10% vs 20%, Eval: max as damage or damage+drange.
     if (FOREST) {
       drange = 0.1*damage;
       if (damage < 9999) damage = rInterval(damage-drange, damage+drange);    
@@ -1170,14 +1173,18 @@ function spattack(monster, attack, xx, yy) {
       // fall through
 
     case 3: // dragon
-      if (damage == null) 
+      if (damage == null) { 
         damage = rnd(20) + 25 - armorclass;
-      if (player.FIRERESISTANCE) 
+      }
+      if (player.FIRERESISTANCE) {
         updateLog(`The ${monster}'s flame doesn't faze you!`);
+      }
       else { 
         updateLog(`The ${monster} breathes fire at you!`);
-        updateLog(`You lost ${damage} hp`);
         player.losehp(damage);
+        if (FOREST) { 
+          updateLog(`You lost ${damage} hp`);
+        }
       }
       return 0;
 
@@ -1191,8 +1198,10 @@ function spattack(monster, attack, xx, yy) {
     case 5:
       updateLog(`The ${monster} blasts you with its cold breath`);
       damage = rnd(15) + 18 - armorclass;
-      updateLog(`You lost ${damage} hp`);
       player.losehp(damage);
+      if (FOREST) { 
+        updateLog(`You lost ${damage} hp`);
+      }
       return 0;
 
     case 6:
@@ -1211,8 +1220,10 @@ function spattack(monster, attack, xx, yy) {
     case 7:
       updateLog(`The ${monster} got you with a gusher!`);
       damage = rnd(15) + 25 - armorclass;
-      updateLog(`You lost ${damage} hp`);
       player.losehp(damage);
+      if (FOREST) { 
+        updateLog(`You lost ${damage} hp`);
+      }
       return 0;
 
     case 8:
@@ -1297,6 +1308,9 @@ function spattack(monster, attack, xx, yy) {
       if (damage == null) damage = rnd(15) + 10 - armorclass;
       updateLog(`The ${monster} bit you!`);
       player.losehp(damage);
+      if (FOREST) { 
+        updateLog(`You lost ${damage} hp`);
+      }
       return 0;
 
   }
