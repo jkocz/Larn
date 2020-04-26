@@ -662,6 +662,13 @@ function parse_tradepost(key) {
         return 0;
       }
       if (item.matches(OSCROLL) || item.matches(OPOTION)) {
+        /* 12.5.0 fix
+           cure dianthroritis isn't in the dnd_item array which
+           causes see invisible and poison to sell for the wrong amount
+        */
+        if (item.matches(OPOTION) && item.arg > 21) {
+          j -= 1;
+        }
         value = 0.2 * dnd_item[j + item.arg].price;
       } else {
         var izarg = item.arg;
@@ -764,25 +771,25 @@ function printclasses() {
   cursor(1, 1);
   lprcat(`The College of ${GAMENAME} offers the exciting opportunity of higher education to\n`);
   lprcat(`all inhabitants of the caves. Here is the class schedule:\n\n\n`);
-  lprcat(`\t\t    Course Name               Time Needed\n\n`);
+  lprcat(`                      Course Name               Time Needed\n\n`);
 
-  if (!course[0]) lprcat(`\t\ta)  Fighter Training I          10 mobuls`);
+  if (!course[0]) lprcat(`                  a)  Fighter Training I          10 mobuls`);
   lprc('\n');
-  if (!course[1]) lprcat(`\t\tb)  Fighter Training II         15 mobuls`);
+  if (!course[1]) lprcat(`                  b)  Fighter Training II         15 mobuls`);
   lprc('\n');
-  if (!course[2]) lprcat(`\t\tc)  Introduction to Wizardry    10 mobuls`);
+  if (!course[2]) lprcat(`                  c)  Introduction to Wizardry    10 mobuls`);
   lprc('\n');
-  if (!course[3]) lprcat(`\t\td)  Applied Wizardry            20 mobuls`);
+  if (!course[3]) lprcat(`                  d)  Applied Wizardry            20 mobuls`);
   lprc('\n');
-  if (!course[4]) lprcat(`\t\te)  Behavioral Psychology       10 mobuls`);
+  if (!course[4]) lprcat(`                  e)  Behavioral Psychology       10 mobuls`);
   lprc('\n');
-  if (!course[5]) lprcat(`\t\tf)  Faith for Today             10 mobuls`);
+  if (!course[5]) lprcat(`                  f)  Faith for Today             10 mobuls`);
   lprc('\n');
-  if (!course[6]) lprcat(`\t\tg)  Contemporary Dance          10 mobuls`);
+  if (!course[6]) lprcat(`                  g)  Contemporary Dance          10 mobuls`);
   lprc('\n');
-  if (!course[7]) lprcat(`\t\th)  History of ${GAMENAME}${ULARN ? `` : ` `}             5 mobuls`);
+  if (!course[7]) lprcat(`                  h)  History of ${GAMENAME}${ULARN ? `` : ` `}             5 mobuls`);
 
-  lprcat(`\n\n\t\tAll courses cost 250 gold pieces`);
+  lprcat(`\n\n                  All courses cost 250 gold pieces`);
   cursor(30, 18);
   lprcat(`You are presently carrying ${Number(player.GOLD).toLocaleString()} gold pieces`);
 }
@@ -1120,7 +1127,6 @@ async function win(key) {
   if (key != ENTER) {
     return 0;
   }
-
   napping = true;
   cursor(1, 8);
   cltoeoln();

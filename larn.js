@@ -1,13 +1,12 @@
 'use strict';
 
 const VERSION = '12.6.0 (alpha)';
-const BUILD = '008';
+const BUILD = '009';
 
 var ULARN = false; // are we playing LARN or ULARN?
 var FOREST = false; // are we playing the FOREST?
 
-const IMG_HEIGHT = 24;
-const IMG_WIDTH = 12;
+var ULARN = false; // are we playing LARN or ULARN?
 
 var DEBUG_STATS = false;
 var DEBUG_OUTPUT = false;
@@ -18,8 +17,10 @@ var DEBUG_LPRCAT = 0;
 var DEBUG_LPRC = 0;
 var DEBUG_PROXIMITY = false;
 
-var dofs = false;
-var lambda;
+var dofs = false; /* use fullstory */
+var lambda; /* AWS lambda database handle */
+let compressionWorker; /* web worker to compress save games outside of main thread */
+let workersAvailable = window.location.protocol != `file:`; /* can't read file:// */
 
 function play() {
 
@@ -27,8 +28,10 @@ function play() {
   AWS.config.accessKeyId = "AWS_CONFIG_ACCESSKEYID";
   AWS.config.secretAccessKey = "AWS_CONFIG_SECRETACCESSKEY";
 
-  // real credentials are set here, and not committed
   // JXK: removed for offline 
+  //      Offline flag for an if/else would be preferred.
+
+  // real credentials are set here, and not committed
   //try {
   //  initLambdaCredentials();
   //} catch (error) {
@@ -43,11 +46,17 @@ function play() {
   initKeyBindings();
 
   document.addEventListener("click", onMouseClick);
+  window.addEventListener("resize", onResize);
 
-  /* warn the player that closing their window will kill the game.
+  if (window.Worker && workersAvailable) {
+    compressionWorker = new Worker('worker.js');
+    compressionWorker.onmessage = onCompressed;
+  }
+
+    /* warn the player that closing their window will kill the game.
      this is a bit annoying, and I'm tempted to get rid of it now
      that there are checkpoints in place */
-  if (location.hostname === 'localhost') {
+  if (location.hostname === 'localhost' || location.hostname === '') {
     enableDebug();
   } else {
     window.onbeforeunload = confirmExit;
@@ -118,7 +127,7 @@ function initKeyBindings() {
   Mousetrap.bind('@', mousetrap); // auto-pickup
   Mousetrap.bind('#', mousetrap); // inventory 
   Mousetrap.bind('{', mousetrap); // retro fonts
-  Mousetrap.bind('}', eventToggleMode); // classic/hack/amiga 
+  Mousetrap.bind('}', mousetrap); // classic/hack/amiga
   Mousetrap.bind('?', mousetrap); // help
   Mousetrap.bind('_', mousetrap); // password
   Mousetrap.bind('-', mousetrap); // disarm 
@@ -157,6 +166,7 @@ function initKeyBindings() {
 
 function enableDebug() {
   debug_used = 1;
+  console.log(`DEBUG_MODE: ON`);
   Mousetrap.bind('alt+`', eventToggleDebugStats);
   Mousetrap.bind('alt+1', eventToggleDebugOutput);
   Mousetrap.bind('alt+2', eventToggleDebugWTW);
@@ -169,66 +179,6 @@ function enableDebug() {
   Mousetrap.bind('alt+9', eventEngolden);
   Mousetrap.bind('alt+0', eventToggleDebugProximity);
 }
-
-
-
-// toggle between classic, hack and amiga mode
-function eventToggleMode(event, key, quiet) {
-  nomove = 1;
-  // classic => hack
-  if (original_objects && !amiga_mode) {
-    document.body.style.fontSize = retro_mode ? '25px' : '22px';
-    original_objects = false;
-    if (!quiet) updateLog(`Switching to Hack mode`);
-  }
-  // hack mode => amiga
-  else if (!original_objects && !amiga_mode) {
-    document.body.style.fontSize = '20px';
-    amiga_mode = true;
-    original_objects = true;
-    for (var y = 0; y < 24; y++) {
-      for (var x = 0; x < 80; x++) {
-        display[x][y] = createDiv(x, y);
-      }
-    }
-    if (!images) {
-      loadImages();
-    }
-    bltDocument();
-    if (!quiet) updateLog(`Switching to Amiga mode`);
-    clear();
-  }
-  // amiga mode => classic
-  else {
-    document.body.style.fontSize = retro_mode ? '25px' : '22px';
-    amiga_mode = false;
-    original_objects = true;
-    if (!quiet) updateLog(`Switching to Classic mode`);
-  }
-
-  paint();
-}
-
-
-
-function createDiv(x, y) {
-  var callback = ``;
-  if (mobile) {
-    var key = `.`;
-    if (x < 22 && y <= 5) key = `y`;
-    else if (x <= 44 && y <= 5) key = `k`;
-    else if (x <= 67 && y <= 5) key = `u`;
-    else if (x < 22 && y <= 11) key = `h`;
-    else if (x <= 44 && y <= 11) key = `.`;
-    else if (x <= 67 && y <= 11) key = `l`;
-    else if (x < 22 && y <= 16) key = `b`;
-    else if (x <= 44 && y <= 16) key = `j`;
-    else if (x <= 67 && y <= 16) key = `n`;
-    callback = `onclick='mousetrap(null, "${key}")'`;
-  }
-  return `<div id='${x},${y}' class='image' ${callback}></div>`;
-}
-
 
 
 function eventToggleDebugStats() {
@@ -367,102 +317,4 @@ function eventToggleDebugProximity() {
   DEBUG_PROXIMITY = !DEBUG_PROXIMITY;
   updateLog(`DEBUG: PROXIMITY: ` + DEBUG_PROXIMITY);
   paint();
-}
-
-
-
-function onMouseClick(event) {
-  try {
-
-    let xy, x, y;
-
-    if (amiga_mode) {
-      if (!event.target.attributes.id) return; // clicking outside the 80,24 window
-      xy = event.target.attributes.id.value.split(`,`);
-      x = xy[0];
-      y = xy[1];
-    } 
-    else {
-
-      return;
-
-      /*
-      // this is too unreliable to ship
-      let el = document.getElementById('LARN');
-      let style = window.getComputedStyle(el, null).getPropertyValue('font-size');
-      let fontSize = parseFloat(style);
-      let fontWidth = getTextWidth("0", fontSize + 'pt dos');
-      // console.log(`fontwidth: ${fontWidth} fontSize: ${fontSize}`);
-
-      // console.log(event.layerX, event.layerY);
-      // console.log(event.clientX, event.clientY);
-
-      let offx = 25; // event.target.offsetLeft;
-      let offy = 25; // event.target.offsetTop);
-      // let offx = event.target.offsetLeft;
-      // let offy = event.target.offsetTop;
-      console.log(offx, offy);
-      
-      let clickX = event.clientX - offx;
-      let clickY = event.clientY - offy;
-      // console.log(`clickX`, clickX, `clickY`, clickY);
-
-      x = clickX / fontWidth;
-      y = clickY / fontSize;
-      console.log(x, y);
-
-      let weirdHackX = (66/59.52);
-      let weirdHackY = (16/18.45);
-      x = Math.floor((clickX / fontWidth) * weirdHackX);
-      y = Math.floor((clickY / fontSize) * weirdHackY);
-      */
-
-    }
-
-    let monster = monsterAt(x, y);
-    let item = itemAt(x, y);
-
-    if (!item) return; // clicking outside the 67,17 maze
-
-    let description = ``;
-    let prefix = `It's `;
-    let sayEmpty = false;
-
-    // console.log(event);
-    // console.log(x, y);
-    // updateLog(`${x}, ${y}`);
-
-    if (monster) {
-      // no help for invisible monsters or if you're blind
-      sayEmpty = !monster.isVisible() || player.BLINDCOUNT > 0;
-    }
-
-    if (sayEmpty) monster = null; // what monster?
-
-    if (!player.level.know[x][y]) {
-      description = `a mystery`;
-    }
-    else if (x == player.x && y == player.y) {
-      description = `our Hero`;
-    } 
-    else if (monster) {
-      description = monster.toString();
-      if (monster.matches(MIMIC)) description = monsterlist[monster.mimicarg].toString();
-      let firstChar = description.substring(0, 1).toLocaleLowerCase();
-      prefix = `It's a `;
-      if (`aeiou`.indexOf(firstChar) >= 0) prefix = `It's an `;
-    }
-    else if (sayEmpty || item.matches(OIVDARTRAP) || item.matches(OIVTELETRAP) || item.matches(OIVTRAPDOOR) || item.matches(OTRAPARROWIV)) {
-      description = OEMPTY.desc;
-    }
-    else {
-      description = item.desc;
-    }
-
-    description = prefix + description;
-    updateLog(description);
-    paint();
-  } catch (error) {
-    console.log(`onMouseClick`, error);
-  }
 }

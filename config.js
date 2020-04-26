@@ -62,8 +62,6 @@ function setGameConfig() {
 
     if (ULARN) OTRADEPOST.desc = `the Ularn trading Post`;
 
-
-
     if (ULARN) {
         DEATH_REASONS.set(DIED_BOTTOMLESS_TRAPDOOR, `fell through a trap door to HELL`);
         DEATH_REASONS.set(DIED_BOTTOMLESS_PIT, `fell into a pit to HELL`);

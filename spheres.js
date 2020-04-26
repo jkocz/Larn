@@ -89,7 +89,7 @@ function newsphere(x, y, dir, life, lev) {
     return;
   }
 
-  setItem(x, y, createObject(OANNIHILATION));
+  setItem(x, y, OANNIHILATION);
 
   updateWalls(x, y, 1);
 

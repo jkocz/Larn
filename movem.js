@@ -29,7 +29,6 @@ function movemonst() {
   /* no action if monsters are held */
   if (player.HOLDMONST) return;
 
-
   if (player.AGGRAVATE) {
     /* determine window of monsters to move */
     move_yl = player.y - 5;
@@ -655,7 +654,7 @@ function mmove(sx, sy, dx, dy) {
   /* if blind don't show where monsters are */
   if (player.BLINDCOUNT) return;
 
-  if (player.level.know[dx][dy] != OUNKNOWN) {
+  if (player.level.know[dx][dy] != null) {
     if (trap_msg) {
       updateLog(trap_msg);
       beep();
@@ -714,6 +713,9 @@ function valid_monst_move(x, y, monster) {
 
   /* can't move here */
   at_player = (x == player.x) && (y == player.y);
+  // JXK: level 1 is first dungeon level, level 21 is first forest level
+  //      TODO: first forest level should be set to variable instead of
+  //            static. Set to vbottom + 1?
   at_entrance = (x == 33) && (y == MAXY - 1) && ((level == 1) || (level == 21));
 
   /*

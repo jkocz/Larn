@@ -218,7 +218,7 @@ function parse(key) {
   //
   // EAT COOKIE
   //
-  if (key == 'E' || key == 'e') {
+  if (key == 'e') {
     if (item.isStore()) {
       enter();
       return;
@@ -381,7 +381,7 @@ function parse(key) {
   //
   if (key == 't' || key == ',') {
     /* pickup, don't identify or prompt for action */
-    lookforobject(false, true, false);
+    lookforobject(false, true);
     return;
   }
 
@@ -545,8 +545,7 @@ function parse(key) {
   //
   if (key == 'S') {
     nomove = 1;
-    saveGame();
-    if (!NOCOOKIES) died(DIED_SAVED_GAME, false); /* saved game */
+    if (saveGame()) died(DIED_SAVED_GAME, false); /* saved game */
     return;
   }
 
@@ -663,7 +662,30 @@ function parse(key) {
   if (key == ':') {
     nomove = 1; /* assumes look takes no time */
     /* identify, don't pick up or prompt for action */
-    lookforobject(true, false, false);
+    lookforobject(true, false);
+    return;
+  }
+
+  //
+  // help screen
+  //
+  if (key == '?') {
+    nomove = 1;
+    currentpage = 0;
+    setCharCallback(parse_help);
+    print_help();
+    return;
+  }
+
+  //
+  // toggle extra keyboard help mode
+  //
+  if (key == '!') {
+    nomove = 1;
+    keyboard_hints = !keyboard_hints;
+    updateLog(`Keyboard hints: ${keyboard_hints ? `on` : `off`}`);
+    if (keyboard_hints)
+      lookforobject(true, false);
     return;
   }
 
@@ -703,6 +725,7 @@ function parse(key) {
     nomove = 1;
     side_inventory = !side_inventory;
     updateLog(`Inventory view: ${side_inventory ? `on` : `off`}`);
+    setMode(amiga_mode, retro_mode, original_objects);
     return;
   }
 
@@ -717,13 +740,42 @@ function parse(key) {
   }
 
   //
+  // toggle between classic, hack and amiga mode
+  //
+  if (key == '}') {
+    nomove = 1;
+    // classic => hack
+    if (original_objects && !amiga_mode) {
+      original_objects = false;
+      updateLog(`Switching to Hack mode`);
+    }
+    // hack mode => amiga
+    else if (!original_objects && !amiga_mode) {
+      amiga_mode = true;
+      original_objects = true;
+      updateLog(`Switching to Amiga mode`);
+    }
+    // amiga mode => classic
+    else {
+      amiga_mode = false;
+      original_objects = true;
+      updateLog(`Switching to Classic mode`);
+    }
+    setMode(amiga_mode, retro_mode, original_objects);
+    return;
+  }
+
+  //
   // toggle retro fonts
   //
   if (key == '{') {
     nomove = 1;
     retro_mode = !retro_mode;
-    updateLog(`Retro fonts: ${retro_mode ? `on` : `off`}`);
-    setFontMode(retro_mode);
+    localStorageSetObject('retro', retro_mode);
+    let fontStatus = retro_mode ? `DOS` : `Modern`;
+    if (amiga_mode) fontStatus = retro_mode ? `Amiga 500` : `Amiga 1200`;
+    updateLog(`Font: ${fontStatus}`);
+    setMode(amiga_mode, retro_mode, original_objects);
     return;
   }
 

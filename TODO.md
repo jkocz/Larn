@@ -2,12 +2,32 @@ One thing that was askew in your initial implementation was flex: 95%
 If you're only after flex-grow, use the property directly rather than through the shorthand flex. Then it becomes easier to spot that flex-grow doesn't take % in but relative integer weights (1, 2, 3...)
 
 ULARN 12.5.0:
-- better amiga icons: magic items, demons & lucifer, elevator, lemming, bitbug
 - update README.spoilers doc
 - eye of larn appraisal in bank
 - search for ULARN TODO
 - "you have found" vs "you find"
 - check all 1.6.3 code
+- prevent wield and wear at the same time
+- should running increase gtime?
+- explain that . drops gold
+- should smart monsters be able to walk around sleeping monsters?
+- when blind, killing a monster shouldn't reveal gold dropped, or anything else?
+- retro font mode isn't properly monospaced in mac/safari
+
+python -m SimpleHTTPServer 8000
+http://localhost:8000/larn_local.html
+file:///Users/jay/Dropbox/Desktop/LARN/JLarn/larn/larn_local.html?ularn=true
+
+
+Navigator.cookieEnabled Read only
+Returns false if setting a cookie will be ignored and true otherwise.
+if (!navigator.cookieEnabled) {
+  // The browser does not support or is blocking cookies from being set.
+}
+Navigator.onLine Read only
+Returns a Boolean indicating whether the browser is working online.
+window.addEventListener('offline', function(e) { console.log('offline'); });
+window.addEventListener('online', function(e) { console.log('online'); });
 
 ULARN 12.5.1
 - crumble altars faster? 1/20?
@@ -17,10 +37,11 @@ ULARN 12.5.1
   - monster.isSlow, and different way to decide when to move
 - async/await for keyboard input?
 - update babel to support async/await for nap()
-- why is bessman:1 for every old game?
 - amiga mode: unseen walls should be flat
 - widget of spine tingling 
 - life preserver
+- just pray option at altar
+- wash at fountain clears itching
 
 todo:
 - check chrome audit tab
@@ -30,13 +51,12 @@ todo:
 - show time in side inventory
 - Save id to name and name to id map
 - update history
-- beep()
 - help wiki (items/scrolls/potions/features/monsters/etc)
 - most references to player.level should be replaced with functions
 - allow hitting escape while naps are happening (interrupt settimeout?)
   - make buying / selling items etc faster 
 - eye of larn pickup/drop message with proper naps inbetween messages (harder than expected the first time around)
-
+- repeat function
 
 
 bugs:
@@ -49,7 +69,6 @@ bugs:
   just in drops you back on the monsters spot. the monster reappears when you move.
 - can't load game stats from local scoreboard (can't find game sdkjfhsdfkj)
 - arrow buttons on help screen are truncated in amiga mode
-- amiga mode: viewing scoreboard resets to classic mode (partially fixed)
 - amiga mode: strikethrough missing on taxes owing after victory
 - blindness
   - black tile when opening door when blind
@@ -60,8 +79,6 @@ bugs:
 
 
 extras:
-- change font to dynamically fit window
-- better inventory layout, font selection with react?
 - url for scoreboard
 - mle bounce off demon
 - no teleport away for demon
@@ -88,3 +105,13 @@ extras:
   - win/death ratio per difficulty
 - speedrun mode
 - lantern - radiates light out from hero for x spaces?
+
+
+hardmode ideas:
+- can only wield actual weapons
+- prevent wield and wear at the same time
+- altar donation aren't just 10%, min 50
+- stop time doesn't prevent falling in pits
+- demons don't respect stealth, hold is less effective
+- guardians are never asleep
+- reduce blessed ularn item sale prices

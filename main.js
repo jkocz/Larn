@@ -14,6 +14,11 @@ function welcome() {
   createLevelNames();
 
   initHelpPages();
+
+  amiga_mode = PARAMS.mode && PARAMS.mode == `amiga`;
+  retro_mode = localStorageGetObject('retro', true);
+  setMode(amiga_mode, retro_mode, original_objects);
+
   lprcat(helppages[0]);
   cursors();
 
@@ -39,14 +44,11 @@ function welcome() {
 
   if (!no_intro) {
     setTextCallback(setname);
-    setButtons();
   } else {
     setname(logname);
   }
 
-  retro_mode = localStorageGetObject('retro', false);
-  setFontMode(retro_mode);
-
+  setButtons();
   blt();
 }
 
@@ -112,7 +114,8 @@ function setname(name) {
   player = new Player(); /* gender and character class are set later on */
 
   if (no_intro) {
-    startgame(getDifficulty());
+    //startgame(getDifficulty());
+    setclass(`Adventurer`);
     return 1;
   }
 
@@ -121,7 +124,6 @@ function setname(name) {
     readmail();
     localStorageRemoveItem(logname); /* clear the mail flag */
     return 1;
-
   } else if (savegame || checkpoint) {
     if (savegame) {
       loadSavedGame(saveddata, false);
@@ -265,7 +267,7 @@ function getIP() {
       });
     });
   } catch (e) {
-    console.error(`caught: ${e}`);
+    // do nothing
   }
 }
 
@@ -285,18 +287,18 @@ function setdiff(hard) {
     setGameDifficulty(hard);
   }
 
-  if (ULARN) {
+  if (ULARN && !no_intro) {
     clear();
     lprcat(`The Addiction of Ularn\n\n`);
-    lprcat(`\tPick a character class...\n\n`);
-    lprcat(`\ta)  Ogre          Exceptional strength, but thick as a brick\n`);
-    lprcat(`\tb)  Wizard        Smart, good at magic, but very weak\n`);
-    lprcat(`\tc)  Klingon       Strong and average IQ, but unwise & very ugly\n`);
-    lprcat(`\td)  Elf           OK at magic, but a mediocre fighter\n`);
-    lprcat(`\te)  Rogue         Nimble and smart, but only average strength\n`);
-    lprcat(`\tf)  Adventurer    Jack of all trades, master of none\n`);
-    lprcat(`\tg)  Dwarf         Strong and healthy, but not good at magic\n`);
-    lprcat(`\th)  Rambo         Bad at everything, but has a Lance of Death\n`);
+    lprcat(`     Pick a character class...\n\n`);
+    lprcat(`     a)  Ogre          Exceptional strength, but thick as a brick\n`);
+    lprcat(`     b)  Wizard        Smart, good at magic, but very weak\n`);
+    lprcat(`     c)  Klingon       Strong and average IQ, but unwise & very ugly\n`);
+    lprcat(`     d)  Elf           OK at magic, but a mediocre fighter\n`);
+    lprcat(`     e)  Rogue         Nimble and smart, but only average strength\n`);
+    lprcat(`     f)  Adventurer    Jack of all trades, master of none\n`);
+    lprcat(`     g)  Dwarf         Strong and healthy, but not good at magic\n`);
+    lprcat(`     h)  Rambo         Bad at everything, but has a Lance of Death\n`);
     cursors();
 
     player.char_picked = localStorageGetObject('character_class') || 'Adventurer';
@@ -344,14 +346,14 @@ function setclass(classpick) {
     changedWC = 0; // don't highlight AC & WC on game start
     changedAC = 0;
 
-    if (ULARN) {
+    if (ULARN && !no_intro) {
       localStorageSetObject('character_class', characterClass);
       clear();
       lprcat(`The Addiction of Ularn\n\n`);
-      lprcat(`\tPick a gender...\n\n`);
-      lprcat(`\ta)  Male\n`);
-      lprcat(`\tb)  Female\n`);
-      lprcat(`\tc)  I prefer to not be defined by traditional gender norms\n`);
+      lprcat(`     Pick a gender...\n\n`);
+      lprcat(`     a)  Male\n`);
+      lprcat(`     b)  Female\n`);
+      lprcat(`     c)  I prefer to not be defined by traditional gender norms\n`);
       cursors();
 
       player.gender = localStorageGetObject('gender') || 'Male';
@@ -406,6 +408,8 @@ function startgame(hard) {
   initFS();
 
   //JXK: Removed for offline
+  //     Set to have a flag for local play?
+  //     (No need to go asking for IPs otherwise)
   //getIP();
 
   makeplayer(); /*  make the character that will play  */
@@ -418,138 +422,25 @@ function startgame(hard) {
   updateLog(introMessage);
 
   if (NOCOOKIES) {
-    updateLog(`Cookies are disabled, games cannot be loaded or saved`);
+    updateLog(`Are cookies disabled? You may not be able to save your game!`);
   }
-
-  setAmigaMode();
 
   showcell(player.x, player.y);
 
   GAMEOVER = false;
   setMazeMode(true);
-  side_inventory = true;
+  game_started = true;
 
-  // DEVMODE();
+  // DEVMODE(); // this must be commented out for production releases
 
   return 1;
 }
 
 
-
-function DEVMODE() {
-
-    enableDebug();
-    eventToggleDebugWTW();
-    eventToggleDebugStairs();
-    eventToggleDebugOutput();
-    eventToggleDebugKnowAll();
-    eventToggleDebugStats();
-    eventToggleDebugImmortal();
-    eventToggleDebugAwareness();
-    player.updateStealth(100000);
-    player.updateCancellation(100000);
-
-    // wizardmode(`pvnert(x)`);
-
-    // var startShield = createObject(OSHIELD);
-    // take(startShield);
-    // var startDagger = createObject(ODAGGER, -9);
-    // var startSlayer = createObject(OSLAYER);
-    // take(startDagger);
-    // take(startSlayer);
-    // player.SHIELD = startShield;
-    // take(createObject(OPOTION, 2));
-    // take(createObject(OPOTION, 10));
-    // take(createObject(OPOTION, 21));
-    // take(createObject(OPOTION, 23));
-
-    // take(createObject(OSPHTALISMAN));
-    // take(createObject(OHANDofFEAR));
-    take(createObject(OLARNEYE));
-    // take(createObject(ONOTHEFT));
-    // take(createObject(OBRASSLAMP));
-    // gtime = 30001;
-    // player.GOLD = 250000;
-
-    // createmonster(MIMIC,30, 0);
-    // createmonster(NYMPH);
-    // revealLevel();
-
-}
-
-
-function setAmigaMode() {
-  if (PARAMS.mode && PARAMS.mode == `amiga`) {
-    console.log(`switching to Amiga mode`);
-    amiga_mode = false;
-    original_objects = false;
-    eventToggleMode(null, null, true);
-  }
-}
-
-
-
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
 
-
-
-/**
- * Uses canvas.measureText to compute and return the width of the given text of given font in pixels.
- * 
- * @param {String} text The text to be rendered.
- * @param {String} font The css font descriptor that text is to be rendered with (e.g. "bold 14px verdana").
- * 
- * @see https://stackoverflow.com/questions/118241/calculate-text-width-with-javascript/21015393#21015393
- */
-function getTextWidth(text, font) {
-  // re-use canvas object for better performance
-  var canvas = getTextWidth.canvas || (getTextWidth.canvas = document.createElement("canvas"));
-  var context = canvas.getContext("2d");
-  context.font = font;
-  var metrics = context.measureText(text);
-  return metrics.width;
-}
-
-
-
-// function makeItFit() {
-
-//   var el = document.getElementById('LARN');
-//   var style = window.getComputedStyle(el, null).getPropertyValue('font-size');
-//   var fontSize = parseFloat(style); 
-//   // now you have a proper float for the font size (yes, it can be a float, not just an integer)
-
-//   var browserWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
-//   var browserHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
-
-//   fontSize = parseFloat(100);
-//   var safe = 100;
-//   var fontWidth = getTextWidth("0", fontSize + 'pt dos');
-//   // while (fontWidth * 80.0 < browserWidth) {
-//   //   fontWidth = getTextWidth("0", fontSize + 'pt dos');
-//   //   fontSize += 0.1;
-//   //   el.style.fontSize = (fontSize) + 'px';
-//   //   //console.log("+W", fontWidth, fontWidth*80.0, browserWidth, fontSize);
-//   //   if (safe-- < 0) return;
-//   // }
-
-//   // safe = 100;
-//   // if (fontWidth * 80.0 > browserWidth) {
-//   //   fontWidth = getTextWidth("0", fontSize + 'pt dos');
-//   //   fontSize -= 0.1;
-//   //   el.style.fontSize = (fontSize) + 'px';
-//   //   //console.log("-W", fontWidth, fontWidth*80.0, browserWidth, fontSize);
-//   //   if (safe-- < 0) return;
-//   // }
-
-//     var suggestedSize = Math.max(10, ((browserHeight-100) / 24.0));
-// console.log(suggestedSize, fontSize);
-//     suggestedSize = Math.min(suggestedSize, fontSize);
-//     el.style.fontSize = (suggestedSize-1) + 'px';
-
-// }
 
 /*
   JRP
@@ -557,8 +448,6 @@ function getTextWidth(text, font) {
   turn the original main loop a little bit inside-out
 */
 function mainloop(key) {
-
-  // makeItFit();
 
   if (napping) {
     debug(`napping`);
@@ -587,7 +476,7 @@ function mainloop(key) {
 
   /* see if there is an object here. */
   if (dropflag == 0) {
-    lookforobject(true, auto_pickup, false);
+    lookforobject(true, auto_pickup);
   } else {
     dropflag = 0; /* don't show it just dropped an item */
   }
@@ -677,16 +566,28 @@ function run(dir) {
 function wizardmode(password) {
 
   if (password === 'checkpoint') {
-    updateLog(`reload to restart from backup checkpoint`);
     var checkpoint = localStorageGetObject('checkpointbackup');
-    localStorageSetObject('checkpoint', checkpoint);
+    let error = localStorageSetObject('checkpoint', checkpoint);
+    if (!error) {
+      updateLog(`Reload to restart from backup checkpoint`);
+    }
+    else {
+      updateLog(`Sorry, no checkpoint found (or cookies are disabled)`);
+      updateLog(`${error}`);
+    }
     return 1;
   }
 
   if (password === 'savegame') {
-    updateLog(`reload to restart from backup save game`);
     var savegame = localStorageGetObject(logname + 'backup');
-    localStorageSetObject(logname, savegame);
+    let error = localStorageSetObject(logname, savegame);
+    if (!error) {
+      updateLog(`Reload to restart from backup save game`);
+    }
+    else {
+      updateLog(`Sorry, no backup save game found (or cookies are disabled)`);
+      updateLog(`${error}`);
+    }
     return 1;
   }
 
@@ -705,6 +606,10 @@ function wizardmode(password) {
   // other valid passwords to add in the future
   // main(){}
   // frobozz
+  //
+  // amiga?
+  // ularn 1.6?
+  // ularn 1.5?
   if (password === 'pvnert(x)') {
     //updateLog(`disabling wizard mode`);
     wizard = 1;
@@ -721,7 +626,7 @@ function wizardmode(password) {
     player.inventory[0] = null;
     player.inventory[1] = null;
     var startLance = createObject(OLANCE, 25);
-    var startRing = createObject(OPROTRING, 250);
+    var startRing = createObject(OPROTRING, 50);
     take(startLance);
     take(startRing);
     if (ULARN) take(createObject(OSLAYER));
@@ -745,21 +650,21 @@ function wizardmode(password) {
       for (var scrolli = 0; scrolli < SCROLL_NAMES.length; scrolli++) {
         var scroll = createObject(OSCROLL, scrolli);
         learnScroll(scroll);
-        player.level.items[scrolli][0] = scroll;
+        setItem(scrolli, 0, scroll);
       }
 
-      for (var potioni = MAXX - 15; potioni > MAXX - 1 - POTION_NAMES.length; potioni--) {
+      for (var potioni = MAXX - 1; potioni > MAXX - 1 - POTION_NAMES.length; potioni--) {
         var potion = createObject(OPOTION, MAXX - 1 - potioni);
         learnPotion(potion);
-        player.level.items[potioni][0] = potion;
+        setItem(potioni-10, 0, potion);
       }
 
       var ix = 0;
-      var iy = 0;
+      var iy = 1;
       var wizi = 0;
       while (iy < MAXY) {
         if (itemlist[++wizi]) {
-          player.level.items[ix][++iy] = createObject(itemlist[wizi]);
+          setItem(ix, iy++, itemlist[wizi]);
           if (!ULARN) {
             if (wizi == OORB.id) --iy;
             if (wizi == OELEVATORUP.id) --iy;
@@ -767,10 +672,9 @@ function wizardmode(password) {
           }
         }
       }
-      --wizi;
       while (++ix < MAXX - 1) {
         if (itemlist[++wizi]) {
-          player.level.items[ix][iy - 1] = createObject(itemlist[wizi]);
+          setItem(ix, iy - 1, itemlist[wizi]);
           if (!ULARN && wizi >= OCOOKIE.id) break;
         } else --ix;
       }
@@ -780,15 +684,16 @@ function wizardmode(password) {
         while (wizi < OPAD.id) {
           var wizitem = itemlist[++wizi];
           if (wizitem && wizitem != OHOMEENTRANCE && wizitem != OUNKNOWN)
-            player.level.items[ix][--iy] = createObject(wizitem);
+            setItem(ix, --iy, wizitem);
         }
       }
+
       if (FOREST) {
         // over 100 items now
         while (wizi < OMARK.id) {
           var wizitem = itemlist[++wizi];
           if (wizitem && wizitem != OHOMEENTRANCE && wizitem != OUNKNOWN)
-            player.level.items[--ix][0] = createObject(wizitem);
+            setItem(--ix, 0, wizitem);
         }
       }
         

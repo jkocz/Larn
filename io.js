@@ -3,6 +3,8 @@
 var cursorx = 1;
 var cursory = 1;
 
+// JXK: Change to allow longer logfile 
+//      24/29 should be replaced with variable
 //var display = initGrid(80, 24);
 var display = initGrid(80, 29);
 
@@ -33,6 +35,12 @@ function lprint(str) {
 
 function lprcat(str, width) {
   DEBUG_LPRCAT++;
+
+  if (alternativeDisplay) {
+    alternativeDisplay += str;
+    return;
+  }
+
   if (width) {
     lprintf(str, width);
     return;
@@ -111,6 +119,11 @@ function cursors() {
 
 function lprc(ch, markup) {
   DEBUG_LPRC++;
+
+  if (alternativeDisplay) {
+    alternativeDisplay += ch;
+    return;
+  }
 
   if (ch == '\b') {
     cursorx--;

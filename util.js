@@ -216,7 +216,7 @@ function blinken(x, y) {
     function() {
       var xpos = x + KEYBOARD_INPUT.length;
       cursor(xpos, y);
-      lprc(BLINKEN ? `` : BLINKENCHAR);
+      lprc(BLINKEN ? ` ` : BLINKENCHAR);
       cltoeoln();
       cursor(xpos, y);
       BLINKEN = !BLINKEN;
@@ -309,19 +309,6 @@ function isnum(str) {
 
 
 
-Storage.prototype.setObject = function(key, value) {
-  this.setItem(key, JSON.stringify(value));
-}
-
-
-
-Storage.prototype.getObject = function(key) {
-  var value = this.getItem(key);
-  return value && JSON.parse(value);
-}
-
-
-
 function pad(str, width, bold) {
   return padString(`` + str, width, bold);
 }
@@ -360,6 +347,47 @@ function compareArrays(a1, a2) {
 }
 
 
+const COMPRESSED_DATA = `_COMPRESSED`;
+
+
+/* compressionWorker callback to compress large files to be written to localstorage */
+function onCompressed(event) {
+  let key = event.data[0];
+  let value = event.data[1];
+  debug(`onCompressed: compression end size: ${key} ${value.length}`);
+  localStorage.setItem(key, value);
+}
+
+
+Storage.prototype.setObject = function(key, value) {
+  value = JSON.stringify(value);
+
+  let usedWorker = false;
+
+  /* compress if it's big */
+  if (value.length > 25000) {
+    /* store a record that the data is compressed */
+    this.setItem(key, COMPRESSED_DATA);
+    /* create a new key that will store the compressed data */
+    key = key + COMPRESSED_DATA;
+    debug(`setObject: compression start size: ${value.length}`);
+    /* try to do the compression in a worker outside of the main thread */
+    if (compressionWorker) {
+      usedWorker = true;
+      /* send the data to the worker (which will call back via onCompressed()) */
+      compressionWorker.postMessage([key, value]);
+    }
+    else {
+      value = LZString.compressToUTF16(value);
+      debug(`setObject: compression end size: ${value.length}`);
+    }
+  }
+
+  /* if the web worker couldn't be found, then write the data from here */
+  if (!usedWorker) {
+    this.setItem(key, value);
+  }
+}
 
 function localStorageSetObject(key, value) {
   if (ULARN) key += `_ularn`;
@@ -367,16 +395,30 @@ function localStorageSetObject(key, value) {
   try {
     console.log(`setObject: ${key} ${value}`);
     localStorage.setObject(key, value);
+    NOCOOKIES = false;
   }
   catch (err) {
-      console.log(`set: cookies are disabled`);
-      console.log(`set: ${err}`);
-      updateLog(`Cookies are disabled, games cannot be loaded or saved`);
+      console.log(`setObject: ${err}`);
       NOCOOKIES = true;
+      return err;
   }
 }
 
 
+
+Storage.prototype.getObject = function(key) {
+  var value = this.getItem(key);
+  /* decompress if it's big */
+  if (value === COMPRESSED_DATA) {
+    value = this.getItem(key + COMPRESSED_DATA);
+    if (value) {
+      console.log('getObject: start size', value.length);
+      value = LZString.decompressFromUTF16(value);
+      console.log('getObject: end size', value.length);
+    }
+  }
+  return value && JSON.parse(value);
+}
 
 function localStorageGetObject(key, failValue) {
   if (ULARN) key += `_ularn`;
@@ -384,12 +426,12 @@ function localStorageGetObject(key, failValue) {
   try {
     console.log(`getObject: ${key}`);
     var retrievedObject = localStorage.getObject(key);
+    NOCOOKIES = false;
+    if (retrievedObject === false) return false;
     return retrievedObject || failValue;
   }
   catch (err) {
-    console.log(`get: cookies are disabled`);
-    console.log(`get: ${err}`);
-    updateLog(`Cookies are disabled, games cannot be loaded or saved`);
+    console.log(`getObject: "${key}" ${err}`);
     NOCOOKIES = true;
     return failValue;
   }
@@ -403,11 +445,11 @@ function localStorageRemoveItem(key) {
   try {
     console.log(`removeItem: ${key}`);
     localStorage.removeItem(key);
+    localStorage.removeItem(key + COMPRESSED_DATA);
+    NOCOOKIES = false;
   }
   catch (err) {
-    console.log(`remove: cookies are disabled`);
-    console.log(`remove: ${err}`);
-    updateLog(`Cookies are disabled, games cannot be loaded or saved`);
+    console.log(`removeItem: ${err}`);
     NOCOOKIES = true;
   }
 }

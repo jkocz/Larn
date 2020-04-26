@@ -2,16 +2,20 @@ JS Forest/U/Larn 12.6.0 (currently pre-alpha)
 ------------------------------------------
 
 Added the "Forest of Larn" area. New monsters to defeat, new items and some
-new spells. For the early game, it maintaines the balances of version 12.5.0 
+new spells. For the early game, it maintaines the balances of version 12.5.0
 ULarn/Larn integration.
-
 
 
 JS U/Larn 12.5.0 (currently beta)
 ----------------
-Added Ularn functionality. Primarily follows the 1.5 codebase with some 
-inspiration from 1.6. Maintains the new/balance/fix items of version 12.4.5 
+Added Ularn functionality. Primarily follows the 1.5 codebase with some
+inspiration from 1.6. Maintains the new/balance/fix items of version 12.4.5
 where it seems to make sense.
+
+1. [new] Also playable with Amiga-style graphics thanks to the new sprites
+created by Chris Yewchuck and Jerome Lecomte.
+
+1. [new] Toggle added for retro-style fonts and two different Amiga fonts.
 
 
 JS Larn 12.4.5
@@ -54,7 +58,7 @@ a monster will notice when the player passes too closely. Affects difficulty 2
 and higher.
 
 1. [balance] Selling items is blocked once the potion has been picked up to
-prevent player from inflating their score by selling epic items.   
+prevent player from inflating their score by selling epic items.
 
 1. [balance] Demons can no longer be teleported.
 
@@ -71,14 +75,14 @@ weapon against rusting monsters. Thanks to Will Oprisko for finding this one.
 properly when the player was running.
 
 1. [fix] After casting Stop Time, monsters would still chase the player when
-running. 
+running.
 
 1. [fix] Bessman's Flailing Hammer could only be created on the first level
 of the dungeon.
 
 1. [fix]/[new] You can drop gold onto an existing pile of gold now.
 
-1. [fix]/[new] When a monster is killed with a ranged attack, loot will now be 
+1. [fix]/[new] When a monster is killed with a ranged attack, loot will now be
 dropped beside the corpse instead of the player.
 
 1. [un-fix] The history lesson from the College of Larn says that the Eye

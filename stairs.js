@@ -104,7 +104,6 @@ function act_down_shaft() {
             way to prevent that from happening.
   */
   if (LEVELS[1] == null && !wizard) {
-    nomove = 1;
     updateLog(`  You feel a foreboding sense of doom, and back away`);
     return;
   }
