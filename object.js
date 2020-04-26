@@ -115,6 +115,8 @@ class Item {
     weapon |= this.matches(OVORPAL);
     weapon |= this.matches(OSLAYER);
     weapon |= this.matches(OPSTAFF);
+    weapon |= this.matches(ODESTROYER);
+    weapon |= this.matches(OFLAWLESS);
     return weapon;
   }
 
