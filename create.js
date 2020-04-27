@@ -400,7 +400,7 @@ function makeobject(depth) {
   }
   if (depth == MAXLEVEL) fillroom(OVOLUP, 0); /* volcano shaft up from the temple */
 
-  if ((depth > 0) &&        /* no stairs on home level */
+  if ((depth > 0) && (depth <= VBOTTOM) &&        /* no stairs on home level or in forest */
       (depth != DBOTTOM) && /* no stairs on bottom of dungeon */
       (depth != VBOTTOM)) {  /* no stairs on bottom of volcano but ularn has dead down stairs on v3, v4 */
     fillroom(OSTAIRSDOWN, 0);
