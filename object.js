@@ -928,7 +928,9 @@ function oteleport(err) {
   if (player.TELEFLAG == 0 && level != 0) {
     changedDepth = millis(); // notify when depth changes to '?'
   }
-  player.TELEFLAG = 1; /* show ? on bottomline if been teleported */
+
+  player.TELEFLAG = wizard ? 0 : 1; /* show ? on bottomline if been teleported */
+
   var newLevel;
   if (level == 0) {
     newLevel = 0;

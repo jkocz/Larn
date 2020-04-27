@@ -400,14 +400,19 @@ function makeobject(depth) {
   }
   if (depth == MAXLEVEL) fillroom(OVOLUP, 0); /* volcano shaft up from the temple */
 
-  if ((depth > 0) &&                         /* no stairs on home level */
-      (depth != DBOTTOM) &&                  /* no stairs on bottom of dungeon */
-      (depth < VBOTTOM - (ULARN ? 2 : 0))) { /* no stairs on v3, v4, v5 */
+  if ((depth > 0) &&        /* no stairs on home level */
+      (depth != DBOTTOM) && /* no stairs on bottom of dungeon */
+      (depth != VBOTTOM)) {  /* no stairs on bottom of volcano but ularn has dead down stairs on v3, v4 */
     fillroom(OSTAIRSDOWN, 0);
   }
 
-  if ((depth > 1) && (depth != MAXLEVEL) && (depth < MAXLEVEL + MAXVLEVEL)) {
-    fillroom(OSTAIRSUP, 0);
+  if ((depth > 1) && (depth < MAXLEVEL + MAXVLEVEL)) { /* no stairs on home level, D1 */
+    if (ULARN && depth == MAXLEVEL) {
+      fillroom(OSTAIRSUP, 0); /* ularn has dead up stairs on V1 */
+    }
+    else if (depth != MAXLEVEL) {
+      fillroom(OSTAIRSUP, 0); /* no up stairs on V1 */
+    }
   }
 
   if ((depth > MAXLEVEL + MAXVLEVEL) && (depth < FBOTTOM)) {
@@ -666,7 +671,7 @@ function fillmonst(what, awake) {
     must be done when entering a new level
     if sethp(1) then wipe out old monsters else leave them there
  */
-function sethp(flg) {
+function sethp(newLevel) {
   // if (flg) {
   //   for (var i = 0; i < MAXY; i++) {
   //     for (var j = 0; j < MAXX; j++) {
@@ -684,7 +689,7 @@ function sethp(flg) {
   }
 
   var nummonsters;
-  if (flg) {
+  if (newLevel) {
     nummonsters = rnd(12) + 2 + (level >> 1);
   } else {
     nummonsters = (level >> 1) + 1;
@@ -694,7 +699,7 @@ function sethp(flg) {
     fillmonst(makemonst(level));
   }
 
-  if (ULARN & flg) {
+  if (ULARN && newLevel && !DEBUG_NO_MONSTERS) {
     /*
     ** level 11 gets 1 demon lord
     ** level 12 gets 2 demon lords
