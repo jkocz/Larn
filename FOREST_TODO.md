@@ -10,6 +10,7 @@
     - Ensure that combined items etc cannot appear on maps randomly 
     - Puzzle of mark
     - No trapdoors in forest
+    - Post potion, store opens up with new items (some new, some like Slashing/Vorpal?)
 
 - Monsters/balance:
     - Make e.g. hellhound immune to fire? 

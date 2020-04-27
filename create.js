@@ -426,14 +426,14 @@ function makeobject(depth) {
 
   if (ULARN) {
     if (depth > 3 &&          // > 3
-        depth <= VBOTOM &&    // not in forest
+        depth <= VBOTTOM &&    // not in forest
         depth != DBOTTOM &&   // not on 15
         depth != MAXLEVEL &&  // not on V1
         depth != VBOTTOM) {   // not on V5
       createArtifact(OELEVATORUP, player.ELEVUP, rnd(100) > 85);
     }
     if (depth > 0 &&               // not on home
-        depth <= VBOTOM &&    // not in forest
+        depth <= VBOTTOM &&    // not in forest
         (depth <= (DBOTTOM - 5) || // < level 10
          depth == DBOTTOM ||       // 15
          depth == VBOTTOM)) {      // V5

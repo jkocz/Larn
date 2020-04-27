@@ -54,7 +54,9 @@ function createMonster(monst) {
     monster.mimiccounter = monst.mimiccounter;
   }
 
-  monster.initInventory();
+  // JXK: Double init? Not necessary? (Causes forest guardians to 
+  //      have double items.
+  //monster.initInventory();
 
   return monster;
 }
