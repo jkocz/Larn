@@ -331,6 +331,7 @@ Monster.prototype = {
  */
 function randmonst() {
   if (player.TIMESTOP) return; /*  don't make monsters if time is stopped  */
+  if (FOREST && level > FBOTTOM) return; /* don't make monsters in endgame */
   if (--rmst <= 0) {
     if (FOREST && level > VBOTTOM) {
       rmst = 120 - (VBOTTOM << 2)
@@ -887,6 +888,15 @@ function hitmonster(x, y) {
     return;
   }
 
+  if (FOREST && monster.matches(POLINNEAUS)) {
+    if (!player.WIELD && player.INVUN) {
+      killMonster(x, y);
+      player.raiseexperience(monster.experience);
+      ocomplete();
+      return;
+    } 
+  }
+ 
   var blind = ifblind(x, y);
   var damage = 0;
   var flag = 0;
@@ -950,6 +960,7 @@ function hitmonster(x, y) {
     }
   }
 
+  // JXK: Make elseif?
   if (!ULARN && monster.matches(VAMPIRE)) {
     if (monster.hitpoints > 0 && monster.hitpoints < 25) {
       player.level.monsters[x][y] = createMonster(BAT);
@@ -966,6 +977,13 @@ function hitmonster(x, y) {
 
   if (ULARN && monster.matches(LEMMING)) {
     if (rnd(100) <= 40) createmonster(LEMMING);
+  }
+ 
+  if (FOREST && monster.matches(POLINNEAUS)) {
+    if (monster.hitpoints <= 0) {
+      createmonster(POLINNEAUS);
+      createmonster(POLINNEAUS);
+    }
   }
 }
 

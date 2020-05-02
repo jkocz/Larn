@@ -768,6 +768,10 @@ function lookforobject(do_ident, do_pickup) {
   if (do_pickup) {
     if (canTake(item) && take(item)) {
       forget(); // remove from board
+      // JXK: A better way to do this then checking each time?
+      if (item.matches(OMARK)) {
+        oendgame();
+      }
     } else {
       nomove = 1;
     }
@@ -894,6 +898,59 @@ function oforest(direction) {
     player.y = 1;
     newcavelevel(level-1);
   }
+}
+
+function oendgame() {
+  
+  if (!player.HASMARK) {
+   
+    player.TELEFLAG = 1;
+    initNewLevel(FBOTTOM+1);
+  
+    for (let i = 0; i < MAXY; i++) {
+      for (let j = 0; j < MAXX; j++) {
+          setItem(j, i, OEMPTY);
+      }
+    }
+  
+    fillmonst(POLINNEAUS);
+  
+    player.x = rnd(MAXX - 2);
+    player.y = rnd(MAXY - 2);
+  
+    positionplayer();
+
+  }
+  else {
+    return;
+  }
+}
+
+async function ocomplete() {
+  player.HASMARK = true;
+
+  newcavelevel(0);
+  positionplayer();
+
+  setMazeMode(false);
+  setCharCallback(parse_home);
+  napping = true;
+  
+  cursor(1,7)
+  lprint(`You fall to your knees as your mind recovers from the onslought of\n`); 
+  lprint(`battling the spirit trapped within The Mark.\n`); 
+  await nap(2000);
+  lprint(`\nIt is obvious now that the great wizard never truly died, but lives\n`); 
+  lprint(`within the amulet, dominating all who attempt to use their power.\n`); 
+  lprint(`Fortunately, you were not so easy to control! You can still feel the life\n`); 
+  lprint(`force in the amulet, but now it ready to be used for your own purposes.\n`); 
+  lprint(`\n\n`); 
+  lprint(`The fate of the Lost Wizard Polinneaus is finally known.\n`); 
+  lprint(`It is time to go and see how your daughter is recovering.\n`); 
+  await nap(2000);
+  lprint(`\n\n\tPress <b>escape</b> to leave. `);
+  paint();
+  napping = false;
 }
 
 function forget() {

@@ -924,8 +924,8 @@ async function ohome() {
   dropflag = 1;
 
   setCharCallback(parse_home);
-
-  var hasMark = isCarrying(createObject(OMARK));
+ 
+  var hasMark = player.HASMARK;
   var hasPotion = isCarrying(createObject(OPOTION, 21));
   var inTime = gtime <= TIMELIMIT;
 

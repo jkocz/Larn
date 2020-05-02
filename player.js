@@ -94,7 +94,9 @@ var Player = function Player() {
     this.DRAINSTRENGTH = 0; // UNUSED
     this.INFEEBLEMENT = 0;  // UNUSED
 
+    // other
     this.TELEFLAG = 0;
+    this.HASMARK = false;
 
     // special items
     this.LAMP = false;

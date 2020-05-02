@@ -36,7 +36,7 @@ function newsphere(x, y, dir, life, lev) {
 
   var monster = monsterAt(x, y);
 
-  if (monster && monster.matches(MASTER)) /* Master always dispels the sphere */ {
+  if (monster && (monster.matches(MASTER) || monster.matches(POLINNEAUS))) /* Master always dispels the sphere */ {
     cursors();
     updateLog(`The ${monster} dispels the sphere!`);
     rmsphere(x, y); 

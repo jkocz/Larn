@@ -11,6 +11,7 @@
     - Puzzle of mark
     - No trapdoors in forest
     - Post potion, store opens up with new items (some new, some like Slashing/Vorpal?)
+    - Stairs in addition to going further in? (If stairs, could be for special items?)
 
 - Monsters/balance:
     - Make e.g. hellhound immune to fire? 
@@ -28,6 +29,7 @@
     - Make alters crumble more easily?
     - ~~Too hard to hit master~~
     - Master can cast spells from a distance
+    - P doesn't attack on edge
               
 - Spells:
     - ~~Complete Rebound~~
