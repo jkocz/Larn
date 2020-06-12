@@ -636,7 +636,7 @@ function wizardmode(password) {
     player.inventory[0] = null;
     player.inventory[1] = null;
     var startLance = createObject(OLANCE, 25);
-    var startRing = createObject(OPROTRING, 1550);
+    var startRing = createObject(OPROTRING, 50);
     take(startLance);
     take(startRing);
     if (ULARN) take(createObject(OSLAYER));
