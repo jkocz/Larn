@@ -69,23 +69,41 @@ function loadSavedGame(savedState, isCheckPoint) {
     2) stringify current state that was loaded from saved state
     3) compare
   */
-  var x = player.level;
-  player.level = null;
-  let savedStateString = JSON.stringify(savedState);
-  debug(`saved`, savedStateString.length, savedState);
-  var currentState = new GameState();
 
+  // we don't save player.level in savegames, so remove it until later
+  let x = player.level;
+  player.level = null;
+
+  let savedStateString = JSON.stringify(savedState);
+  let currentState = new GameState();
   let currentStateString = JSON.stringify(currentState);
-  debug(`current`, currentStateString.length, currentState);
-  let integrityCheck = savedStateString === currentStateString;
-  let playernullcheck = player.level == null;
-  debug(`player`, player.level);
+
+  let difftool = new diff_match_patch();
+  let diff = difftool.diff_main(savedStateString, currentStateString);
+  difftool.diff_cleanupSemantic(diff);
+
+  // reload player.level
   player.level = x;
 
-  if (!integrityCheck) {
-    console.log(`save game integrity check failed`);
-    console.log(`player.level null == ${playernullcheck}`);
-    Rollbar.error(`failed integrity check, player.level == ${playernullcheck}`);
+  // failed integrity check
+  if (diff.length != 1) {
+
+    // Rollbar chokes on large messages, and these could get up to 500k+
+    // truncate down to what actually matters
+    try {
+      let errorMessage = `${BUILD} ${GAMENAME} failed integrity check, current.length:${currentStateString.length}, saved.length:${savedStateString.length} diff=\n`;
+      for (let index = 0; index < diff.length; index++) {
+        let fragment = diff[index][1];
+        if (fragment.length > 200) {
+          fragment = `${fragment.substring(0, 100)}\n   ...\n   ${fragment.substring(fragment.length - 100)}`;
+        }
+        errorMessage += `${index}: ${fragment}\n`;
+      }
+      Rollbar.error(`${errorMessage}`);
+      console.log(`${errorMessage}`);
+    } catch (error) {
+      console.log(`failed integrity check: caught: ${error}`);
+    }
   }
 
   /* delete / clear the saved game file */
@@ -295,6 +313,7 @@ function loadPlayer(saved) {
   newPlayer.SLAY = saved.SLAY;
   newPlayer.VORPAL = saved.VORPAL;
   newPlayer.STAFF = saved.STAFF;
+  newPlayer.PRESERVER = saved.PRESERVER;
   newPlayer.PAD = saved.PAD;
   newPlayer.ELEVDOWN = saved.ELEVDOWN;
   newPlayer.ELEVUP = saved.ELEVUP;

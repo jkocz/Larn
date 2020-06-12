@@ -42,6 +42,8 @@ function play() {
     apiVersion: '2015-03-31'
   });
 
+  initRB();
+
   initKeyBindings();
 
   document.addEventListener("click", onMouseClick);

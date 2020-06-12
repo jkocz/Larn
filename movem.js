@@ -601,7 +601,7 @@ function mmove(sx, sy, dx, dy) {
   } else if (item.matches(OTELEPORTER)) {
     /* monster hits teleport trap */
     if (!monster.isDemon()) {
-      trap_msg = `The ${monster} gets teleported.`;
+      trap_msg = `The ${monster} gets teleported${period}`;
       teleportMonster(dx, dy);
       dx = movedx;
       dy = movedy;
@@ -609,9 +609,9 @@ function mmove(sx, sy, dx, dy) {
   } else if (item.matches(OPIT) || item.matches(OTRAPDOOR)) {
     /* non-flying monsters can fall into pits and trap doors */
     if (!monster.canFly()) {
-      trap_msg = `The ${monster} fell into a pit.`;
+      trap_msg = `The ${monster} fell into a pit${period}`;
       if (item.matches(OTRAPDOOR)) {
-        trap_msg = `The ${monster} fell through a trapdoor.`;
+        trap_msg = `The ${monster} fell through a trapdoor${period}`;
       }
       killMonster(dx, dy);
       monst_killed = 1;
@@ -632,10 +632,10 @@ function mmove(sx, sy, dx, dy) {
     if (monster.hitpoints <= 0) {
       /* the trap killed the monster */
       killMonster(dx, dy);
-      trap_msg = `${what} hits and kills the ${monster}.`;
+      trap_msg = `${what} hits and kills the ${monster}${period}`;
       monst_killed = 1;
     } else {
-      trap_msg = `${what} hits the ${monster}.`;
+      trap_msg = `${what} hits the ${monster}${period}`;
     }
   }
 
@@ -730,11 +730,13 @@ function valid_monst_move(x, y, monster) {
    */
   monster_special = (monster.matches(VAMPIRE)) && (item.matches(OMIRROR));
 
-  //// ULARN TODO?? this looks ridiculous! -- jrp
-  // if (monster.matches(DEMONPRINCE) || monster.matches(LUCIFER)) {
-  //   /* walls and closed doors are no hindrance to a demon prince or above */
-  //   blocked = false;
-  // }
+  // scary! -- jrp
+  if (ULARN) {
+    if (monster.matches(DEMONPRINCE) || monster.matches(LUCIFER)) {
+      /* walls and closed doors are no hindrance to a demon prince or above */
+      blocked = false;
+    }
+  }
 
   if (at_entrance || blocked || monster_special) {
     /* Return false to indicate illegal position */

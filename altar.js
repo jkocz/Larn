@@ -35,7 +35,7 @@ function pray_at_altar() {
 */
 function act_donation_pray(offering) {
   if (offering == ESC) {
-    appendLog(` cancelled`);
+    appendLog(` cancelled${period}`);
     nomove = 1;
     prayed = 0;
     return 1;
@@ -99,7 +99,7 @@ function act_donation_pray(offering) {
       else {
         var p = rund(16);
         if (p < 4) {
-          updateLog("Thank you.");
+          updateLog(`Thank you${period}`);
           return 1;
         } else if (p < 6) {
           enchantarmor(ENCH_ALTAR);
@@ -149,7 +149,7 @@ function act_donation_pray(offering) {
         return 1;
       }
 
-      updateLog(`  Thank You.`);
+      updateLog(`  Thank You${period}`);
       return 1;
 
     }
@@ -185,17 +185,17 @@ function act_just_pray() {
     } else if (p < 27) {
       act_prayer_heard();
     } else {
-      updateLog(`  Nothing happens`);
+      updateLog(`  Nothing happens${period}`);
     }
   } else {
     if (rnd(100) < 75) {
-      updateLog(`  Nothing happens`);
+      updateLog(`  Nothing happens${period}`);
     } else if (rnd(43) == 10) {
       enchantarmor(ENCH_ALTAR);
       return 'ac';
     } else if (rnd(43) == 10) {
       if (player.WIELD) {
-        updateLog(`  You feel your weapon vibrate for a moment`);
+        updateLog(`  You feel your weapon vibrate for a moment${period}`);
       }
       enchweapon();
       return 'wc';
@@ -222,7 +222,7 @@ function act_desecrate_altar() {
   } else if (rnd(101) < 30) {
     crumble_altar();
   } else
-    updateLog(`  Nothing happens`);
+    updateLog(`  Nothing happens${period}`);
   return;
 }
 
@@ -231,7 +231,7 @@ function act_desecrate_altar() {
   Destroys the Altar
 */
 function crumble_altar() {
-  updateLog(`  The altar crumbles into a pile of dust before your eyes`);
+  updateLog(`  The altar crumbles into a pile of dust before your eyes${period}`);
   forget(); /*  remember to destroy the altar   */
 }
 
@@ -248,7 +248,7 @@ function act_ignore_altar(x, y) {
     createmonster(makemonst(level + monstBoost), x, y);
     player.AGGRAVATE += rnd(450);
   } else
-    updateLog(`  Nothing happens`);
+    updateLog(`  Nothing happens${period}`);
   return;
 }
 

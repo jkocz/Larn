@@ -219,11 +219,11 @@ function parse(key) {
   // EAT COOKIE
   //
   if (key == 'e') {
-    if (item.isStore()) {
-      enter();
-      return;
-    }
     if (player.TIMESTOP == 0) {
+        if (item.isStore()) {
+        enter();
+        return;
+      }
       if (item.matches(OCOOKIE)) {
         outfortune();
         forget();
@@ -248,9 +248,11 @@ function parse(key) {
   // TIDY UP AT FOUNTAIN
   //
   if (key == 'f') {
-    wash_fountain(null);
-    dropflag = 1;
-    return;
+    if (player.TIMESTOP == 0) {
+      wash_fountain(null);
+      dropflag = 1;
+  }
+  return;
   }
 
   //
@@ -275,29 +277,30 @@ function parse(key) {
   // OPEN (in a direction)
   //
   if (key == 'o' || key == 'O') {
-    /* check for confusion. */
-    if (player.CONFUSE > 0) {
-      updateLog(`You're too confused!`);
-      beep();
-      return;
-    }
-    /* check for player standing on a chest.  If he is, prompt for and
-        let him open it.  If player ESCs from prompt, quit the Open
-        command.
-    */
-    if (item.matches(OCHEST)) {
-      act_open_chest(player.x, player.y);
-      dropflag = 1; /* prevent player from picking back up if fail */
-      return;
-    } else {
-      if (nearPlayer(OCLOSEDDOOR) || nearPlayer(OCHEST)) {
-        prepare_direction_event(open_something);
-      } else {
-        updateLog(`There is nothing to open!`);
-        nomove = 1;
+    if (player.TIMESTOP == 0) {
+      /* check for confusion. */
+      if (player.CONFUSE > 0) {
+        updateLog(`You're too confused!`);
+        beep();
+        return;
       }
+      /* check for player standing on a chest.  If he is, prompt for and
+          let him open it.  If player ESCs from prompt, quit the Open
+          command.
+      */
+      if (item.matches(OCHEST)) {
+        act_open_chest(player.x, player.y);
+        dropflag = 1; /* prevent player from picking back up if fail */
+        return;
+      } else {
+        if (nearPlayer(OCLOSEDDOOR) || nearPlayer(OCHEST)) {
+          prepare_direction_event(open_something);
+        } else {
+          updateLog(`There is nothing to open!`);
+        }
+      }
+      dropflag = 1;
     }
-    dropflag = 1;
     return;
   }
 
@@ -305,9 +308,11 @@ function parse(key) {
   // PRAY
   //
   if (key == 'p') {
-    pray_at_altar();
-    dropflag = 1;
-    prayed = 1;
+    if (player.TIMESTOP == 0) {
+      pray_at_altar();
+      dropflag = 1;
+      prayed = 1;
+    }
     return;
   }
 
@@ -315,7 +320,7 @@ function parse(key) {
   // quaff
   //
   if (key == 'q') {
-    if (player.TIMESTOP == 0)
+    if (player.TIMESTOP == 0) {
       if (item.matches(OPOTION)) {
         forget();
         quaffpotion(item, true);
@@ -323,6 +328,7 @@ function parse(key) {
         updateLog(`What do you want to quaff [<b>space</b> to view] ? `);
         setCharCallback(act_quaffpotion);
       }
+    }
     return;
   }
 
@@ -381,7 +387,9 @@ function parse(key) {
   //
   if (key == 't' || key == ',') {
     /* pickup, don't identify or prompt for action */
-    lookforobject(false, true);
+    if (player.TIMESTOP == 0) {
+      lookforobject(false, true);
+    }
     return;
   }
 
@@ -432,8 +440,10 @@ function parse(key) {
   // DESECRATE
   //
   if (key == 'A') {
-    desecrate_altar();
-    dropflag = 1;
+    if (player.TIMESTOP == 0) {
+      desecrate_altar();
+      dropflag = 1;
+    }
     return;
   }
 
@@ -441,33 +451,37 @@ function parse(key) {
   // CLOSE DOOR
   //
   if (key == 'C') {
-    /* check for confusion. */
-    if (player.CONFUSE > 0) {
-      updateLog(`You're too confused!`);
-      beep();
-      return;
-    }
-    if (item.matches(OOPENDOOR)) {
-      close_something(0);
-      return;
-    } else {
-      if (nearPlayer(OOPENDOOR)) {
-        prepare_direction_event(close_something);
-      } else {
-        updateLog(`There is nothing to close!`);
-        nomove = 1;
+    if (player.TIMESTOP == 0) {
+      /* check for confusion. */
+      if (player.CONFUSE > 0) {
+        updateLog(`You're too confused!`);
+        beep();
+        return;
       }
-      dropflag = 1;
-      return;
+      if (item.matches(OOPENDOOR)) {
+        close_something(0);
+        return;
+      } else {
+        if (nearPlayer(OOPENDOOR)) {
+          prepare_direction_event(close_something);
+        } else {
+          updateLog(`There is nothing to close!`);
+        }
+        dropflag = 1;
+        return;
+      }
     }
+    return;
   }
 
   //
   // DRINK FROM FOUNTAIN
   //
   if (key == 'D') {
-    drink_fountain(null);
-    dropflag = 1;
+    if (player.TIMESTOP == 0) {
+      drink_fountain(null);
+      dropflag = 1;
+    }
     return;
   }
 
@@ -475,7 +489,9 @@ function parse(key) {
   // ENTER A BUILDING
   //
   if (key == 'E' || key == 'e' || key == ENTER) {
-    enter();
+    if (player.TIMESTOP == 0) {
+      enter();
+    }
     return;
   }
 
@@ -495,9 +511,9 @@ function parse(key) {
   if (key == 'P') {
     nomove = 1;
     if (outstanding_taxes > 0)
-      updateLog(`You presently owe ${outstanding_taxes} gold pieces in taxes`);
+      updateLog(`You presently owe ${outstanding_taxes} gold pieces in taxes${period}`);
     else
-      updateLog(`You do not owe any taxes`);
+      updateLog(`You do not owe any taxes${period}`);
     return;
   }
 
@@ -514,11 +530,11 @@ function parse(key) {
   function parseQuit(key) {
     nomove = 1;
     if (key == ESC || key == 'n' || key == 'N') {
-      appendLog(` no`);
+      appendLog(` no${period}`);
       return 1;
     }
     if (key == 'y' || key == 'Y') {
-      appendLog(` yes`);
+      appendLog(` yes${period}`);
       died(DIED_QUITTER, false); /* a quitter */
       return 1;
     }
@@ -529,12 +545,14 @@ function parse(key) {
   // REMOVE GEMS
   //
   if (key == 'R') {
-    if (item.matches(OBRASSLAMP)) {
-      act_rub_lamp();
-    } else {
-      remove_gems();
+    if (player.TIMESTOP == 0) {
+      if (item.matches(OBRASSLAMP)) {
+        act_rub_lamp();
+      } else {
+        remove_gems();
+      }
+      dropflag = 1;
     }
-    dropflag = 1;
     return;
   }
 
@@ -555,14 +573,13 @@ function parse(key) {
   if (key == 'T') {
     if (player.SHIELD) {
       player.SHIELD = null;
-      updateLog(`Your shield is off`);
+      updateLog(`Your shield is off${period}`);
     } else
     if (player.WEAR) {
       player.WEAR = null;
-      updateLog(`Your armor is off`);
+      updateLog(`Your armor is off${period}`);
     } else
-      updateLog(`You aren't wearing anything`);
-    nomove = 1;
+      updateLog(`You aren't wearing anything${period}`);
     return;
   }
 
@@ -584,11 +601,13 @@ function parse(key) {
   //
   if (key == 'Z') {
     if (player.LEVEL > 9) {
-      oteleport(1);
+      if (player.TIMESTOP == 0) {
+        oteleport(1);
+      }
       return;
     }
     cursors();
-    updateLog(`As yet, you don't have enough experience to use teleportation`);
+    updateLog(`As yet, you don't have enough experience to use teleportation${period}`);
     return;
   }
 
@@ -608,7 +627,9 @@ function parse(key) {
       }
     }
 
-    up_stairs();
+    if (player.TIMESTOP == 0) {
+      up_stairs();
+    }
 
     return;
   }
@@ -625,7 +646,9 @@ function parse(key) {
       }
     }
 
-    down_stairs();
+    if (player.TIMESTOP == 0) {
+      down_stairs();
+    }
 
     return;
   }
@@ -646,13 +669,13 @@ function parse(key) {
           case OPIT.id:
           case OELEVATORUP.id:
           case OELEVATORDOWN.id:
-            updateLog(`It's ${trap}`);
+            updateLog(`It's ${trap}${period}`);
             flag++;
         }
       }
     }
     if (flag == 0)
-      updateLog(`No traps are visible`);
+      updateLog(`No traps are visible${period}`);
     return;
   }
 

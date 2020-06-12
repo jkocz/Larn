@@ -1,6 +1,9 @@
 'use strict';
 
 const itemlist = [];
+var youFound;  // set in config
+var period;    // set in config
+
 
 /*
 This is the base object for every item in the game
@@ -312,14 +315,14 @@ const OHOMEENTRANCE = new DungeonObject(93, OEMPTY.char, `8`, OEMPTY.char, NO_CO
 const OUNKNOWN = new DungeonObject(94, ` `, ` `, ` `, NO_COLOR, NO_BOLD, `... nothing`, NO_CARRY);
 
 // buildings / home level
-const OHOME = new DungeonObject(69, `H`, `1`, `H`, `cornflowerblue`, BOLD, `your home`, NO_CARRY);
+const OHOME = new DungeonObject(69, `H`, `1`, `H`, `cornflowerblue`, BOLD, `your way home`, NO_CARRY);
 const ODNDSTORE = new DungeonObject(12, `=`, `2`, `=`, `orchid`, BOLD, `the DND store`, NO_CARRY);
 const OTRADEPOST = new DungeonObject(77, `S`, `3`, `S`, `tan`, BOLD, `the local trading post`, NO_CARRY);
 const OLRS = new DungeonObject(80, `L`, `4`, `L`, `lightgray`, BOLD, `the Larn Revenue Service`, NO_CARRY);
 const OBANK = new DungeonObject(16, `$`, `5`, `$`, `gold`, BOLD, `the bank of Larn`, NO_CARRY);
 const OBANK2 = new DungeonObject(15, `$`, `5`, `$`, `gold`, BOLD, `the Nth branch of the Bank of Larn`, NO_CARRY);
 const OSCHOOL = new DungeonObject(10, `+`, `6`, `+`, `darkorange`, BOLD, `the College of Larn`, NO_CARRY);
-const OENTRANCE = new DungeonObject(54, `E`, `8`, `E`, `mediumseagreen`, BOLD, `the dungeon entrance`, NO_CARRY);
+const OENTRANCE = new DungeonObject(54, `E`, `8`, `E`, `yellowgreen`, BOLD, `the dungeon entrance`, NO_CARRY);
 const OVOLDOWN = new DungeonObject(55, `V`, `9`, `V`, `crimson`, BOLD, `a volcanic shaft leaning downward`, NO_CARRY);
 // ULARN
 const OPAD = new DungeonObject(100, `@`, `@`, `@`, `lightgreen`, BOLD, `Dealer McDope's Hideout!`, NO_CARRY);
@@ -331,12 +334,13 @@ const OFORESTUP = new DungeonObject(104, OEMPTY.char, `8`, OEMPTY.char, NO_COLOR
 
 // dungeon features
 const OWALL = new DungeonObject(21, `▒`, `▒`, `▒`, NO_COLOR, NO_BOLD, `a wall`, NO_CARRY);
-const OALTAR = new DungeonObject(1, `A`, `:`, `A`, `orchid`, BOLD, `a holy altar`, NO_CARRY);
+// const OALTAR = new DungeonObject(1, `A`, `:`, `A`, `orchid`, BOLD, `a holy altar`, NO_CARRY);
+const OALTAR = new DungeonObject(1, `A`, `:`, `A`, `lightslategray`, BOLD, `a holy altar`, NO_CARRY);
 const OTHRONE = new DungeonObject(2, `T`, `\\`, `T`, `gold`, BOLD, `a handsome jewel encrusted throne`, NO_CARRY);
 const ODEADTHRONE = new DungeonObject(79, `t`, `/`, `t`, `lightgray`, BOLD, `a massive throne`, NO_CARRY);
 const OPIT = new DungeonObject(4, `P`, `^`, `P`, `sandybrown`, BOLD, `a pit`, NO_CARRY);
-const OVOLUP = new DungeonObject(56, `V`, `9`, `V`, `mediumseagreen`, BOLD, `the base of a volcanic shaft`, NO_CARRY);
-const OSTAIRSUP = new DungeonObject(5, `&lt`, `&lt`, `%`, `mediumseagreen`, BOLD, `a staircase going up`, NO_CARRY); // use &lt to prevent bugginess when dropping a ! or ? to the right
+const OVOLUP = new DungeonObject(56, `V`, `9`, `V`, `yellowgreen`, BOLD, `the base of a volcanic shaft`, NO_CARRY);
+const OSTAIRSUP = new DungeonObject(5, `&lt`, `&lt`, `%`, `yellowgreen`, BOLD, `a staircase going up`, NO_CARRY); // use &lt to prevent bugginess when dropping a ! or ? to the right
 const OSTAIRSDOWN = new DungeonObject(13, `&gt`, `&gt`, `%`, `sandybrown`, BOLD, `a staircase going down`, NO_CARRY);
 const OFOUNTAIN = new DungeonObject(7, `F`, `{`, `F`, `cornflowerblue`, BOLD, `a bubbling fountain`, NO_CARRY);
 const ODEADFOUNTAIN = new DungeonObject(17, `f`, `}`, `f`, `lightgray`, BOLD, `a dead fountain`, NO_CARRY);
@@ -345,7 +349,7 @@ const OMIRROR = new DungeonObject(11, `M`, `|`, `M`, `silver`, BOLD, `a mirror`,
 const OOPENDOOR = new DungeonObject(19, `O`, `'`, `O`, `lightgray`, BOLD, `an open door`, NO_CARRY);
 const OCLOSEDDOOR = new DungeonObject(20, `D`, `+`, `D`, `lightgray`, BOLD, `a closed door`, NO_CARRY);
 // ULARN
-const OELEVATORUP = new DungeonObject(6, `_`, `_`, `_`, `mediumseagreen`, BOLD, `an express elevator going up`, NO_CARRY);
+const OELEVATORUP = new DungeonObject(6, `_`, `_`, `_`, `yellowgreen`, BOLD, `an express elevator going up`, NO_CARRY);
 const OELEVATORDOWN = new DungeonObject(14, `_`, `_`, `_`, `sandybrown`, BOLD, `an express elevator going down`, NO_CARRY);
 
 // traps
@@ -361,12 +365,12 @@ const OIVTRAPDOOR = new DungeonObject(76, OEMPTY.char, OEMPTY.char, OEMPTY.char,
 // dungeon items
 const OGOLDPILE = new DungeonObject(18, `*`, `$`, `*`, `gold`, BOLD, `some gold`, CARRY, 0);
 const OSCROLL = new DungeonObject(41, `?`, `?`, `?`, `tan`, BOLD, `a magic scroll`, CARRY);
-const OPOTION = new DungeonObject(42, `!`, `!`, `!`, `mediumpurple`, BOLD, `a magic potion`, CARRY);
+const OPOTION = new DungeonObject(42, `!`, `!`, `!`, `plum`, BOLD, `a magic potion`, CARRY);
 const OBOOK = new DungeonObject(43, `B`, `?`, `B`, `darkgoldenrod`, BOLD, `a book`, CARRY);
 const OCHEST = new DungeonObject(44, `C`, `&`, `C`, `khaki`, BOLD, `a chest`, CARRY);
 const ODIAMOND = new DungeonObject(50, `@`, `*`, `&lt`, `white`, BOLD, `a brilliant diamond`, CARRY);
 const ORUBY = new DungeonObject(51, `@`, `*`, `&lt`, `crimson`, BOLD, `a ruby`, CARRY);
-const OEMERALD = new DungeonObject(52, `@`, `*`, `&lt`, `seagreen`, BOLD, `an enchanting emerald`, CARRY);
+const OEMERALD = new DungeonObject(52, `@`, `*`, `&lt`, `springgreen`, BOLD, `an enchanting emerald`, CARRY);
 const OSAPPHIRE = new DungeonObject(53, `@`, `*`, `&lt`, `dodgerblue`, BOLD, `a sparkling sapphire`, CARRY);
 const OCOOKIE = new DungeonObject(83, `c`, `,`, `c`, `tan`, BOLD, `a fortune cookie`, CARRY);
 
@@ -428,6 +432,7 @@ const OHANDofFEAR = new DungeonObject(86, `.`, `.`, `.`, `crimson`, BOLD, `The H
 const OSPHTALISMAN = new DungeonObject(87, `.`, `.`, `.`, `skyblue`, BOLD, `The Talisman of the Sphere`, CARRY);
 const OWWAND = new DungeonObject(88, `/`, `/`, `/`, `mediumseagreen`, BOLD, `a wand of wonder`, CARRY);
 const OPSTAFF = new DungeonObject(89, `/`, `/`, `/`, `darkorange`, BOLD, `a staff of power`, CARRY);
+const OLIFEPRESERVER = new DungeonObject(101, `"`, `"`, `"`, `orange`, BOLD, `an amulet of life preservation`, CARRY);
 // FOREST
 const OMARK = new DungeonObject(106, '@','@','@',`darkorange`, BOLD,`the mark of Polinneaus`, CARRY);
 
@@ -508,10 +513,14 @@ function lookforobject(do_ident, do_pickup) {
     nomove = 1;
     return;
   }
-  //
   else if (item.matches(OGOLDPILE)) {
-    updateLog(`You have found some gold!`);
-    updateLog(`  It is worth ${Number(item.arg).toLocaleString()}!`);
+    if (ULARN) {
+      updateLog(`${youFound} ${Number(item.arg).toLocaleString()} gold pieces${period}`)
+    }
+    else {
+      updateLog(`${youFound} some gold!`);
+      updateLog(`  It is worth ${Number(item.arg).toLocaleString()}!`);
+    }
     player.setGold(player.GOLD + item.arg);
     forget();
     return;
@@ -533,43 +542,47 @@ function lookforobject(do_ident, do_pickup) {
   }
   //
   else if (item.matches(OPIT)) {
-    updateLog(`You're standing at the top of a pit`);
+    updateLog(`You're standing at the top of a pit${period}`);
     opit();
   }
   //
   else if (item.matches(OMIRROR)) {
     if (nearbymonst()) return;
-    if (do_ident) updateLog(`There is a mirror here`);
+    if (do_ident) updateLog(`There is a mirror here${period}`);
   }
   //
   else if (item.matches(OFOUNTAIN)) {
     if (nearbymonst()) return;
-    if (do_ident) updateLog(`There is a fountain here`, formatHint('f', 'to wash', 'D', 'to drink'));
+    if (do_ident) updateLog(`There is a fountain here${period}`, formatHint('f', 'to wash', 'D', 'to drink'));
   }
   //
   else if (item.matches(ODEADFOUNTAIN)) {
     if (nearbymonst()) return;
-    if (do_ident) updateLog(`There is a dead fountain here`);
+    if (do_ident) updateLog(`There is a dead fountain here${period}`);
   }
   //
   else if (ULARN && item.matches(OOPENDOOR)) {
     if (nearbymonst()) return;
-    if (do_ident) updateLog(`There is an open door here.`);
+    if (do_ident) updateLog(`There is an open door here${period}`);
   }
   //
   else if (item.matches(ODNDSTORE)) {
     if (nearbymonst()) return;
-    if (do_ident) updateLog(`There is a DND store here`, formatHint('e', 'to go inside'));
+    if (do_ident) updateLog(`There is a DND store here${period}`, formatHint('e', 'to go inside'));
   }
   //
-  else if (item.isStore() && !item.matches(OVOLUP) && !item.matches(OVOLDOWN)) {
+  else if (item.matches(OPAD)) {
     if (nearbymonst()) return;
     if (do_ident) updateLog(`You have found ${item}`, formatHint('e', 'to go inside'));
+  }
+  else if (item.isStore()) {
+    if (nearbymonst()) return;
+    if (do_ident) updateLog(`You have found ${item}${period}`, formatHint('e', 'to go inside'));
   }
   //
   else if (item.matches(OSTATUE)) {
     if (nearbymonst()) return;
-    if (do_ident) updateLog(`You are standing in front of a statue`);
+    if (do_ident) updateLog(`You are standing in front of a statue${period}`);
   }
   //
   else if (item.matches(OIVTELETRAP)) {
@@ -599,7 +612,7 @@ function lookforobject(do_ident, do_pickup) {
   }
   //
   else if (item.matches(OTRAPARROW)) {
-    updateLog(`You are hit by an arrow`);
+    updateLog(`You are hit by an arrow!`);
     lastnum = DIED_ARROW; /* shot by an arrow */
     player.losehp(rnd(10) + level);
     return;
@@ -617,7 +630,7 @@ function lookforobject(do_ident, do_pickup) {
   }
   //
   else if (item.matches(ODARTRAP)) {
-    updateLog(`You are hit by a dart`);
+    updateLog(`You are hit by a dart!`);
     lastnum = DIED_DART; /* hit by a dart */
     player.losehp(rnd(5));
     player.setStrength(player.STRENGTH - 1);
@@ -637,7 +650,7 @@ function lookforobject(do_ident, do_pickup) {
   //
   else if (item.matches(OTRAPDOOR)) {
     if (isCarrying(OWWAND)) {
-      updateLog(`You escape a trap door.`);
+      updateLog(`You escape a trap door!`);
       return;
     }
     if ((level == DBOTTOM) || (level >= VBOTTOM)) {
@@ -649,7 +662,7 @@ function lookforobject(do_ident, do_pickup) {
       return;
     }
     var dmg = rnd(5 + level);
-    updateLog(`You fall through a trap door!  You lose ${dmg} hit points`);
+    updateLog(`You fall through a trap door! You lose ${dmg} hit points${period}`);
     lastnum = DIED_TRAPDOOR; /* fell through a trap door */
     player.losehp(dmg);
     //nap(2000);
@@ -667,15 +680,15 @@ function lookforobject(do_ident, do_pickup) {
     }
   }
   //
-  else if (item.matches(OSTAIRSUP) || item.matches(OVOLUP)) {
-    let stairMessage = `You have found ${item}`;
-    if (ULARN) stairMessage = `There is a circular staircase here`;
+  else if (item.matches(OSTAIRSUP)) {
+    let stairMessage = `${youFound} ${item}`;
+    if (ULARN) stairMessage = `There is a circular staircase here${period}`;
     if (do_ident) updateLog(stairMessage, formatHint('<', 'go up'));
   }
   //
-  else if (item.matches(OSTAIRSDOWN) || item.matches(OVOLDOWN)) {
-    let stairMessage = `You have found ${item}`;
-    if (ULARN) stairMessage = `There is a circular staircase here`;
+  else if (item.matches(OSTAIRSDOWN)) {
+    let stairMessage = `${youFound} ${item}`;
+    if (ULARN) stairMessage = `There is a circular staircase here${period}`;
     if (do_ident) updateLog(stairMessage, formatHint('>', 'go down'));
   }
   //
@@ -699,69 +712,61 @@ function lookforobject(do_ident, do_pickup) {
   }
   //
   else if (item.matches(OBRASSLAMP)) {
-    updateLog(`You find ${item}. [<b>R</b> to rub]`);
+    updateLog(`You find ${item}${period} [<b>R</b> to rub]`);
   }
   //
   else if (item.matches(OPOTION)) {
-    if (do_ident) updateLog(`You have found ${item}`, formatHint('t', 'to take', 'q', 'to quaff'));
+    if (do_ident) updateLog(`${youFound} ${item}${period}`, formatHint('t', 'to take', 'q', 'to quaff'));
   }
   //
   else if (item.matches(OSCROLL) || item.matches(OBOOK)) {
-    if (do_ident) updateLog(`You have found ${item}`, formatHint('t', 'to take', 'r', 'to read'));
+    if (do_ident) updateLog(`${youFound} ${item}${period}`, formatHint('t', 'to take', 'r', 'to read'));
   }
   //
   else if (item.isArmor()) {
-    if (do_ident) updateLog(`You have found ${item}`, formatHint('t', 'to take', 'W', 'to wear'));
+    if (do_ident) updateLog(`${youFound} ${item}${period}`, formatHint('t', 'to take', 'W', 'to wear'));
   }
   //
   else if (item.isWeapon()) {
-    if (do_ident) updateLog(`You have found ${item}`, formatHint('t', 'to take', 'w', 'to wield'));
+    if (do_ident) updateLog(`${youFound} ${item}${period}`, formatHint('t', 'to take', 'w', 'to wield'));
   }
   //
   else if (item.matches(OCHEST)) {
-    if (do_ident) updateLog(`There is a chest here`, formatHint('t', 'to take', 'o', 'to open'));
+    if (do_ident) updateLog(`There is a chest here${period}`, formatHint('t', 'to take', 'o', 'to open'));
   }
   //
   else if (item.matches(OCOOKIE)) {
-    if (do_ident) updateLog(`You have found ${item}`, formatHint('t', 'to take', 'E', 'to eat'));
+    if (do_ident) updateLog(`${youFound} ${item}${period}`, formatHint('t', 'to take', 'E', 'to eat'));
   }
   //
   else if (item.matches(OSPEED)) {
-    if (do_ident) updateLog(`You find some speed. [<b>s</b> to snort]`);
+    if (do_ident) updateLog(`${youFound} ${item}${period} [<b>s</b> to snort]`);
   }
   //
   else if (item.matches(OSHROOMS)) {
-    if (do_ident) updateLog(`You find some magic mushrooms. [<b>e</b> to eat]`);
+    if (do_ident) updateLog(`${youFound} ${item}${period} [<b>e</b> to eat]`);
   }
   //
   else if (item.matches(OACID)) {
-    if (do_ident) updateLog(`You find some LSD. [<b>e</b> to eat]`);
+    if (do_ident) updateLog(`${youFound} ${item}${period} [<b>e</b> to eat]`);
   }
   //
   else if (item.matches(OHASH)) {
-    if (do_ident) updateLog(`You find some hashish. [<b>s</b> to smoke]`);
+    if (do_ident) updateLog(`${youFound} ${item}${period} [<b>s</b> to smoke]`);
   }
   //
   else if (item.matches(OCOKE)) {
-    if (do_ident) updateLog(`You find some cocaine. [<b>s</b> to snort]`);
+    if (do_ident) updateLog(`${youFound} ${item}${period} [<b>s</b> to snort]`);
   }
   //
   else if (canTake(item)) {
-    if (ULARN) {
-      if (do_ident) updateLog(`You find ${item}.`, formatHint('t', 'to take'));
-    } else {
-      if (do_ident) updateLog(`You have found ${item}`, formatHint('t', 'to take'));
-    }
+    if (do_ident) updateLog(`${youFound} ${item}${period}`, formatHint('t', 'to take'));
   }
 
   // base case
   else {
     if (do_ident && !item.matches(OWALL)) {
-      if (ULARN) {
-        updateLog(`You find ${item}.`);
-      } else {
-        updateLog(`You have found ${item}`);
-      }
+      updateLog(`${youFound} ${item}${period}`);
     }
   }
 
@@ -797,7 +802,7 @@ function opit() {
     return;
   }
   if (isCarrying(OWWAND)) {
-    updateLog(`You float right over the pit.`);
+    updateLog(`You float right over the pit!`);
     return;
   }
   if (level == DBOTTOM || level >= VBOTTOM) {
@@ -805,12 +810,12 @@ function opit() {
   } else {
     var damage = 0;
     if (rnd(101) < 20) {
-      var pitMessage = ULARN ? `A poor monster cushions your fall!` : `Your fall is cushioned by an unknown force`;
+      var pitMessage = ULARN ? `A poor monster cushions your fall!` : `Your fall is cushioned by an unknown force${period}`;
       updateLog(`You fell into a pit! ${pitMessage}`);
     } else {
       damage = rnd(level * 3 + 3);
       var plural = damage == 1 ? `` : `s`;
-      updateLog(`You fell into a pit! You suffer ${damage} hit point${plural} damage`);
+      updateLog(`You fell into a pit! You suffer ${damage} hit point${plural} damage${period}`);
       lastnum = DIED_PIT; /* fell into a pit */
     }
     player.losehp(damage);
@@ -835,7 +840,7 @@ function oelevator(direction) {
   // going up
   if (direction == 1) {
     if (level == 0) {
-      appendLog(`, unfortunately it is out of order.`);
+      appendLog(`, unfortunately it is out of order${period}`);
       return;
     }
     player.x = rnd(MAXX - 2);
@@ -1097,7 +1102,7 @@ function readbook(book) {
 
   learnSpell(spelcode[spellIndex]);
   updateLog(`Spell '<b>${spelcode[spellIndex]}</b>': ${spelname[spellIndex]}`);
-  updateLog(`  ${speldescript[spellIndex]}`);
+  updateLog(`  ${speldescript[spellIndex]}${period}`);
   if (rnd(10) == 4) {
     if (ULARN) updateLog(`You feel clever!`);
     else updateLog(`  Your intelligence went up by one!`);

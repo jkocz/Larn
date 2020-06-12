@@ -42,7 +42,7 @@ function act_remove_gems(arg) {
     itemAt(player.x, player.y).arg = 1;
     player.level.know[player.x][player.y] = 0;
   } else {
-    updateLog(`  Nothing happens`);
+    updateLog(`  Nothing happens${period}`);
   }
   return;
 }
@@ -87,7 +87,7 @@ function act_sit_throne(arg) {
     beep();
     oteleport(0);
   } else {
-    updateLog(`  Nothing happens`);
+    updateLog(`  Nothing happens${period}`);
   }
 }
 
@@ -103,7 +103,7 @@ function act_sit_dead_throne(arg) {
       beep();
       oteleport(0);
     } else {
-      updateLog(`  Nothing happens`);
+      updateLog(`  Nothing happens${period}`);
     }
     return;
   } else {

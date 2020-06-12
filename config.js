@@ -67,4 +67,66 @@ function setGameConfig() {
         DEATH_REASONS.set(DIED_BOTTOMLESS_PIT, `fell into a pit to HELL`);
     }
 
+    // MISC NIT-PICKING FOR MESSAGES
+    youFound = ULARN ? `You find` : `You have found`;
+    period = ULARN ? `.` : ``;
+
+    // MONSTER COLOURS
+    if (ULARN) monsterlist[LEMMING].color = `rosybrown`; else monsterlist[BAT].color = `brown`;
+    monsterlist[GNOME].color = `darkkhaki`;
+    monsterlist[HOBGOBLIN].color = `salmon`;
+    monsterlist[JACKAL].color = `sandybrown`;
+    if (ULARN) monsterlist[KOBOLD].color = `brown` ; else monsterlist[KOBOLD].color = `rosybrown`;
+    monsterlist[ORC].color = `tan`;
+    monsterlist[SNAKE].color = `olivedrab`;
+    monsterlist[CENTIPEDE].color = `orangered`;
+    monsterlist[JACULI].color = `burlywood`;
+    monsterlist[TROGLODYTE].color = `navajowhite`;
+    monsterlist[ANT].color = `indianred`;
+    monsterlist[EYE].color = `mediumorchid`;
+    monsterlist[LEPRECHAUN].color = `mediumseagreen`;
+    monsterlist[NYMPH].color = `lightpink`;
+    monsterlist[QUASIT].color = `yellowgreen`;
+    monsterlist[RUSTMONSTER].color = `goldenrod`;
+    monsterlist[ZOMBIE].color = `gray`;
+    monsterlist[ASSASSINBUG].color = `forestgreen`;
+    if (ULARN) monsterlist[BITBUG].color = `chocolate`; else monsterlist[BUGBEAR].color = `chocolate`;
+    monsterlist[HELLHOUND].color = `crimson`;
+    monsterlist[ICELIZARD].color = `white`;
+    monsterlist[CENTAUR].color = `sandybrown`;
+    monsterlist[TROLL].color = `seagreen`;
+    monsterlist[YETI].color = `mintcream`;
+    monsterlist[WHITEDRAGON].color = `snow`;
+    monsterlist[ELF].color = `mediumseagreen`;
+    monsterlist[CUBE].color = `turquoise`;
+    monsterlist[METAMORPH].color = `moccasin`;
+    monsterlist[VORTEX].color = `lightcyan`;
+    monsterlist[ZILLER].color = `cadetblue`;
+    monsterlist[VIOLETFUNGI].color = `violet`;
+    monsterlist[WRAITH].color = `dimgray`;
+    monsterlist[FORVALAKA].color = `thistle`;
+    if (ULARN) monsterlist[LAMANOBE].color = `powderblue`; else monsterlist[LAWLESS].color = `powderblue`;
+    monsterlist[OSEQUIP].color = null;
+    monsterlist[ROTHE].color = `sienna`;
+    monsterlist[XORN].color = `brown`;
+    monsterlist[VAMPIRE].color = `slategray`;
+    monsterlist[INVISIBLESTALKER].color = null;
+    monsterlist[POLTERGEIST].color = `lavender`;
+    monsterlist[DISENCHANTRESS].color = `antiquewhite`;
+    monsterlist[SHAMBLINGMOUND].color = `olivedrab`;
+    monsterlist[YELLOWMOLD].color = `palegoldenrod`;
+    monsterlist[UMBERHULK].color = `peru`;
+    monsterlist[GNOMEKING].color = `steelblue`;
+    monsterlist[MIMIC].color = `beige`;
+    monsterlist[WATERLORD].color = `cornflowerblue`;
+    monsterlist[BRONZEDRAGON].color = `goldenrod`;
+    monsterlist[GREENDRAGON].color = `palegreen`;
+    monsterlist[PURPLEWORM].color = `purple`;
+    monsterlist[XVART].color = `teal`;
+    monsterlist[SPIRITNAGA].color = `mediumslateblue`;
+    monsterlist[SILVERDRAGON].color = `paleturquoise`;
+    monsterlist[PLATINUMDRAGON].color = `lightsteelblue`;
+    monsterlist[GREENURCHIN].color = `lime`;
+    monsterlist[REDDRAGON].color = `indianred`;
+
 }

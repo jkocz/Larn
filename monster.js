@@ -18,6 +18,8 @@ var Monster = function Monster(char, desc, level, armorclass, damage, attack, in
   this.hitpoints = hitpoints;
   this.awake = awake;
   this.moved = moved;
+
+  this.color = NO_COLOR;
 }
 
 
@@ -40,7 +42,7 @@ function createMonster(monst) {
     monst.intelligence, monst.gold, monst.hitpoints, monst.experience,
     monst.arg, monst.awake, monst.moved);
 
-  if (monst.inventory.length > 0) {
+  if (monst.inventory && monst.inventory.length > 0) {
     for (let index = 0; index < monst.inventory.length; index++) {
       monster.inventory[index] = createObject(monst.inventory[index]);
     }
@@ -126,7 +128,12 @@ Monster.prototype = {
         return `<font color='crimson'>${demonchar[this.arg - DEMONLORD]}</font>`;
       } 
       else {
-        return monsterlist[monster].char;
+        if (show_color && monsterlist[monster].color) {
+          return `<font color='${monsterlist[monster].color}'>${monsterlist[monster].char}</font>`;
+        }
+        else {
+          return monsterlist[monster].char;
+        }
       }
     }
   },
@@ -728,7 +735,7 @@ function hitplayer(x, y) {
   var damageModifier = 1; // will alway be 1 for classic Larn
 
   if (monster.matches(POLTERGEIST) || monster.matches(SPIRITNAGA)) {
-    if (isCarrying(OSPIRITSCARAB) || player.SPIRITPRO) {
+    if (player.SPIRITPRO || isCarrying(OSPIRITSCARAB)) {
       if (ULARN) {
         /* spirit naga's and poltergeist's damage is halved if scarab of negate spirit */
         damageModifier = 0.5;
@@ -740,7 +747,7 @@ function hitplayer(x, y) {
   }
 
   if (monster.matches(VAMPIRE) || monster.matches(WRAITH) || monster.matches(ZOMBIE)) {
-    if (isCarrying(OCUBEofUNDEAD) || player.UNDEADPRO) {
+    if (player.UNDEADPRO || isCarrying(OCUBEofUNDEAD)) {
       if (ULARN) {
         /*	halved if undead and cube of undead control	*/
         damageModifier = 0.5;
@@ -766,7 +773,7 @@ function hitplayer(x, y) {
 
   if (!(ULARN && monster.isDemon())) {
     if ((player.INVISIBILITY > 0) && (rnd(33) < 20)) {
-      updateLog(`The ${monster} misses wildly`);
+      updateLog(`The ${monster} misses wildly${period}`);
       return;
     }
   }
@@ -820,10 +827,10 @@ function hitplayer(x, y) {
 
   if (((dam + bias) > player.AC) || (rnd(((player.AC > 0) ? player.AC : 1)) == 1)) {
     if (!FOREST) {
-      updateLog(`  The ${monster} hit you`);
+      updateLog(`  The ${monster} hit you${period}`);
     }
     else {
-      updateLog(`  The ${monster} hit you for ${dam} damage`);
+      updateLog(`  The ${monster} hit you for ${dam} damage${period}`);
     }
     playerHit = true;
 
@@ -862,7 +869,7 @@ function hitplayer(x, y) {
       player.losehp(dam);
     }
   }
-  if (!playerHit) updateLog(`  The ${monster} missed `);
+  if (!playerHit) updateLog(`  The ${monster} missed${period}`);
 }
 
 
@@ -899,7 +906,7 @@ function hitmonster(x, y) {
  
   var blind = ifblind(x, y);
   var damage = 0;
-  var flag = 0;
+  let hitMonster = false;
 
   var hitSkill = monster.armorclass + player.LEVEL + player.DEXTERITY + player.WCLASS / 4 - 12;
 
@@ -915,8 +922,8 @@ function hitmonster(x, y) {
   var drange = 0;
 
   if ((rnd(20) < hitSkill - difficultyModifier) || (rnd(71) < 5)) /* need at least random chance to hit */ {
-    updateLog(`You hit the ` + (blind ? `monster` : monster));
-    flag = 1;
+    updateLog(`You hit the ${blind ? `monster` : monster}${period}`);
+    hitMonster = true;
     damage = fullhit(1);
 
     // JXK: This is so the lance values aren't reduced. 
@@ -930,10 +937,10 @@ function hitmonster(x, y) {
       if (damage < 9999) damage = rnd(damage) + 1;
     } 
   } else {
-    updateLog(`You missed the ` + (blind ? `monster` : monster));
-    flag = 0;
+    updateLog(`You missed the ${blind ? `monster` : monster}${period}`);
+    hitMonster = false;
   }
-  if (flag == 1) {
+  if (hitMonster) {
     /* if the monster was hit */
     if (monster.matches(RUSTMONSTER) || monster.matches(DISENCHANTRESS) || monster.matches(CUBE)) {
       if (weapon && weapon.isWeapon()) {
@@ -946,18 +953,35 @@ function hitmonster(x, y) {
         } else if (ULARN && weapon.arg <= -10) {
           destroyInventory(weapon);
           updateLog(`  Your weapon disintegrates!`);
-          flag = 0; /* Didn't hit after all... */
+          hitMonster = false; /* Didn't hit after all... */
         }
       }
     }
   }
-  if (flag == 1) {
-    hitm(x, y, damage);
-    if (ULARN) {
-      if (monster.isDemon() && weapon && weapon.matches(OLANCE) && monster.hitpoints > 0) {
-        updateLog(`  Your lance of death tickles the ${monster}`);
+  if (hitMonster) {
+
+    /* Deal with Vorpy */
+    // 12.5.0 fix: this was in hitm() before and you could 'behead' a monster with a spell
+    if (weapon && weapon.matches(OVORPAL) && rnd(20) == 1 && monster.canBehead()) {
+      updateLog(`  The Vorpal Blade beheads the ${monster}!`);
+      damage = monster.hitpoints;
+    }
+
+    // 12.5.0 fix: this was in hitm() before and was causing spells to be too powerful
+    if (ULARN && monster.isDemon()) {
+      if (weapon && weapon.matches(OLANCE)) {
+        damage = 300;
+        if (monster.hitpoints > damage) {
+          updateLog(`  Your lance of death tickles the ${monster}`);
+        }
+      }
+      if (weapon && weapon.matches(OSLAYER)) {
+        damage = 10000;
       }
     }
+
+    hitm(x, y, damage); /* actually hit the monster */
+
   }
 
   // JXK: Make elseif?
@@ -998,7 +1022,6 @@ function hitmonster(x, y) {
  *  Called by hitmonster(x,y)
  */
 function hitm(x, y, damage) {
-  //vxy( & x, & y); /* verify coordinates are within range */
   var monster = player.level.monsters[x][y];
   var fulldamage = damage; /* save initial damage so we can return it */
   if (player.HALFDAM > 0) damage >>= 1; /* if half damage curse adjust damage points */
@@ -1026,27 +1049,10 @@ function hitm(x, y, damage) {
     }
   }
 
-  var weapon = player.WIELD;
-
-  /* Deal with Vorpy */
-  if (weapon && weapon.matches(OVORPAL) && rnd(20) == 1 && monster.canBehead()) {
-    updateLog(`  The Vorpal Blade beheads the ${monster}!`);
-    damage = monster.hitpoints;
-  }
-
   /* invincible monster fix is here */
   if (monster.hitpoints > monsterlist[monster.arg].hitpoints)
     monster.hitpoints = monsterlist[monster.arg].hitpoints;
 
-  if (ULARN && monster.isDemon()) {
-    if (weapon && weapon.matches(OLANCE)) {
-      damage = 300;
-    }
-    if (weapon && weapon.matches(OSLAYER)) {
-      damage = 10000;
-    }
-  }
- 
   if ((level > VBOTTOM) && (monster.arg < DEMONLORD)) {
     // monsters in the forest are tough! 
     damage = Math.floor(damage / 3);
@@ -1130,12 +1136,11 @@ function spattack(monster, attack, xx, yy) {
     }
   }
 
-  /* no special attack for spirit naga if scarab of negate spirit */
-  /* 12.5.0 - seems like this is missing from the original. updated to match 
-              cube of undead behaviour
+  /* 12.5.0 - seems like this is missing from the original. updated to no special attack
+     for naga with spirit protection, but leave at 50% if scarab of negate spirit (done in hitplayer())
   */
-  if (monster.matches(SPIRITNAGA)) {
-    if (isCarrying(OSPIRITSCARAB) || player.SPIRITPRO) {
+  if (ULARN && monster.matches(SPIRITNAGA)) {
+    if (player.SPIRITPRO) {
       return 0;
     }
   }
@@ -1197,7 +1202,7 @@ function spattack(monster, attack, xx, yy) {
       /* if rusting did not occur */
       if (rust == 0) {
         if (armor && armor.matches(OLEATHER)) {
-          updateLog(`The ${monster} hit you -- you're lucky to be wearing leather armor`);
+          updateLog(`The ${monster} hit you -- you're lucky to be wearing leather armor!`);
         }
         if (armor && armor.matches(OSSPLATE)) {
           updateLog(`The ${monster} hit you -- you're fortunate to have stainless steel armor!`);
@@ -1206,7 +1211,7 @@ function spattack(monster, attack, xx, yy) {
           updateLog(`The ${monster} hit you -- you are very lucky to have such strong elven chain!`);
         }
       } else {
-        updateLog(`The ${monster} hit you -- your armor feels weaker`);
+        updateLog(`The ${monster} hit you -- your armor feels weaker${period}`);
       }
       break;
 
@@ -1232,13 +1237,13 @@ function spattack(monster, attack, xx, yy) {
 
     case 4:
       if (player.STRENGTH > 3) {
-        updateLog(`The ${monster} stung you! You feel weaker`);
+        updateLog(`The ${monster} stung you! You feel weaker${period}`);
         player.setStrength(player.STRENGTH - 1);
       } else updateLog(`The ${monster} stung you!`);
       break;
 
     case 5:
-      updateLog(`The ${monster} blasts you with its cold breath`);
+      updateLog(`The ${monster} blasts you with its cold breath${period}`);
       damage = rnd(15) + 18 - armorclass;
       player.losehp(damage);
       if (FOREST) { 
@@ -1247,6 +1252,10 @@ function spattack(monster, attack, xx, yy) {
       return 0;
 
     case 6:
+      if (isCarrying(OLIFEPRESERVER)) {
+        /* Life preserver prevents all drain life attacks */
+        return 0;
+      }
       updateLog(`The ${monster} drains you of your life energy!`);
       player.loselevel();
       if (monster.matches(DEMONPRINCE)) {
@@ -1271,12 +1280,12 @@ function spattack(monster, attack, xx, yy) {
     case 8:
       if (isCarrying(ONOTHEFT)) return 0; /* he has a device of no theft */
       if (player.GOLD) {
-        updateLog(`The ${monster} hit you -- your purse feels lighter`);
+        updateLog(`The ${monster} hit you -- your purse feels lighter${period}`);
         if (player.GOLD > 32767)
           player.setGold(player.GOLD >> 1);
         else
           player.setGold(player.GOLD - rnd(1 + (player.GOLD >> 1)));
-      } else updateLog(`The ${monster} couldn't find any gold to steal`);
+      } else updateLog(`The ${monster} couldn't find any gold to steal${period}`);
       /* 12.4.5 and ularn */
       /* put the monster back somewhere on the level */
       teleportMonster(xx, yy);
@@ -1297,20 +1306,20 @@ function spattack(monster, attack, xx, yy) {
           return 0;
         }
         if (--j <= 0) {
-          updateLog(`The ${monster} nearly misses`);
+          updateLog(`The ${monster} nearly misses${period}`);
         }
         break;
       }
       break;
 
     case 10:
-      updateLog(`The ${monster} hit you with its barbed tail`);
+      updateLog(`The ${monster} hit you with its barbed tail${period}`);
       damage = rnd(25) - armorclass;
       player.losehp(damage);
       return 0;
 
     case 11:
-      updateLog(`The ${monster} has confused you`);
+      updateLog(`The ${monster} has confused you${period}`);
       player.CONFUSE += 10 + rnd(10);
       break;
 
@@ -1327,12 +1336,12 @@ function spattack(monster, attack, xx, yy) {
     case 14: {
       if (isCarrying(ONOTHEFT)) return 0; /* he has device of no theft */
       if (emptyhanded()) {
-        updateLog(`The ${monster} couldn't find anything to steal`);
+        updateLog(`The ${monster} couldn't find anything to steal${period}`);
         break;
       }
       updateLog(`The ${monster} picks your pocket and takes: `);
       let item = stealsomething();
-      if (!item) updateLog(`  nothing`);
+      if (!item) updateLog(`  nothing${period}`);
       /* put the stolen item into the monsters inventory */
       monsterAt(xx, yy).pickup(item);
       /* 12.4.5 and ularn */

@@ -258,6 +258,20 @@ function initFS() {
 
 
 
+function initRB() {
+  try {
+    Rollbar.configure({
+      payload: {
+        environment: `${BUILD}`
+      }
+    });
+  } catch (error) {
+    // do nothing
+  }
+}
+
+
+
 function getIP() {
   try {
     fetch(`https://www.cloudflare.com/cdn-cgi/trace`).then(function (response) {
@@ -603,14 +617,10 @@ function wizardmode(password) {
     return 1;
   }
 
-  // other valid passwords to add in the future
-  // main(){}
-  // frobozz
-  //
-  // amiga?
-  // ularn 1.6?
-  // ularn 1.5?
-  if (password === 'pvnert(x)') {
+  // there have been many wizard passwords over the years
+  let wizardPasswords = [`pvnert(x)`, `frobozz`, `fizban`, `main(){}`, `amiga`];
+
+  if (wizardPasswords.includes(password)) {
     //updateLog(`disabling wizard mode`);
     wizard = 1;
 
@@ -680,8 +690,8 @@ function wizardmode(password) {
       }
 
       if (ULARN) {
-        // 100 items now
-        while (wizi < OPAD.id) {
+        // 101 items now
+        while (wizi < OLIFEPRESERVER.id) {
           var wizitem = itemlist[++wizi];
           if (wizitem && wizitem != OHOMEENTRANCE && wizitem != OUNKNOWN)
             setItem(ix, --iy, wizitem);
@@ -699,7 +709,7 @@ function wizardmode(password) {
         
     }
   } else {
-    updateLog(`Sorry`);
+    updateLog(`Sorry${period}`);
     return 1;
   }
 
