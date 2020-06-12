@@ -2,7 +2,6 @@
     - Re-evaluate time limit
     - Amiga graphics?
     - Need additional maps (even if only slight variations). Then ensure maps only used once.
-    - Ensure that combined items etc cannot appear on maps randomly 
     - Post potion, store opens up with new items (some new, some like Slashing/Vorpal?)
     - Stairs in addition to going further in? (If stairs, could be for special items?)
     - No teleportation traps in forest
@@ -31,8 +30,6 @@
     - Replace Alters with Totems or similar? 
 
 - Out and out bugs:
-    - Ularn bug: Vorpal blade sometimes beheads a monster that is killed by a spell.
     - Ularn bug: Make stairs always take you to same place
-    - Investigate haste self. - Does not always work if monster hit by spell?
     - Creator only sees full map of map where level gained
     - Store opens again if not carry potion - make "Have potion" permanent (similar to have mark).
