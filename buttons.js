@@ -171,6 +171,7 @@ function setButtons() {
             var boldLabel = bold_objects ? `on` : `off`;
             var colorLabel = show_color ? `on` : `off`;
             var retroLabel = retro_mode ? `DOS` : `modern`;
+            var monsterColor = monster_color ? `on` : `off`; 
             if (amiga_mode) retroLabel = retro_mode ? `Amiga 500` : `Amiga 1200`;
             addButton(createVariableButton(`!`, `Keyboard hints: ${hintsLabel}`));
             addButton(createVariableButton(`@`, `Auto pickup: ${pickupLabel}`));
@@ -178,6 +179,7 @@ function setButtons() {
             addButton(createVariableButton(`$`, `Show color: ${colorLabel}`));
             addButton(createVariableButton(`%`, `Bold objects: ${boldLabel}`));
             addButton(createVariableButton(`{`, `Font: ${retroLabel}`));
+            addButton(createVariableButton('|', `Monster Color: ${monsterColor}`));
         }
         setDiv(`FOOTER`, BUTTONS);
         return; // disable everything else for now

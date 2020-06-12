@@ -761,6 +761,13 @@ function parse(key) {
     updateLog(`Colors: ${show_color ? `on` : `off`}`);
     return;
   }
+  
+  if (key == '|') {
+    nomove = 1;
+    monster_color = !monster_color;
+    updateLog(`Monster color: ${monster_color ? `on` : `off`}`);
+    return;
+  }
 
   //
   // toggle between classic, hack and amiga mode

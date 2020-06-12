@@ -128,5 +128,4 @@ function setGameConfig() {
     monsterlist[PLATINUMDRAGON].color = `lightsteelblue`;
     monsterlist[GREENURCHIN].color = `lime`;
     monsterlist[REDDRAGON].color = `indianred`;
-
 }

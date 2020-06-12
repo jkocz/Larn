@@ -1,7 +1,7 @@
 'use strict';
 
-const VERSION = '12.6.0 (alpha)';
-const BUILD = '010';
+const VERSION = '12.6.0 (beta)';
+const BUILD = '011';
 
 var ULARN = false; // are we playing LARN or ULARN?
 var FOREST = false; // are we playing the FOREST?
@@ -129,6 +129,7 @@ function initKeyBindings() {
   Mousetrap.bind('#', mousetrap); // inventory 
   Mousetrap.bind('{', mousetrap); // retro fonts
   Mousetrap.bind('}', mousetrap); // classic/hack/amiga
+  Mousetrap.bind('|', mousetrap); // monster color
   Mousetrap.bind('?', mousetrap); // help
   Mousetrap.bind('_', mousetrap); // password
   Mousetrap.bind('-', mousetrap); // disarm 
