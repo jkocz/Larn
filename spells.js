@@ -811,6 +811,12 @@ function spell_combine(index) {
       destroyInventory(item);
       take(createObject(ODESTROYER));
     } 
+    else if (((itemA.id == ODESTROYER.id) && (item.id == OVORPAL.id)) || ((item.id == ODESTROYER.id) && (itemA.id == OVORPAL.id))) {
+      updateLog(` You have created Infinite Edge!`);
+      destroyInventory(itemA);
+      destroyInventory(item);
+      take(createObject(OINFINITE)); 
+    }
     else if (((itemA.id == ODESTROYER.id) && (item.id == OSWORDofSLASHING.id)) || ((item.id == ODESTROYER.id) && (itemA.id == OSWORDofSLASHING.id))) {
       updateLog(` You have created Flawless!`);
       destroyInventory(itemA);

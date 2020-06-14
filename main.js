@@ -699,8 +699,10 @@ function wizardmode(password) {
       }
 
       if (FOREST) {
-        // over 100 items now
-        while (wizi < OMARK.id) {
+        // Forest items start at 120 to prevent conflict with 
+        // additional ULARN 12.6+ objects. 
+        wizi = 120;
+        while (wizi < OMARK.id-2) {
           var wizitem = itemlist[++wizi];
           if (wizitem && wizitem != OHOMEENTRANCE && wizitem != OUNKNOWN)
             setItem(--ix, 0, wizitem);

@@ -119,6 +119,7 @@ class Item {
     weapon |= this.matches(OSLAYER);
     weapon |= this.matches(OPSTAFF);
     weapon |= this.matches(ODESTROYER);
+    weapon |= this.matches(OINFINITE);
     weapon |= this.matches(OFLAWLESS);
     return weapon;
   }
@@ -327,10 +328,10 @@ const OVOLDOWN = new DungeonObject(55, `V`, `9`, `V`, `crimson`, BOLD, `a volcan
 // ULARN
 const OPAD = new DungeonObject(100, `@`, `@`, `@`, `lightgreen`, BOLD, `Dealer McDope's Hideout!`, NO_CARRY);
 // FOREST
-const OFOREST =   new DungeonObject(101, `F`, `A`, `F`, `darkgreen`, BOLD, `a portal that seems to lead to a forest`,NO_CARRY);
-const OFORESTENTRANCE = new DungeonObject(102, OEMPTY.char, `8`, OEMPTY.char, NO_COLOR, NO_BOLD, `the exit to the home level`, NO_CARRY);
-const OFORESTDOWN = new DungeonObject(103, OEMPTY.char, `8`, OEMPTY.char, NO_COLOR, NO_BOLD, `go futher into the forest?`, NO_CARRY);
-const OFORESTUP = new DungeonObject(104, OEMPTY.char, `8`, OEMPTY.char, NO_COLOR, NO_BOLD, `go back the way you came?`, NO_CARRY);
+const OFOREST =   new DungeonObject(121, `F`, `A`, `F`, `darkgreen`, BOLD, `a portal that seems to lead to a forest`,NO_CARRY);
+const OFORESTENTRANCE = new DungeonObject(122, OEMPTY.char, `8`, OEMPTY.char, NO_COLOR, NO_BOLD, `the exit to the home level`, NO_CARRY);
+const OFORESTDOWN = new DungeonObject(123, OEMPTY.char, `8`, OEMPTY.char, NO_COLOR, NO_BOLD, `go futher into the forest?`, NO_CARRY);
+const OFORESTUP = new DungeonObject(124, OEMPTY.char, `8`, OEMPTY.char, NO_COLOR, NO_BOLD, `go back the way you came?`, NO_CARRY);
 
 // dungeon features
 const OWALL = new DungeonObject(21, `▒`, `▒`, `▒`, NO_COLOR, NO_BOLD, `a wall`, NO_CARRY);
@@ -392,8 +393,9 @@ const OHAMMER = new DungeonObject(27, `)`, `)`, `)`, `darkgoldenrod`, BOLD, `Bes
 const OVORPAL = new DungeonObject(90, `)`, `)`, `)`, `darkorange`, BOLD, `the Vorpal Blade`, CARRY);
 const OSLAYER = new DungeonObject(91, `)`, `)`, `)`, `crimson`, BOLD, `Slayer`, CARRY);
 // FOREST
-const ODESTROYER = new DungeonObject(105, `)`, `)`, `)`, `darkgray`, BOLD, `The Destroyer`, CARRY);
-const OFLAWLESS = new DungeonObject(107, `)`, `)`, `)`, `black`, BOLD, `Flawless`, CARRY);
+const ODESTROYER = new DungeonObject(125, `)`, `)`, `)`, `gold`, BOLD, `The Destroyer`, CARRY);
+const OINFINITE = new DungeonObject(126, `)`, `)`, `)`, `darkgray`, BOLD, `Infinite Edge `, CARRY);
+const OFLAWLESS = new DungeonObject(127, `)`, `)`, `)`, `black`, BOLD, `Flawless`, CARRY);
 
 // armour
 const OLEATHER = new DungeonObject(25, `[`, `[`, `[`, `lightgray`, BOLD, `leather armor`, CARRY);
@@ -434,7 +436,7 @@ const OWWAND = new DungeonObject(88, `/`, `/`, `/`, `mediumseagreen`, BOLD, `a w
 const OPSTAFF = new DungeonObject(89, `/`, `/`, `/`, `darkorange`, BOLD, `a staff of power`, CARRY);
 const OLIFEPRESERVER = new DungeonObject(101, `"`, `"`, `"`, `orange`, BOLD, `an amulet of life preservation`, CARRY);
 // FOREST
-const OMARK = new DungeonObject(106, '@','@','@',`darkorange`, BOLD,`the mark of Polinneaus`, CARRY);
+const OMARK = new DungeonObject(128, '@','@','@',`darkorange`, BOLD,`the mark of Polinneaus`, CARRY);
 
 // ULARN drugs
 const OSPEED = new DungeonObject(95, `:`, `:`, `:`, `paleblue`, BOLD, `some speed`, CARRY);

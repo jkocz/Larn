@@ -1,6 +1,6 @@
 'use strict';
 
-const VERSION = '12.6.0 (beta)';
+const VERSION = '13.0.0 (beta)';
 const BUILD = '011';
 
 var ULARN = false; // are we playing LARN or ULARN?

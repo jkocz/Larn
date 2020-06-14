@@ -293,6 +293,7 @@ const FOREST_STORE_INVENTORY = [
   [500,    OBRASSLAMP.id,       0,  0],
   [95000,  OPSTAFF.id,          0,  0],
   [500000, ODESTROYER.id,       0,  0],
+  [750000, OINFINITE.id,        0,  0],
   [900000, OFLAWLESS.id,        0,  0],
   [1000000,OMARK.id,            0,  0]
 ];
