@@ -33,4 +33,3 @@
 - Out and out bugs:
     - Ularn bug: Make stairs always take you to same place
     - Creator only sees full map of map where level gained
-    - Store opens again if not carry potion - make "Have potion" permanent (similar to have mark).
