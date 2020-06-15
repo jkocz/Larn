@@ -320,7 +320,7 @@ const LARN_spelweird = [
 /*         zombie */ [  0,0,0,8,0,4,   0,0,0,0,0,0,4,0,   0,0,0,0,0,4,0,   4,0,4,0,0,4,   0,0,0,0,0,0,   0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0 	],
 /*   assassin bug */ [  0,0,0,0,0,0,   0,0,0,0,0,0,0,0,   0,0,0,0,0,0,0,   0,0,0,0,0,0,   0,0,0,0,0,0,   0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0 	],
 /*        bugbear */ [  0,0,0,0,0,0,   0,0,0,0,0,0,0,5,   0,0,0,0,0,0,0,   0,0,0,0,0,0,   0,0,0,0,0,0,   0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0 	],
-/*     hell hound */ [  0,6,0,0,0,0,   12,0,0,0,0,0,0,0,  0,0,0,0,0,0,0,   0,0,0,0,0,0,   0,0,0,0,0,0,   0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0 	],
+/*     hell hound */ [  0,6,0,0,0,0,   12,0,0,0,0,0,0,0,  19,0,0,0,0,0,0,  0,0,0,0,0,0,   0,0,0,0,0,0,   0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0 	],
 
 /*     ice lizard */ [  0,0,0,0,0,0,   11,0,0,0,0,0,0,0,  0,15,0,0,0,0,0,  0,0,0,0,0,0,   0,0,0,0,0,0,   0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0 	],
 /*        centaur */ [  0,0,0,0,0,0,   0,0,0,0,0,0,0,0,   0,0,0,0,0,0,0,   0,0,0,0,0,0,   0,0,0,0,0,0,   0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0 	],
@@ -353,16 +353,16 @@ const LARN_spelweird = [
 
 /*          mimic */ [  0,0,0,0,0,0,   2,0,0,0,0,0,0,0,   0,0,0,0,0,0,0,   0,0,0,0,0,0,   0,0,0,0,0,0,   0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0 	],
 /*     water lord */ [  0,13,0,8,3,4,  1,0,0,0,0,0,0,0,   0,0,9,0,0,4,0,   0,0,0,0,16,4,  0,0,0,0,0,0,   0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0 	],
-/*  bronze dragon */ [  0,7,0,0,0,0,   0,0,0,0,0,0,0,0,   0,0,0,0,0,0,0,   0,0,0,0,0,0,   0,0,0,0,0,0,   0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0 	],
+/*  bronze dragon */ [  0,7,0,0,0,0,   0,0,0,0,0,0,0,0,   19,0,0,0,0,0,0,  0,0,0,0,0,0,   0,0,0,0,0,0,   0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0 	],
 /*   green dragon */ [  0,7,0,0,0,0,   11,0,0,0,0,0,0,0,  0,0,0,0,0,0,0,   0,0,0,0,0,0,   0,0,0,0,0,0,   0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0 	],
 /*    purple worm */ [  0,0,0,0,0,0,   0,0,0,0,0,0,0,0,   0,0,0,0,0,0,0,   0,0,0,0,0,0,   0,0,0,0,0,0,   0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0 	],
 
 /*          xvart */ [  0,13,0,0,0,0,  0,0,0,0,0,0,0,0,   0,0,0,0,0,0,0,   0,0,0,0,4,4,   0,0,0,0,0,0,   0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0 	],
 /*    spirit naga */ [  0,13,0,8,3,4,  1,0,0,0,0,0,14,5,  0,4,9,0,0,4,0,   4,0,4,0,4,4,   0,0,0,0,0,0,   0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0 	],
-/*  silver dragon */ [  0,6,0,9,0,0,   12,0,0,0,0,0,0,0,  0,0,9,0,0,0,0,   0,0,0,0,0,0,   0,0,0,0,0,0,   0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0 	],
+/*  silver dragon */ [  0,6,0,9,0,0,   12,0,0,0,0,0,0,0,  19,0,9,0,0,0,0,  0,0,0,0,0,0,   0,0,0,0,0,0,   0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0 	],
 /*platinum dragon */ [  0,7,0,9,0,0,   11,0,0,0,0,0,14,0, 0,0,9,0,0,0,0,   0,0,0,0,0,0,   0,0,0,0,0,0,   0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0 	],
 /*   green urchin */ [  0,0,0,0,0,0,   0,0,0,0,0,0,0,0,   0,0,0,0,0,0,0,   0,0,0,0,0,0,   0,0,0,0,0,0,   0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0 	],
-/*     red dragon */ [  0,6,0,0,0,0,   12,0,0,0,0,0,0,0,  0,0,0,0,0,0,0,   0,0,0,0,0,0,   0,0,0,0,0,0,   0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0 	],
+/*     red dragon */ [  0,6,0,0,0,0,   12,0,0,0,0,0,0,0,  19,0,0,0,0,0,0,  0,0,0,0,0,0,   0,0,0,0,0,0,   0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0 	],
 
 /*                      p m d s c s    w s e h c c p i    b c p c h c v    d l d g f f    s h s t m m    s g s w a p   p c b d b f m g r */
 /*                      r l e l h s    e t n e b r h n    a l l a a k p    r i r l l g    c l t e f k    p e u t l e   o o r e r r s h b */
@@ -412,6 +412,7 @@ var spelmes = [
 /* 16 */ function(monster) { return `the ${monster} loves the water!`; },
 /* 17 */ function(monster) { return `the demon is terrified of the ${monster}!`; },
 /* 18 */ function(monster) { return `the ${monster} loves fire and lightning!`; },
+/* 19 */ function(monster) { return `the ${monster} loves fire!`; },
  ];
 
 
@@ -458,5 +459,5 @@ attackmessage[LIT] = function(monster, i) { return `  A lightning bolt hits the 
 attackmessage[DRL] = function(monster, i) { return ``;  };
 attackmessage[FGR] = function(monster, i) { return `  The ${monster}'s heart stopped${period}`; };
 attackmessage[SUM] = function(monster, i) { return `  The demon strikes at the ${monster}${period}`; };
-attackmessage[BRN] = function(monster, i) { return `  The ${monster} is encased in writhing flames`; };
-attackmessage[FRZ] = function(monster, i) { return `  The ${monster} is surrounded by a storm of ice`; };
+attackmessage[BRN] = function(monster, i) { return `  The ${monster} is encased in writhing flames${period}`; };
+attackmessage[FRZ] = function(monster, i) { return `  The ${monster} is surrounded by a storm of ice${period}`; };

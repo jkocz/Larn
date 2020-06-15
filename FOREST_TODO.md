@@ -7,8 +7,6 @@
     - No teleportation traps in forest
 
 - Monsters/balance:
-    - Monster color is an optional button?
-    - Make e.g. hellhound immune to fire? 
     - Some monsters need to move faster than Our Hero (just guardians, or all?)
     - Make guardians invisible without eye of larn
     - Addition of other stats when fighting monsters - in particular guardians+
