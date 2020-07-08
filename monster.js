@@ -52,15 +52,23 @@ function createMonster(monst) {
   }
 
   if (arg == MIMIC) {
-    monster.mimicarg = monst.mimicarg;
-    monster.mimiccounter = monst.mimiccounter;
+
+    // JXK: Double init? Not necessary? (Causes forest guardians to
+    //      have double items.
+    //monster.initInventory();
+    monster.mimicarg = monst.mimicarg ? monst.mimicarg : createMimicArg();
+    monster.mimiccounter = monst.mimiccounter ? monst.mimiccounter : 0;
   }
 
-  // JXK: Double init? Not necessary? (Causes forest guardians to 
-  //      have double items.
-  //monster.initInventory();
-
   return monster;
+}
+
+
+
+function createMimicArg() {
+  let arg = rnd(REDDRAGON);
+  if (arg == INVISIBLESTALKER) arg++;
+  return arg;
 }
 
 
@@ -96,13 +104,7 @@ Monster.prototype = {
   getChar: function () {
     let monster = this.arg;
 
-    if (this.arg == MIMIC) {
-      if (!this.mimiccounter || this.mimiccounter == 10) {
-        this.mimiccounter = 0;
-        this.mimicarg = rnd(REDDRAGON);
-        if (this.mimicarg == INVISIBLESTALKER) this.mimicarg++;
-      }
-      this.mimiccounter++;
+    if (this.arg == MIMIC && this.mimicarg) {
       monster = this.mimicarg;
     }
 
