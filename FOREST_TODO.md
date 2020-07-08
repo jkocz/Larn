@@ -12,9 +12,11 @@
     - Addition of other stats when fighting monsters - in particular guardians+
     - Must have high wis/int to solve puzzle of mark?
     - Make alters in Ularn more dangerous? (too easy to get high stats?)
+    - Track if players drop gold before praying? 
     - Make alters crumble more easily?
     - Master can cast spells from a distance
     - P doesn't attack on edge
+    - Make monsters more powerful as we get further into the Forest
               
 - Spells:
     - GEN and 1) Dragons, 2) Guardian/App/Master
