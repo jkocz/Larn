@@ -23,6 +23,9 @@ function movemonst() {
   // /* move the spheres of annihilation if any */
   // movsphere();
 
+  /* no action if monsters are stopped */
+  if (player.STOPMONST) return;
+
   /* no action if monsters are held */
   if (player.HOLDMONST) return;
 
@@ -164,6 +167,10 @@ function movemt(x, y) {
      * Even then, only half the time
      */
     scared = (scared <= 1) ? 0 : (rnd(10) > 5);
+  }
+  else if (monster.arg > LUCIFER) {
+    // Guardian or higher in forest
+    scared = (scared <= 1) ? 0 : (rnd(10) > 8);
   }
 
   /* Call the appropriate move routine */
@@ -557,8 +564,13 @@ function mmove(sx, sy, dx, dy) {
   let trap_msg;
 
   if (item.matches(OANNIHILATION)) {
+    /* master always dispels the sphere */
+    if (monster.matches(MASTER)) {
+      trap_msg = `The ${monster} dispels the sphere!`;
+      rmsphere(dx, dy);
+    } 
     /* demons dispel spheres */
-    if (monster.isDemon()) {
+    else if (monster.isDemon()) {
       let have_talisman = isCarrying(OSPHTALISMAN);
       if ((!have_talisman) ||
         // lucifer can't dispels 30% of the time if talisman
@@ -571,6 +583,11 @@ function mmove(sx, sy, dx, dy) {
         trap_msg = `The ${monster} is destroyed by the sphere of annihilation!`;
         killMonster(dx, dy);
         monst_killed = 1;
+      }
+    } else if (monster.matches(APPRENTICE)) {
+      if (!isCarrying(OSPHTALISMAN)) {
+        trap_msg = `The ${monster} dispels the sphere!`;
+        rmsphere(dx, dy); 
       }
     } else {
       if (monster.isCarrying(OSPHTALISMAN)) {
@@ -704,7 +721,10 @@ function valid_monst_move(x, y, monster) {
 
   /* can't move here */
   at_player = (x == player.x) && (y == player.y);
-  at_entrance = (x == 33) && (y == MAXY - 1) && (level == 1);
+  // JXK: level 1 is first dungeon level, level 21 is first forest level
+  //      TODO: first forest level should be set to variable instead of
+  //            static. Set to vbottom + 1?
+  at_entrance = (x == 33) && (y == MAXY - 1) && ((level == 1) || (level == 21));
 
   /*
    * A monster cannot pass through a closed door or a wall.

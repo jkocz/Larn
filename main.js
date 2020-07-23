@@ -1,6 +1,8 @@
 'use strict';
 
 /* if (ULARN) This game is bad for you. It is evil. It will rot your brain. */
+/* if (FOREST) We decided that we were so far down the rabbit hole we might as
+   well keep digging. */
 
 /* create new game */
 function welcome() {
@@ -45,6 +47,7 @@ function welcome() {
   } else {
     setname(logname);
   }
+
   setButtons();
   blt();
 }
@@ -58,6 +61,9 @@ function createLevelNames() {
   }
   for (let i = 0; i < MAXVLEVEL; i++) {
     LEVELNAMES.push(`V${i+1}`);
+  }
+  for (let i = 0; i < MAXFLEVEL; i++) {
+    LEVELNAMES.push(`F${i+1}`);
   }
 }
 
@@ -127,7 +133,7 @@ function setname(name) {
     clearBlinkingCursor(); // clear after setting name and loading savegame
     setGameDifficulty(getDifficulty());
 
-    return 1;
+    return 1; 
   } else {
     var difficultyString = `What difficulty would you like to play? [<b>${getDifficulty()}</b>]: `;
     lprcat(difficultyString);
@@ -414,7 +420,11 @@ function setgender(genderpick) {
 function startgame(hard) {
 
   initFS();
-  getIP();
+
+  //JXK: Removed for offline
+  //     Set to have a flag for local play?
+  //     (No need to go asking for IPs otherwise)
+  //getIP();
 
   makeplayer(); /*  make the character that will play  */
 
@@ -656,7 +666,7 @@ function wizardmode(password) {
       for (var potioni = MAXX - 1; potioni > MAXX - 1 - POTION_NAMES.length; potioni--) {
         var potion = createObject(OPOTION, MAXX - 1 - potioni);
         learnPotion(potion);
-        setItem(potioni, 0, potion);
+        setItem(potioni-10, 0, potion);
       }
 
       var ix = 0;
@@ -688,6 +698,17 @@ function wizardmode(password) {
         }
       }
 
+      if (FOREST) {
+        // Forest items start at 120 to prevent conflict with 
+        // additional ULARN 12.6+ objects. 
+        wizi = 120;
+        while (wizi < OMARK.id-2) {
+          var wizitem = itemlist[++wizi];
+          if (wizitem && wizitem != OHOMEENTRANCE && wizitem != OUNKNOWN)
+            setItem(--ix, 0, wizitem);
+        }
+      }
+        
     }
   } else {
     updateLog(`Sorry${period}`);

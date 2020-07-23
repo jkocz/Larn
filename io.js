@@ -3,7 +3,10 @@
 var cursorx = 1;
 var cursory = 1;
 
-var display = initGrid(80, 24);
+// JXK: Change to allow longer logfile 
+//      24/29 should be replaced with variable
+//var display = initGrid(80, 24);
+var display = initGrid(80, 29);
 
 
 
@@ -145,7 +148,8 @@ function lprc(ch, markup) {
 var HACK_URL_TEXT = `url`;
 
 function os_put_font(ch, x, y, markup) {
-  if (x >= 0 && x < 80 && y >= 0 && y < 24) {
+  //if (x >= 0 && x < 80 && y >= 0 && y < 24) {
+  if (x >= 0 && x < 80 && y >= 0 && y < 29) {
     if (!amiga_mode) {
 
       if (DEBUG_PROXIMITY) {
@@ -213,7 +217,9 @@ function cl_up(x, y) {
 
 
 function cl_dn(x, y) {
-  for (var i = y; i <= 24; i++) {
+  // JXK: extended log
+  //for (var i = y; i <= 24; i++) {
+  for (var i = y; i <= 29; i++) {
     cursor(1, i);
     cltoeoln();
   }

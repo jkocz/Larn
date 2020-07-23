@@ -73,16 +73,31 @@ function initNewLevel(depth) {
   level = depth;
 }
 
+/* JXK: Possibly better to not concat FOREST_MAZES in config.js
+        Requires less logic here.
+*/
 
-
-function loadcanned() {
+function loadcanned(d=0) {
   var mazeindex;
 
-  do {
-    mazeindex = rund(MAZES.length);
-  } while (USED_MAZES.indexOf(mazeindex) > -1);
-  USED_MAZES.push(mazeindex);
-  //debug(`loadcanned: used: ` + USED_MAZES);
+  if (d <= VBOTTOM) {
+    // We're not in the forest, use only other mazes
+    do {
+      mazeindex = rund(MAZES.length - FOREST_MAZES.length);
+    } while (USED_MAZES.indexOf(mazeindex) > -1);
+    USED_MAZES.push(mazeindex);
+    //debug(`loadcanned: used: ` + USED_MAZES);
+  }
+  else if (d == FBOTTOM) {
+    // We're in the bottom level of the forest. Use specific level
+    mazeindex = MAZES.length - 1;
+    USED_MAZES.push(mazeindex);
+  }
+  else {
+    // We're in the Forest, only use Forest levels
+    mazeindex = rInterval(VBOTTOM+1, MAZES.length-2); 
+    USED_MAZES.push(mazeindex);
+  }
   return MAZES[mazeindex];
 }
 
@@ -90,7 +105,7 @@ function loadcanned() {
 
 function cannedlevel(depth) {
 
-  var canned = loadcanned();
+  var canned = loadcanned(depth);
 
   var monsters = player.level.monsters;
 
@@ -134,7 +149,7 @@ function cannedlevel(depth) {
 /* subroutine to make the caverns for a given level. only walls are made */
 function makemaze(k) {
   var useCanned = false;
-  if (k == DBOTTOM || k == VBOTTOM) {
+  if (k == DBOTTOM || k >= VBOTTOM) {
     useCanned = true;
   }
   else if (k > 1) {
@@ -379,31 +394,46 @@ function makeobject(depth) {
     LEVELS[depth].items[Math.floor(MAXX / 2)][MAXY - 1] = createObject(OHOMEENTRANCE);
   }
 
+  if (depth == (MAXLEVEL + MAXVLEVEL)) {
+    LEVELS[depth].items[Math.floor(MAXX / 2)][MAXY - 1] = createObject(OFORESTENTRANCE);
+    LEVELS[depth].items[Math.floor(MAXX / 2)][0] = createObject(OFORESTDOWN);
+  }
   if (depth == MAXLEVEL) fillroom(OVOLUP, 0); /* volcano shaft up from the temple */
 
-  if ((depth > 0) &&        /* no stairs on home level */
+  if ((depth > 0) && (depth <= VBOTTOM) &&        /* no stairs on home level or in forest */
       (depth != DBOTTOM) && /* no stairs on bottom of dungeon */
       (depth != VBOTTOM)) {  /* no stairs on bottom of volcano but ularn has dead down stairs on v3, v4 */
     fillroom(OSTAIRSDOWN, 0);
   }
 
-  if (depth > 1) { /* no stairs on home level, D1 */
+  if ((depth > 1) && (depth <= VBOTTOM)) { /* no stairs on home level, D1 */
     if (ULARN && depth == MAXLEVEL) {
       fillroom(OSTAIRSUP, 0); /* ularn has dead up stairs on V1 */
     }
     else if (depth != MAXLEVEL) {
       fillroom(OSTAIRSUP, 0); /* no up stairs on V1 */
-    } 
-  } 
+    }
+  }
+
+  if ((depth > MAXLEVEL + MAXVLEVEL) && (depth < FBOTTOM)) {
+    LEVELS[depth].items[Math.floor(MAXX / 2)][MAXY - 1] = createObject(OFORESTUP);
+    LEVELS[depth].items[Math.floor(MAXX / 2)][0] = createObject(OFORESTDOWN);
+  }
+
+  if ((depth > MAXLEVEL + MAXVLEVEL) && (depth == FBOTTOM)) {
+    LEVELS[depth].items[Math.floor(MAXX / 2)][MAXY - 1] = createObject(OFORESTUP);
+  }
 
   if (ULARN) {
     if (depth > 3 &&          // > 3
+        depth <= VBOTTOM &&    // not in forest
         depth != DBOTTOM &&   // not on 15
         depth != MAXLEVEL &&  // not on V1
         depth != VBOTTOM) {   // not on V5
       createArtifact(OELEVATORUP, player.ELEVUP, rnd(100) > 85);
     }
     if (depth > 0 &&               // not on home
+        depth <= VBOTTOM &&    // not in forest
         (depth <= (DBOTTOM - 5) || // < level 10
          depth == DBOTTOM ||       // 15
          depth == VBOTTOM)) {      // V5
@@ -424,14 +454,20 @@ function makeobject(depth) {
 	/* because there are no stairs on those levels */
   if (ULARN && depth >= MAXLEVEL + MAXVLEVEL - 3) {
     fillroom(OPIT, 0);
-    fillroom(OIVTRAPDOOR,0);
+    // don't have trapdoors in the forest 
+    if (depth <= VBOTTOM) {
+      fillroom(OIVTRAPDOOR,0);
+    }
   }
   /* regular pits */ 
   fillmroom(rund(3), OPIT, 0);
 
-  if (ULARN || (depth != DBOTTOM) && (depth != VBOTTOM))
-    fillmroom(rund(2), OIVTRAPDOOR, 0);
-
+  if (ULARN || (depth != DBOTTOM) && (depth != VBOTTOM)) {
+    // don't have trapdoors in the forest
+    if (depth <= VBOTTOM) {
+      fillmroom(rund(2), OIVTRAPDOOR, 0);
+    }
+  }
   fillmroom(rund(2), OTRAPARROWIV, 0);
   fillmroom(rnd(3) - 2, OIVDARTRAP, 0);
   fillmroom(rnd(3) - 2, OIVTELETRAP, 0);
@@ -504,6 +540,11 @@ function makeobject(depth) {
     createArtifact(ONOTHEFT,         player.NOTHEFT,      rnd(151) < 3);
     createArtifact(OSWORDofSLASHING, player.SLASH,        rnd(151) < 2);
     createArtifact(OHAMMER,          player.BESSMANN,     rnd(151) < 4);
+  }
+
+  // If we don't already have Slayer, create.
+  if (FOREST) {
+    createArtifact(OSLAYER,          player.SLAY,         !created && depth > VBOTTOM);
   }
 
   if (getDifficulty() < 3 || (rnd(4) == 3)) {
@@ -686,7 +727,7 @@ function sethp(newLevel) {
     ** level V4 gets 4 demon princes
     ** level V5 gets 5 demon princes
     */
-    else if (level >= MAXLEVEL) {
+    else if ((level >= MAXLEVEL) && (level <= VBOTTOM)) {
       numdemons = level - MAXLEVEL + 1;
       for (let j = 1 ; j <= numdemons ; j++){
         if (!fillmonst(DEMONPRINCE)) {
@@ -694,6 +735,41 @@ function sethp(newLevel) {
         }
       }
     }
+    /*
+    ** level F3 gets Earth Guardian 
+    ** level F4 gets Air Guardian
+    ** level F5 gets Fire Guardian
+    ** level F6 gets Water Guardian
+    ** level F7 gets Time Guardian
+    ** level F8 gets Ethereal Guardian
+    ** level F9 gets Apprentice
+    ** level F10 gets Master
+    */
+    else if (level == FBOTTOM) {
+       create_guardian(MASTER,33,9);
+    }
+    else if (level == FBOTTOM - 1) {
+       fillmonst(APPRENTICE);
+    }
+    else if (level == FBOTTOM - 2) {
+      fillmonst(ETHEREALGUARDIAN);
+    }
+    else if (level == FBOTTOM - 3) {
+       fillmonst(TIMEGUARDIAN);
+    }
+    else if (level == FBOTTOM - 4) {
+       fillmonst(WATERGUARDIAN);
+    }
+    else if (level == FBOTTOM - 5) {
+       fillmonst(FIREGUARDIAN);
+    }
+    else if (level == FBOTTOM - 6) {
+       fillmonst(AIRGUARDIAN);
+    }
+    else if (level == FBOTTOM - 7) {
+       fillmonst(EARTHGUARDIAN);
+    }
+    
   }
 
 }

@@ -78,6 +78,8 @@ var Player = function Player() {
   this.TIMESTOP = 0;
   this.WTW = 0;
   this.ALTPRO = 0;
+  this.INVUN = 0;
+  this.REBOUND = 0;
 
   // curses
   this.AGGRAVATE = 0;
@@ -114,6 +116,7 @@ var Player = function Player() {
   this.PAD = false;
   this.ELEVDOWN = false;
   this.ELEVUP = false;
+  this.HASMARK = false;
 
   // this.HARDGAME = 0; moved to state.js
 
@@ -330,7 +333,6 @@ var Player = function Player() {
     }
   };
 
-
   /*
       function to change character levels as needed when taking/dropping an object
       that affects these characteristics
@@ -352,7 +354,7 @@ var Player = function Player() {
       var startIntel = player.INTELLIGENCE;
       // our hero might lose < 10 intelligence when picking up the
       // hammer. we don't want them to get 10 back when dropping it.
-      // this can still be gamed with rings of intelligence, but 
+      // this can still be gamed with rings of intelligence, but
       // it's better than it was.
       if (pickup) {
         player.setIntelligence(player.INTELLIGENCE - 10);
@@ -378,7 +380,7 @@ var Player = function Player() {
     if (oldStr != player.STREXTRA) changedSTR = millis();
     if (oldInt != player.INTELLIGENCE) changedINT = millis();
 
-    if (ULARN && item.matches(OLARNEYE) && player.BLINDCOUNT == 0) {
+    if ((ULARN || FOREST) && item.matches(OLARNEYE) && player.BLINDCOUNT == 0) {
       updateLog(`Your sight fades for a moment...`);
       //await nap(1000); // ULARN TODO, eventually
       if (pickup) {
@@ -827,6 +829,7 @@ var changedUndeadPro = 0;
 var changedSpiritPro = 0;
 var changedCharmCount = 0;
 var changedTimeStop = 0;
+var changedStopMonst = 0;
 var changedHoldMonst = 0;
 var changedGiantStr = 0;
 var changedFireResistance = 0;
@@ -999,7 +1002,7 @@ function wear(index) {
     if (ULARN) {
       if (player.WIELD == item) {
         let arm = item.matches(OSHIELD) ?  `shield` : `armor`;
-        updateLog(`  You can't wear your ${arm} while you're wielding it!`);  
+        updateLog(`  You can't wear your ${arm} while you're wielding it!`);
         return 1;
       }
     }
@@ -1133,9 +1136,12 @@ function debug_stats(p, score) {
   s += `GLO:   ` + p.GLOBE + `\n`;
   s += `SCA:   ` + p.SCAREMONST + `\n`;
   s += `HLD:   ` + p.HOLDMONST + `\n`;
+  s += `MST:   ` + p.STOPMONST + `\n`;
   s += `STP:   ` + p.TIMESTOP + `\n`;
   s += `WTW:   ` + p.WTW + `\n`;
   s += `PRO3:  ` + p.ALTPRO + `\n`;
+  s += `GHO:   ` + p.INVUN + '\n';
+  s += `RBD:   ` + p.REBOUND + '\n';
 
   s += `\nCurses:\n`;
   s += `AGGR:  ` + p.AGGRAVATE + `\n`;

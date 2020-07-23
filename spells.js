@@ -17,6 +17,10 @@ function forgetSpell(spellnum) {
 
 var newSpellCode = null;
 
+/* JXK: This is a hack for the "combine" spell. 
+        There are nicer ways to get this input.
+        TODO: Update! */
+var mergeObjectIndex = -1;
 
 
 function pre_cast() {
@@ -81,9 +85,24 @@ function cast(key) {
   if (codeCheck !== newSpellCode) {
     return codeCheck;
   }
-  player.setSpells(player.SPELLS - 1);
-  player.SPELLSCAST++;
   var spellnum = player.knownSpells.indexOf(newSpellCode.toLowerCase());
+  if (spellnum < 39) {
+    player.setSpells(player.SPELLS - 1);
+  }
+  else {
+    // casting a high level spell
+    // if has less than 10 spells, cannot cast
+    if (player.SPELLS - 10 < 0) {
+      nomove = 0;
+      updateLog(` You do not have enough energy `);
+      newSpellCode = null;
+      return 1;
+    }
+    else {
+      player.setSpells(player.SPELLS - 10);
+    }
+  }
+  player.SPELLSCAST++;
   if (spellnum >= 0) {
     speldamage(spellnum);
   } else {
@@ -483,7 +502,81 @@ function speldamage(x) {
         forgetSpell(PER); /* forget */
       loseint();
       return;
+ 
+      /* ----- LEVEL 7 SPELLS ----- */
 
+    case 39:
+      /* portal */
+      newcavelevel(0);
+      positionplayer();
+      return;
+
+    case 40:
+      /* combine */
+      setCharCallback(spell_combine);
+      updateLog(`Enter your items (press <b>space</b> to show):`);
+      return;
+
+    case 41:
+      /* break */
+      let xh = Math.min(player.x + 1, MAXX - 2);
+      let yh = Math.min(player.y + 1, MAXY - 2);
+      for (let i = Math.max(player.x - 1, 1); i <= xh; i++) {
+        for (let j = Math.max(player.y - 1, 1); j <= yh; j++) {
+          let item = itemAt(i, j);
+          if (item.matches(OWALL)) {
+            setItem(i, j, OEMPTY);
+          } else if (item.matches(OSTATUE)) {
+              setItem(i, j, createObject(OBOOK, level));
+          } else if (item.matches(OTHRONE)) {
+              setItem(i, j, OEMPTY);
+          } else if (item.matches(OALTAR)) {
+              setItem(i,j, OEMPTY);
+          } else if (item.matches(OFOUNTAIN)) {
+              setItem(i,j, OEMPTY);
+          } else if (item.matches(OMIRROR)) {
+              setItem(i,j, OEMPTY);
+          }
+          player.level.know[i][j] = KNOWALL; // HACK fix for black tile
+        }
+      }
+      updateWalls(player.x, player.y, 2);
+      omnidirect(x, 500, `is tossed around by the earthquake`);
+      return;
+
+    case 42:
+      /* desiccate */
+      omnidirect(x, 1000, `is mummified by a shrill wind`);
+      return;
+
+    case 43:
+      /* burn */
+      prepare_direction_event(spell_burn);
+      return;
+
+    case 44:
+      /* freeze */
+      prepare_direction_event(spell_freeze);
+      return;
+
+    case 45: 
+      /* time stop monster */
+      player.updateStopMonst(rnd(20) + (playerLev << 1));
+      return;
+
+    case 46:
+      /* ghost */
+      //player.updateWTW(50);
+      // WTW now managed via INVUN
+      if (player.INVUN == 0) player.setMoreDefenses(player.MOREDEFENSES + 999);
+      player.INVUN += 50;
+      return;
+    
+    case 47:
+      /* rebound */
+      player.REBOUND += 50;
+      return;
+    
     default:
       nomove = 0;
       appendLog(`  spell ${x} not available!`);
@@ -653,6 +746,123 @@ function spell_teleport(direction) {
   }
 }
 
+/* Forest of Larn spells */
+function spell_combine(index) {
+  //no move = 1;
+  if (index == '*' || index == ' ' || index == 'I') {
+    if (mazeMode) {
+      showinventory(true,spell_combine,showall, false, false, true); 
+    } else {
+      setMazeMode(true);
+    }
+    return 0;
+  }
+
+  if (index == '.') {
+    // Can not yet combine gold
+    setMazeMode(true);
+    updateLog(`You can't combine gold! `);    
+
+    //updateLog(`How much gold will you use? `);
+    // Lose the amount of gold
+    return 1;
+  }
+        
+  var useindex = getIndexFromChar(index);
+  var item = player.inventory[useindex];
+
+  if (!item) {
+    if (useindex >= 0 && useindex < 26) {
+      updateLog(`  You do not have item ${index}`);
+    }
+    if (useindex <= -1) {
+      appendLog(` cancelled`);
+    }
+    setMazeMode(true);
+    return 1;
+  }
+
+
+  if (mergeObjectIndex == -1) {
+     mergeObjectIndex = useindex;
+  }
+  else {
+    var itemA = player.inventory[mergeObjectIndex];
+
+    updateLog(` ${itemA} and ${item} have been combined!`);
+
+    if (mergeObjectIndex == useindex) {
+      updateLog(` Combining the item with itself causes it to overload from the feedback`);
+      updateLog(` ${itemA} explodes!`);
+      destroyInventory(itemA);
+    }
+    else if (itemA.id == item.id) {
+      // create new item with combined stats
+      destroyInventory(itemA);
+      destroyInventory(item);
+      // extra + 1 to account for the invisible +0 that actually gives +1
+      itemA.arg += item.arg + 1; 
+      updateLog(` You have created ${itemA}`);
+      take(createObject(itemA));
+    }
+    else if (((itemA.id == OSLAYER.id)  && (item.id == OLANCE.id)) || ((itemA.id == OLANCE.id) && (item.id == OSLAYER.id))) {
+      updateLog(` You have created The Destroyer!`);
+      destroyInventory(itemA);
+      destroyInventory(item);
+      take(createObject(ODESTROYER));
+    } 
+    else if (((itemA.id == ODESTROYER.id) && (item.id == OVORPAL.id)) || ((item.id == ODESTROYER.id) && (itemA.id == OVORPAL.id))) {
+      updateLog(` You have created Infinite Edge!`);
+      destroyInventory(itemA);
+      destroyInventory(item);
+      take(createObject(OINFINITE)); 
+    }
+    else if (((itemA.id == ODESTROYER.id) && (item.id == OSWORDofSLASHING.id)) || ((item.id == ODESTROYER.id) && (itemA.id == OSWORDofSLASHING.id))) {
+      updateLog(` You have created Flawless!`);
+      destroyInventory(itemA);
+      destroyInventory(item);
+      take(createObject(OFLAWLESS)); 
+    }
+    else if (((itemA.id == OELVENCHAIN.id) && (item.id == OSSPLATE.id)) || ((item.id == OELVENCHAIN.id) && (itemA.id == OSSPLATE.id))) {
+      updateLog(` You have diluted the Elvenchain!`);
+      if (item.id == OSSPLATE.id) {
+        destroyInventory(item);
+        itemA.arg=-10;
+      }
+      else {
+        destroyInventory(itemA);
+        item.arg=-10;
+      }
+    }
+    else {
+      updateLog(` The items spark and explode!`);
+      // destroy both items
+      destroyInventory(itemA);
+      destroyInventory(item);
+    }
+
+    // reset the merge index for the next time
+    mergeObjectIndex = -1;
+    setMazeMode(true);
+    return 1;
+  } 
+ 
+  return 0;
+}
+
+function spell_burn(direction) {
+  /* upgraded version of BAL. Creates a stream of flame in a direction.
+     Monsters immune to BAL are damaged by this flame. */ 
+  var damage = rnd(1000 + player.LEVEL) + 750;
+  setup_godirect(20, BRN, direction, damage, '<');
+}
+
+function spell_freeze(direction) {
+  /* upgraded version of CLD. Cretes a ray of frost in a direction.
+     Monsters immune to CLD are damaged by this ray. */
+  var damage = rnd(750 + player.LEVEL) + 1000;
+  setup_godirect(20, FRZ, direction, damage, '^');
+}
 
 
 /*
@@ -735,7 +945,12 @@ function nospell(x, monst) {
  */
 function fullhit(xx) {
   if (xx < 0 || xx > 20) return (0); /* fullhits are out of range */
-  if (player.WIELD && player.WIELD.matches(OLANCE)) return (10000); /* lance of death */
+  if (level <= VBOTTOM) {
+    if (player.WIELD && player.WIELD.matches(OLANCE)) return (10000); /* lance of death */
+  }
+  else {
+    if (player.WIELD && player.WIELD.matches(OLANCE)) return (100); /* the monsters in the forest are tough! */
+  }
   var i = xx * ((player.WCLASS >> 1) + player.STRENGTH + player.STREXTRA - getDifficulty() - 12 + player.MOREDAM);
   return ((i >= 1) ? i : xx);
 }

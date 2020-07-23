@@ -5,7 +5,7 @@ var youFound;  // set in config
 var period;    // set in config
 
 
-/* 
+/*
 This is the base object for every item in the game
 It only has 2 fields to reduce the size of saved games since localstorage is limited to 5MB
 */
@@ -37,7 +37,6 @@ class Item {
     if (exact) isMatch &= this.arg == item.arg;
     return isMatch;
   }
-
 
 
   toString (inStore, showAll, tempPlayer) {
@@ -119,6 +118,9 @@ class Item {
     weapon |= this.matches(OVORPAL);
     weapon |= this.matches(OSLAYER);
     weapon |= this.matches(OPSTAFF);
+    weapon |= this.matches(ODESTROYER);
+    weapon |= this.matches(OINFINITE);
+    weapon |= this.matches(OFLAWLESS);
     return weapon;
   }
 
@@ -196,7 +198,7 @@ class Item {
   }
 
 
-  
+
   getSortCode () {
     var sortcode = (sortorder.indexOf(this.id) + 1) * 10000;
     // sort unknown scrolls and potions above known
@@ -223,7 +225,7 @@ const NO_CARRY = false;
 
 
 
-/* 
+/*
 DungeonObject extends Item and is used to store static characteristics
 of anything that can be found in the dungeon
 */
@@ -281,7 +283,6 @@ class DungeonObject extends Item {
 } /* DungeonObject */
 
 
-
 function createObject(item, arg) {
 
   if (!item) return null;
@@ -326,6 +327,11 @@ const OENTRANCE = new DungeonObject(54, `E`, `8`, `E`, `yellowgreen`, BOLD, `the
 const OVOLDOWN = new DungeonObject(55, `V`, `9`, `V`, `crimson`, BOLD, `a volcanic shaft leaning downward`, NO_CARRY);
 // ULARN
 const OPAD = new DungeonObject(100, `@`, `@`, `@`, `lightgreen`, BOLD, `Dealer McDope's Hideout!`, NO_CARRY);
+// FOREST
+const OFOREST =   new DungeonObject(121, `F`, `A`, `F`, `darkgreen`, BOLD, `a portal that seems to lead to a forest`,NO_CARRY);
+const OFORESTENTRANCE = new DungeonObject(122, OEMPTY.char, `8`, OEMPTY.char, NO_COLOR, NO_BOLD, `the exit to the home level`, NO_CARRY);
+const OFORESTDOWN = new DungeonObject(123, OEMPTY.char, `8`, OEMPTY.char, NO_COLOR, NO_BOLD, `go futher into the forest?`, NO_CARRY);
+const OFORESTUP = new DungeonObject(124, OEMPTY.char, `8`, OEMPTY.char, NO_COLOR, NO_BOLD, `go back the way you came?`, NO_CARRY);
 
 // dungeon features
 const OWALL = new DungeonObject(21, `▒`, `▒`, `▒`, NO_COLOR, NO_BOLD, `a wall`, NO_CARRY);
@@ -386,6 +392,10 @@ const OHAMMER = new DungeonObject(27, `)`, `)`, `)`, `darkgoldenrod`, BOLD, `Bes
 // ULARN
 const OVORPAL = new DungeonObject(90, `)`, `)`, `)`, `darkorange`, BOLD, `the Vorpal Blade`, CARRY);
 const OSLAYER = new DungeonObject(91, `)`, `)`, `)`, `crimson`, BOLD, `Slayer`, CARRY);
+// FOREST
+const ODESTROYER = new DungeonObject(125, `)`, `)`, `)`, `gold`, BOLD, `The Destroyer`, CARRY);
+const OINFINITE = new DungeonObject(126, `)`, `)`, `)`, `darkgray`, BOLD, `Infinite Edge `, CARRY);
+const OFLAWLESS = new DungeonObject(127, `)`, `)`, `)`, `black`, BOLD, `Flawless`, CARRY);
 
 // armour
 const OLEATHER = new DungeonObject(25, `[`, `[`, `[`, `lightgray`, BOLD, `leather armor`, CARRY);
@@ -425,6 +435,8 @@ const OSPHTALISMAN = new DungeonObject(87, `.`, `.`, `.`, `skyblue`, BOLD, `The 
 const OWWAND = new DungeonObject(88, `/`, `/`, `/`, `mediumseagreen`, BOLD, `a wand of wonder`, CARRY);
 const OPSTAFF = new DungeonObject(89, `/`, `/`, `/`, `darkorange`, BOLD, `a staff of power`, CARRY);
 const OLIFEPRESERVER = new DungeonObject(101, `"`, `"`, `"`, `orange`, BOLD, `an amulet of life preservation`, CARRY);
+// FOREST
+const OMARK = new DungeonObject(128, '@','@','@',`darkorange`, BOLD,`the mark of Polinneaus`, CARRY);
 
 // ULARN drugs
 const OSPEED = new DungeonObject(95, `:`, `:`, `:`, `paleblue`, BOLD, `some speed`, CARRY);
@@ -643,7 +655,7 @@ function lookforobject(do_ident, do_pickup) {
       updateLog(`You escape a trap door!`);
       return;
     }
-    if ((level == DBOTTOM) || (level == VBOTTOM)) {
+    if ((level == DBOTTOM) || (level >= VBOTTOM)) {
       var trapMessage = ``;
       if (ULARN) trapMessage = `leading straight to HELL`;
       updateLog(`You fell through a bottomless trap door ${trapMessage}!`);
@@ -690,6 +702,15 @@ function lookforobject(do_ident, do_pickup) {
   else if (item.matches(OELEVATORDOWN)) {
     updateLog(`You have found ${item}`);
     oelevator(-1);
+  }
+  // FOREST
+  else if (item.matches(OFORESTUP)) {
+    updateLog(`You go back the way you came`);
+    oforest(0);
+  }
+  else if (item.matches(OFORESTDOWN)) {
+    updateLog(`You go deeper into the forest`);
+    oforest(1);
   }
   //
   else if (item.matches(OBRASSLAMP)) {
@@ -754,6 +775,10 @@ function lookforobject(do_ident, do_pickup) {
   if (do_pickup) {
     if (canTake(item) && take(item)) {
       forget(); // remove from board
+      // JXK: A better way to do this then checking each time?
+      if (item.matches(OMARK)) {
+        oendgame();
+      }
     } else {
       nomove = 1;
     }
@@ -862,7 +887,76 @@ function oelevator(direction) {
   positionplayer();
 }
 
+function oforest(direction) {
+  if (direction == 1)  {
+    //setMazeMode(true);
+    player.x = 33;
+    player.y = MAXY - 2;
+    newcavelevel(level+1);
+    //player.level.know[33][MAXY - 1] = KNOWALL;
+    //player.level.monsters[33][MAXY - 1] = null;
+    //showcell(player.x, player.y);
+  }
+  else {
+    //setMazeMode(true);
+    player.x = 33;
+    player.y = 1;
+    newcavelevel(level-1);
+  }
+}
 
+function oendgame() {
+  
+  if (!player.HASMARK) {
+   
+    player.TELEFLAG = 1;
+    initNewLevel(FBOTTOM+1);
+  
+    for (let i = 0; i < MAXY; i++) {
+      for (let j = 0; j < MAXX; j++) {
+          setItem(j, i, OEMPTY);
+      }
+    }
+  
+    fillmonst(POLINNEAUS);
+  
+    player.x = rnd(MAXX - 2);
+    player.y = rnd(MAXY - 2);
+  
+    positionplayer();
+
+  }
+  else {
+    return;
+  }
+}
+
+async function ocomplete() {
+  player.HASMARK = true;
+
+  newcavelevel(0);
+  positionplayer();
+
+  setMazeMode(false);
+  setCharCallback(parse_home);
+  napping = true;
+  
+  cursor(1,7)
+  lprint(`You fall to your knees as your mind recovers from the onslought of\n`); 
+  lprint(`battling the spirit trapped within The Mark.\n`); 
+  await nap(2000);
+  lprint(`\nIt is obvious now that the great wizard never truly died, but lives\n`); 
+  lprint(`within the amulet, dominating all who attempt to use their power.\n`); 
+  lprint(`Fortunately, you were not so easy to control! You can still feel the life\n`); 
+  lprint(`force in the amulet, but now it ready to be used for your own purposes.\n`); 
+  lprint(`\n\n`); 
+  lprint(`The fate of the Lost Wizard Polinneaus is finally known.\n`); 
+  lprint(`It is time to go and see how your daughter is recovering.\n`); 
+  await nap(2000);
+  lprint(`\n\n\tPress <b>escape</b> to leave. `);
+  paint();
+  napping = false;
+}
 
 function forget() {
   setItem(player.x, player.y, OEMPTY);
@@ -879,8 +973,11 @@ function oteleport(err) {
       /*
       12.4.5 - you shouldn't get trapped in solid rock with WTW
       This was also added in ularn 1.6.3
+
+      12.6.0 - JXK: WTW does not work in forest (but GHO does).
       */
-      if (player.WTW == 0) {
+
+      if ((player.WTW == 0 && player.INVUN == 0) || ((level > VBOTTOM) && (player.INVUN == 0))) {
         updateLog(`You are trapped in solid rock!`)
         died(DIED_SOLID_ROCK, false); /* trapped in solid rock */
         return;
@@ -899,19 +996,29 @@ function oteleport(err) {
   var newLevel;
   if (level == 0) {
     newLevel = 0;
-  } else if (level < MAXLEVEL) {
+  } else if (level <= DBOTTOM) {
+    // in the dungeon
     newLevel = rnd(5) + level - 3;
-    if (newLevel >= MAXLEVEL)
+    if (newLevel > DBOTTOM)
       newLevel = DBOTTOM;
     if (newLevel < 1)
       newLevel = 1;
-  } else {
+  } else if (level <= VBOTTOM) {
+    // in the volcano
     newLevel = rnd(ULARN ? 4 : 3) + level - 2;
-    if (newLevel >= MAXLEVEL + MAXVLEVEL)
+    if (newLevel > VBOTTOM)
       newLevel = VBOTTOM;
-    if (newLevel < MAXLEVEL)
+    else if (newLevel < MAXLEVEL)
       newLevel = MAXLEVEL;
+  } else {
+    // in the forest
+    newLevel = rnd(5) + level - 3;
+    if (newLevel > FBOTTOM)
+      newLevel = FBOTTOM;
+    else if (newLevel <= VBOTTOM)
+      newLevel = VVOTTOM + 1;
   }
+
   player.x = rnd(MAXX - 2);
   player.y = rnd(MAXY - 2);
 
@@ -940,7 +1047,7 @@ function oteleport(err) {
  */
 function readbook(book) {
   var lev = book.arg;
-  var spellIndex, spell;
+  var spellIndex, spell, spRedo;
   if (lev <= 3) {
     spell = splev[lev];
     spellIndex = rund((spell) ? spell : 1);
@@ -949,11 +1056,49 @@ function readbook(book) {
     spellIndex = rnd((spell) ? spell : 1) + 9;
   }
 
+  // JXK: Rather than having a special case for each new spell, new spells 
+  //      could be of a higher level (forest only) and therefore should 
+  //      not be read early. 
+  //      MKW is special, as it is of a lower level than e.g. PER
+
   // original larn doesn't have make wall spell
   if (!ULARN && spellIndex == MKW) {
     readbook(book);
     return;
   }
+
+  if (FOREST) {
+    updateLog(`Forest level: ${level}, lev: ${lev}`);
+
+    // book from Guardian is forced to be a specific spell
+    if (lev > 40) {
+      spellIndex = lev;
+    } 
+    else if (splev[lev] > 38 && level > VBOTTOM) {
+      // we are in the forest, weight toward new spells
+      // VBOTTOM check is a hack, as lev is sometimes level+N
+      // resulting in higher level spells outside of the forest.
+      // This can happen in treasure rooms, in a canned level,
+      // and chests. 
+      if (spellIndex < 39) {
+        spRedo = rnd(100);
+        updateLog(`Forest redo: Spell index: ${spellIndex}, spRedo: ${spRedo}`);
+        if (spRedo > 75) 
+          spellIndex = 40;
+        else if (spRedo > 50)
+          spellIndex = 39;
+      } 
+    }
+    else if (spellIndex > 38) {
+      // forest spell outside the forest
+      updateLog(`Forest spell early redo: splev: ${splev[lev]}, spellIndex: ${spellIndex} `);
+      readbook(book);
+      return;
+    }
+    //else {
+      //updateLog(`Spell index: ${lev}`);
+    //}
+  } 
 
   learnSpell(spelcode[spellIndex]);
   updateLog(`Spell '<b>${spelcode[spellIndex]}</b>': ${spelname[spellIndex]}`);
@@ -969,6 +1114,22 @@ function readbook(book) {
 
 /* function to adjust time when time warping and taking courses in school */
 function adjtime(tim) {
+  
+  if (FOREST && tim == -99999) {
+  // make higher forest spells extended, but non-permanent
+    if (player.STOPMONST) player.updateStopMonst(-99);
+
+    player.INVUN = player.INVUN > 0 ? Math.max(1, player.INVUN - (-99)) : 0;
+    player.REBOUND = player.REBOUND > 0 ? Math.max(1, player.REBOUND - (-99)) : 0;
+  }
+  else {
+    if (player.STOPMONST) player.updateStopMonst(-tim);
+
+    player.INVUN = player.INVUN > 0 ? Math.max(1, player.INVUN - tim) : 0;
+    player.REBOUND = player.REBOUND > 0 ? Math.max(1, player.REBOUND - tim) : 0;
+
+  }
+
   if (player.STEALTH) player.updateStealth(-tim);
   if (player.UNDEADPRO) player.updateUndeadPro(-tim);
   if (player.SPIRITPRO) player.updateSpiritPro(-tim);
@@ -991,7 +1152,6 @@ function adjtime(tim) {
   player.GLOBE = player.GLOBE > 0 ? Math.max(1, player.GLOBE - tim) : 0;
   player.AWARENESS = player.AWARENESS > 0 ? Math.max(1, player.AWARENESS - tim) : 0;
   player.SEEINVISIBLE = player.SEEINVISIBLE > 0 ? Math.max(1, player.SEEINVISIBLE - tim) : 0;
-
   player.AGGRAVATE = player.AGGRAVATE > 0 ? Math.max(1, player.AGGRAVATE - tim) : 0;
   player.HASTEMONST = player.HASTEMONST > 0 ? Math.max(1, player.HASTEMONST - tim) : 0;
   player.HALFDAM = player.HALFDAM > 0 ? Math.max(1, player.HALFDAM - tim) : 0;

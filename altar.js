@@ -8,6 +8,7 @@ function desecrate_altar() {
     act_desecrate_altar();
   } else {
     updateLog(`I see no altar to desecrate here!`);
+    nomove = 1;
   }
 }
 
@@ -18,6 +19,7 @@ function pray_at_altar() {
   cursors();
   if (!itemAt(player.x, player.y).matches(OALTAR)) {
     updateLog(`I see no altar to pray at here!`);
+    nomove = 1;
   } else {
     updateLog(`  How much do you donate? `);
     setNumberCallback(act_donation_pray, true);
@@ -100,11 +102,41 @@ function act_donation_pray(offering) {
           updateLog(`Thank you${period}`);
           return 1;
         } else if (p < 6) {
-          enchantarmor(ENCH_ALTAR);
-          enchantarmor(ENCH_ALTAR);
+          if (FOREST && offering >= 10000) {
+            updateLog(`Sometimes the Gods can be bought`);
+            enchantarmor(ENCH_ALTAR);
+            enchantarmor(ENCH_ALTAR);
+            enchantarmor(ENCH_ALTAR);
+            enchantarmor(ENCH_ALTAR);
+            enchantarmor(ENCH_ALTAR);
+            enchantarmor(ENCH_ALTAR);
+            enchantarmor(ENCH_ALTAR);
+            enchantarmor(ENCH_ALTAR);
+            enchantarmor(ENCH_ALTAR);
+            enchantarmor(ENCH_ALTAR);
+          }
+          else {
+            enchantarmor(ENCH_ALTAR);
+            enchantarmor(ENCH_ALTAR);
+          }
         } else if (p < 8) {
-          enchweapon(ENCH_ALTAR);
-          enchweapon(ENCH_ALTAR);
+          if (FOREST && offering >= 10000) {
+            updateLog(`Sometimes the Gods can be bought`);
+            enchweapon(ENCH_ALTAR);
+            enchweapon(ENCH_ALTAR);
+            enchweapon(ENCH_ALTAR);
+            enchweapon(ENCH_ALTAR);
+            enchweapon(ENCH_ALTAR);
+            enchweapon(ENCH_ALTAR);
+            enchweapon(ENCH_ALTAR);
+            enchweapon(ENCH_ALTAR);
+            enchweapon(ENCH_ALTAR);
+            enchweapon(ENCH_ALTAR);
+          }
+          else {
+            enchweapon(ENCH_ALTAR);
+            enchweapon(ENCH_ALTAR);
+          }
         } else {
           act_prayer_heard();
         }

@@ -23,6 +23,7 @@ var keyboard_hints = false;
 var auto_pickup = false;
 var side_inventory = true;
 var show_color = true;
+var monster_color = false;
 var bold_objects = true;
 var retro_mode = false;
 var dnd_item = null;
@@ -92,6 +93,7 @@ function GameState() {
   this.auto_pickup = auto_pickup;
   this.side_inventory = side_inventory;
   this.show_color = show_color;
+  this.monster_color = monster_color;
   this.bold_objects = bold_objects;
   this.dnd_item = dnd_item;
   this.genocide = genocide;

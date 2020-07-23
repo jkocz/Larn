@@ -16,6 +16,15 @@ function rund(value) {
   return Math.floor(Math.random() * value);
 }
 
+/* generate random number in an interval min <= N <= max */
+function rInterval(min, max) {  
+  return Math.floor(Math.random() * (max - min + 1) + min);
+}
+
+/* generate random numbers 0 <= N <= 1 to two decimal places  */
+function rndDec() {
+    return Math.floor((Math.random() * 100)) / 100;
+}
 
 
 /*
@@ -382,6 +391,7 @@ Storage.prototype.setObject = function(key, value) {
 
 function localStorageSetObject(key, value) {
   if (ULARN) key += `_ularn`;
+  if (FOREST) key += `_forest`;
   try {
     console.log(`setObject: ${key} ${value}`);
     localStorage.setObject(key, value);
@@ -412,6 +422,7 @@ Storage.prototype.getObject = function(key) {
 
 function localStorageGetObject(key, failValue) {
   if (ULARN) key += `_ularn`;
+  if (FOREST) key += `_forest`;
   try {
     console.log(`getObject: ${key}`);
     var retrievedObject = localStorage.getObject(key);
@@ -430,6 +441,7 @@ function localStorageGetObject(key, failValue) {
 
 function localStorageRemoveItem(key) {
   if (ULARN) key += `_ularn`;
+  if (FOREST) key += `_forest`;
   try {
     console.log(`removeItem: ${key}`);
     localStorage.removeItem(key);

@@ -345,6 +345,23 @@ function drop_object_gold(amount) {
   return 1;
 }
 
+function combineItems(itemOne) {
+  if (itemOne = ESC) {
+    appendLog(` cancelled`);
+    nomove = 1;
+    return 1;
+  }
+  if (itemOne == '*' || itemOnen == ' ' || itemOne == 'I') {
+    if (mazeMode) {
+      showinventory(true, drop_object, showall, false, false, true);
+    } else {
+      setMazeMode(true);
+    }
+    nomove = 1;
+    return 0;
+  }
+}
+
 
 
 /*

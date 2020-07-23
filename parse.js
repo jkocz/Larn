@@ -398,7 +398,12 @@ function parse(key) {
   //
   if (key == 'v') {
     nomove = 1;
-    var larnString = ULARN ? `The Addiction of JS Ularn` : `JS Larn`;
+    if (FOREST) {
+      var larnString = `The Addiction of JS Forest of Larn`;
+    }
+    else {
+      var larnString = ULARN ? `The Addiction of JS Ularn` : `JS Larn`;
+    }
     updateLog(`${larnString}, Version ${VERSION} Build ${BUILD}`);
     updateLog(`  ${logname}`);
     if (ULARN) appendLog(`, ${player.char_picked}`);
@@ -707,6 +712,29 @@ function parse(key) {
     return;
   }
 
+  //
+  // help screen
+  //
+  if (key == '?') {
+    nomove = 1;
+    currentpage = 0;
+    setCharCallback(parse_help);
+    print_help();
+    return;
+  }
+
+  //
+  // toggle extra keyboard help mode
+  //
+  if (key == '!') {
+    nomove = 1;
+    keyboard_hints = !keyboard_hints;
+    updateLog(`Keyboard hints: ${keyboard_hints ? `on` : `off`}`);
+    if (keyboard_hints)
+      lookforobject(true, false, false);
+    return;
+  }
+
   // toggle auto pickup
   if (key == '@') {
     nomove = 1;
@@ -731,6 +759,13 @@ function parse(key) {
     nomove = 1;
     show_color = !show_color;
     updateLog(`Colors: ${show_color ? `on` : `off`}`);
+    return;
+  }
+  
+  if (key == '|') {
+    nomove = 1;
+    monster_color = !monster_color;
+    updateLog(`Monster color: ${monster_color ? `on` : `off`}`);
     return;
   }
 
@@ -797,4 +832,32 @@ function parse(key) {
   // if we get here, it's an invalid key, and shouldn't take any time
   nomove = 1;
 
+}
+
+
+
+function setFontMode(mode) {
+  let fontSize = 22;
+  let fontFamily = `Courier New`;
+  let textColour = `lightgrey`;
+  let letterSpacing = `normal`;
+
+  if (mode) {
+    fontSize = 25;
+    fontFamily = `'dos437'`;
+    textColour = `#ABABAB`;
+    letterSpacing = '-1px';
+  }
+
+  if (amiga_mode) {
+    fontSize = 20;
+  }
+
+  let font = `${fontSize}px ${fontFamily}`;
+
+  document.body.style.font = font;
+  document.body.style.color = textColour;
+  document.body.style.letterSpacing = letterSpacing;
+
+  localStorageSetObject('retro', mode);
 }

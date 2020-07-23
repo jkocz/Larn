@@ -54,6 +54,10 @@ function enter() {
     opad();
     return;
   }
+  if (building.matches(OFOREST)) {
+    forest();
+    return;
+  }
 
   debug(`enter(): no building here`);
   setMazeMode(true);
@@ -90,9 +94,24 @@ function dungeon() {
   showcell(player.x, player.y); /* to show around player */
 }
 
-
-
-
+/*
+ *  
+ *
+ * Forest Entrance
+ *
+ *
+ */
+function forest() {
+  setMazeMode(true);
+  // place player in front of the entrance of the forest. 
+  updateLog(`You enter the forest!`);
+  player.x = 33;
+  player.y = MAXY - 2;
+  newcavelevel(21);
+  player.level.know[33][MAXY - 1] = KNOWALL;
+  player.level.monsters[33][MAXY - 1] = null;
+  showcell(player.x, player.y);
+}
 
 
 
@@ -905,83 +924,193 @@ async function ohome() {
   dropflag = 1;
 
   setCharCallback(parse_home);
-
+ 
+  var hasMark = player.HASMARK;
   var hasPotion = isCarrying(createObject(OPOTION, 21));
   var inTime = gtime <= TIMELIMIT;
 
-  if (hasPotion) {
-    lprint(`Congratulations. You found the potion of cure dianthroritis!\n\n`);
-    await nap(1000);
-    lprint(`Frankly, No one thought you could do it. Boy! Did you surprise them!\n\n`);
-    await nap(1000);
-  }
-
-  // has potion and returned in time. winner!
-  if (hasPotion && inTime) {
-    lprint(`The doctor is now administering the potion, and in a few moments\n`);
-    lprint(`your daughter should be well on her way to recovery.\n\n`);
-    await nap(1000);
-    lprint(`Press <b>enter</b> to continue: `);
-    napping = false;
-    setCharCallback(win);
-    return;
-  }
-
-  // has potion but ran out of time
-  if (hasPotion && !inTime) {
-    if (ULARN) {
-      lprint(`However... the doctor has the sad duty to inform you that your daughter\n`);
-      lprint(`has died! You didn't make it in time. In your agony, you kill the doctor,\nyour `);
-      if (player.gender === `Male`) lprcat(`wife`);
-      else if (player.gender == `Female`) lprcat(`husband`);
-      else lprcat(`partner`);
-      lprint(` and yourself! Too bad...\n\n`);
-    } else {
-      lprint(`The doctor has the sad duty to inform you that your daughter died before\n`);
-      lprint(`your return. There was nothing that could be done without the potion.\n\n`);
+  if (DHEALTHY) {
+    if (hasMark && inTime) {
+      cursor(1, 7);
+      lprint(`Congratulations. Your family is safe and you have\n`); 
+      lprint(`solved the mystery of Polinneaus!\n\n`);
+      await nap(2000);
+      // JXK: add blocking get key
+      //cltoeoln();
+      lprint(`It is time to relax for a while and regale your daughter with your stories\n`);
+      lprint(`while she recovers.\n\n`);
+      await nap(2000);
+      lprint(`\n\nAfteward, there will be plenty of time to explore beyond the borders of Larn...\n\n`);
+      napping = false;
+      died(DIED_WINNER, false); /* a winner! */
+      return 1;
+      //setCharCallback(win);
+      //return;
     }
-    await nap(2000);
-    napping = false;
-    died(DIED_FAILED, false); /* failed */
-    return;
-  }
-
-  // doesn't have potion and still has time
-  if (!hasPotion && inTime) {
-    cursor(1, 7);
-    lprcat(`     Welcome home ${logname}.`);
-    lprcat(`\n\n     The latest word from the doctor is not good.`);
-    lprcat(`\n\n     The diagnosis is confirmed as dianthroritis. The doctor guesses that`);
-    lprcat(`\n     your daughter has only ${timeleft()} mobuls left in this world. It's up to you,`);
-    lprcat(`\n     ${logname}, to find the only hope for your daughter, the`);
-    lprcat(`\n     very rare potion of cure dianthroritis. It is rumored that only deep`);
-    lprcat(`\n     in the depths of the caves can this potion be found.`);
-    lprcat(`\n\n     Press <b>escape</b> to leave: `);
-    paint();
-    napping = false;
-  }
-
-  // doesn't have potion but ran out of time
-  if (!hasPotion && !inTime) {
-    lprint(`Welcome home ${logname}.\n\n`);
-    await nap(1000);
-    lprint(`The latest word from the doctor is not good.\n\n`);
-    await nap(1000);
-    if (ULARN) {
-      lprint(`The doctor has the sad duty to inform you that your daughter has died!\n`);
-      lprint(`You didn't make it in time. In your agony, you kill the doctor, your\n`);
-      if (player.gender == `Male`) lprcat(`wife`);
-      else if (player.gender == `Female`) lprcat(`husband`);
-      else lprcat(`partner`);
-      lprint(` and yourself! Too bad...\n\n`);
-    } else {
-      lprint(`The doctor has the sad duty to inform you that your daughter died! You didn't\n`);
-      lprint(`make it in time. There was nothing that could be done without the potion.\n\n`);
+    else if (hasMark && !inTime) {
+      cursor(1, 7);
+      lprint(`Welcome home ${logname}.\n\n`);
+      await nap(1000);
+      lprint(`Congratulations on the success of your quest.\n\n`);
+      await nap(1000);
+      lprint(`However, while you were galavanting around, your daughter woke up.\n`);
+      lprint(`Concerned that you were missing, she wandered into the forest portal\n`);
+      lprint(`and met her demise at the hands of the monsters there.\n`);
+      lprint(`In your agony at this pointless loss, you destroy the town of larn,\n`); 
+      lprint(`and yourself along with it...\n\n`);
+      await nap(2000);
+      napping = false;
+      died(DIED_FAILED, false); 
+      return;
     }
-    await nap(2000);
-    napping = false;
-    died(DIED_FAILED, false); /* failed */
-    return;
+    else if (!inTime) {
+      cursor(1, 7);
+      lprint(`Welcome home ${logname}.\n\n`);
+      await nap(1000);
+      lprint(`While you were galavanting around, your daughter woke up.\n`);
+      lprint(`Concerned that you were missing, she wandered into the forest portal\n`);
+      lprint(`and met her demise at the hands of the monsters there.\n`);
+      lprint(`In your agony at this pointless loss, you destroy the town of larn,\n`); 
+      lprint(`and yourself along with it...\n\n`);
+      await nap(2000);
+      napping = false;
+      died(DIED_FAILED, false);
+      return;
+    } 
+    else {
+      cursor(1, 7);
+      lprcat(`\tWelcome home ${logname}.`);
+      lprcat(`\n\n\tIt looks like your daughter is still recovering.`);
+      lprcat(`\n\tShe should be awake in a few days.`);
+      lprcat(`\n\n\tPress <b>escape</b> to leave. `);
+      paint();
+      napping = false;
+    }
+  }
+  else {
+    if (hasPotion) {
+      lprint(`Congratulations. You found the potion of cure dianthroritis!\n\n`);
+      await nap(1000);
+      lprint(`Frankly, No one thought you could do it. Boy! Did you surprise them!\n\n`);
+      await nap(1000);
+    }
+
+    // has potion and returned in time. winner!
+    if (hasPotion && inTime) {
+      lprint(`The doctor is now administering the potion, and in a few moments\n`);
+      lprint(`your daughter should be well on her way to recovery.\n\n`);
+      await nap(1000);
+
+      if (!FOREST) {
+        lprint(`Press <b>enter</b> to continue: `);
+        napping = false;
+        setCharCallback(win);
+        return;
+      }   
+
+      napping = true;
+      cursor(1, 8);
+      cltoeoln();
+      lprint(`The potion is`);
+      await nap(500);
+      lprint(`.`);
+      await nap(1000);
+      lprint(`.`);
+      await nap(1000);
+      lprint(`.`);
+      await nap(1000);
+      lprint(` working!\n\n`);
+      lprint(`The doctor thinks that your daughter will recover in a few days.\n`);
+      lprint(`Congratulations!\n\n`);
+      lprint(`\n`);
+      lprint(`\n`);
+      await nap(2000);
+      lprint(`Suddenly you see a shimmer in the distance!\n\n`);
+      await nap(1000);
+      lprint(`It looks like a\n\n`);
+      await nap(500);
+      lprint(`.`);
+      await nap(1000);
+      lprint(`.`);
+      await nap(1000);
+      lprint(`.`);
+      await nap(2000);
+      lprintf(`portal?\n\n`);
+      napping = false;
+      //if (FOREST) {
+      DHEALTHY = true;
+      // Reset time limit
+      TIMELIMIT += 10000;
+      // Draw forest entrance  on home screen
+      fillroom(OFOREST,0);    
+      lprcat(`\n\n\tPress <b>escape</b> to leave: `);
+      paint();
+      napping = false;
+      //}
+      //else {
+      //  died(DIED_WINNER, false); /* a winner! */
+      //  return 1;
+        //setCharCallback(win);
+        //return;
+      //}
+    }
+
+    // has potion but ran out of time
+    if (hasPotion && !inTime) {
+      if (ULARN) {
+        lprint(`However... the doctor has the sad duty to inform you that your daughter\n`);
+        lprint(`has died! You didn't make it in time. In your agony, you kill the doctor,\nyour `);
+        if (player.gender === `Male`) lprcat(`wife`);
+        else if (player.gender == `Female`) lprcat(`husband`);
+        else lprcat(`partner`);
+        lprint(` and yourself! Too bad...\n\n`);
+      } else {
+        lprint(`The doctor has the sad duty to inform you that your daughter died before\n`);
+        lprint(`your return. There was nothing that could be done without the potion.\n\n`);
+      }
+      await nap(2000);
+      napping = false;
+      died(DIED_FAILED, false); /* failed */
+      return;
+    }
+
+    // doesn't have potion and still has time
+    if (!hasPotion && inTime) {
+      cursor(1, 7);
+      lprcat(`\tWelcome home ${logname}.`);
+      lprcat(`\n\n\tThe latest word from the doctor is not good.`);
+      lprcat(`\n\n\tThe diagnosis is confirmed as dianthroritis. The doctor guesses that`);
+      lprcat(`\n\tyour daughter has only ${timeleft()} mobuls left in this world. It's up to you,`);
+      lprcat(`\n\t${logname}, to find the only hope for your daughter, the`);
+      lprcat(`\n\tvery rare potion of cure dianthroritis. It is rumored that only deep`);
+      lprcat(`\n\tin the depths of the caves can this potion be found.`);
+      lprcat(`\n\n\tPress <b>escape</b> to leave: `);
+      paint();
+      napping = false;
+    }
+
+    // doesn't have potion but ran out of time
+    if (!hasPotion && !inTime) {
+      lprint(`Welcome home ${logname}.\n\n`);
+      await nap(1000);
+      lprint(`The latest word from the doctor is not good.\n\n`);
+      await nap(1000);
+      if (ULARN) {
+        lprint(`The doctor has the sad duty to inform you that your daughter has died!\n`);
+        lprint(`You didn't make it in time. In your agony, you kill the doctor, your\n`);
+        if (player.gender == `Male`) lprcat(`wife`);
+        else if (player.gender == `Female`) lprcat(`husband`);
+        else lprcat(`partner`);
+        lprint(` and yourself! Too bad...\n\n`);
+      } else {
+        lprint(`The doctor has the sad duty to inform you that your daughter died! You didn't\n`);
+        lprint(`make it in time. There was nothing that could be done without the potion.\n\n`);
+      }
+      await nap(2000);
+      napping = false;
+      died(DIED_FAILED, false); /* failed */
+      return;
+    }
   }
 }
 
@@ -992,7 +1121,6 @@ function parse_home(key) {
     return exitbuilding();
   }
 }
-
 
 
 async function win(key) {
@@ -1018,8 +1146,6 @@ async function win(key) {
   died(DIED_WINNER, false); /* a winner! */
   return 1;
 }
-
-
 
 
 

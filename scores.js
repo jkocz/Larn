@@ -41,7 +41,7 @@ var LocalScore = function() {
   // START HACK -- we don't want to save the level
   var x = player.level;
   player.level = null;
-  this.player = JSON.stringify(player);
+  this.player = JSON.stringify(player); // ULARN TODO: WHY IS THIS STRINGIFIED???
   player.level = x;
   // END HACK -- we don't want to save the level
 
@@ -273,7 +273,12 @@ function showScores(newScore, local, showWinners, showLosers, offset) {
   if (!GAMEOVER) clear();
 
   if (local) {
-    lprcat(`                    <b>${GAMENAME} Scoreboard</b> (Global scoreboard not available)\n\n`);
+    if (FOREST) {
+      lprcat(`                    <b>The Forest of Larn Scoreboard</b> (Global scoreboard not available)\n\n`);
+    }
+    else {
+      lprcat(`                    <b>${GAMENAME} Scoreboard</b> (Global scoreboard not available)\n\n`);
+    }
     winners = localStorageGetObject('winners', []);
     losers = localStorageGetObject('losers', []);
   } else {
@@ -365,7 +370,7 @@ function printWithoutSpacesAtTheEnd(inputString) {
 function printScoreBoard(board, newScore, header, printout, offset) {
 
     printWithoutSpacesAtTheEnd(header);
-    lprc(`\n`); 
+    lprc(`\n`);
 
     var i = GAMEOVER ? 0 : scoreIndex - offset;
     for (var count = 0; i < board.length ; i++, scoreIndex++) {

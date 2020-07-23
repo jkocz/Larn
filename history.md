@@ -1,11 +1,11 @@
 
 JS U/Larn 12.5.0
 ----------------
-1. [new] Added Ularn functionality. Primarily follows the 1.5 codebase with 
-some inspiration from 1.6. Maintains the new/balance/fix items of version 
+1. [new] Added Ularn functionality. Primarily follows the 1.5 codebase with
+some inspiration from 1.6. Maintains the new/balance/fix items of version
 12.4.5 where it seems to make sense.
 
-1. [new] Ularn also playable with Amiga-style graphics thanks to the new 
+1. [new] Ularn also playable with Amiga-style graphics thanks to the new
 sprites created by Chris Yewchuck and Jerome Lecomte.
 
 1. [new] Stolen items can be recovered if you can find the monster again.
@@ -19,14 +19,14 @@ sprites created by Chris Yewchuck and Jerome Lecomte.
 1. [new] Toggle added for retro-style fonts and two different Amiga fonts.
 
 1. [balance] Selling items is blocked once the potion has been picked up to
-prevent inflated scores by selling epic items.   
+prevent inflated scores by selling epic items.
 
 1. [balance] Demons can no longer be teleported.
 
 1. [fix]/[new] You can drop gold onto an existing pile of gold now, or into
 a pit.
 
-1. [fix]/[new] When a monster is killed with a ranged attack, loot will now be 
+1. [fix]/[new] When a monster is killed with a ranged attack, loot will now be
 dropped beside the corpse instead of our Hero.
 
 1. [fix] Bessman's Flailing Hammer could only be created on the first level
@@ -35,10 +35,10 @@ of the dungeon.
 1. [fix] Jonathon Kocz fixed the potion of fire resistance, which has
 apparently never worked.
 
-1. [fix] Some missile spells could insta-kill demons when our Hero was wielding 
+1. [fix] Some missile spells could insta-kill demons when our Hero was wielding
 Slayer.
 
-1. [fix] Some spells could behead monsters when our Hero was wielding the 
+1. [fix] Some spells could behead monsters when our Hero was wielding the
 Vorpal Blade.
 
 1. [fix] Restoring a saved game would clear the teleport flag and change the
@@ -66,7 +66,7 @@ elsewhere on the same level.
 because it was so easy to work around in the original game.
 
 1. [balance] 'Smart' monsters in a closed room never moved. Now they follow
-our Hero's movement, except for demons, who stand guard to protect the Eye of 
+our Hero's movement, except for demons, who stand guard to protect the Eye of
 Larn and potion of cure Dianthroritis.
 
 1. [balance] Our Hero could donate or 'just pray' their way into unreasonable
@@ -94,7 +94,7 @@ weapon against rusting monsters. Thanks to Will Oprisko for finding this one.
 properly when our Hero was running.
 
 1. [fix] After casting Stop Time, monsters would still chase our Hero when
-running. 
+running.
 
 1. [un-fix] The history lesson from the College of Larn says that the Eye
 of Larn is protected by a Platinum Dragon, which wasn't the case in the original

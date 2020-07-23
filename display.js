@@ -51,7 +51,11 @@ function bltDocument() {
   var output = alternativeDisplay;
   if (!output) {
     output = ``;
-    for (var y = 0; y < 24; y++) {
+    // JXK: Changed from 24 to 29 to allow for longer log
+    //      This should probably be updated to a variable
+    //      so it only needs to be changed in one place
+    //for (var y = 0; y < 24; y++) {
+    for (var y = 0; y < 29; y++) {
       for (var x = 0; x < 80; x++) {
         output += display[x][y] != null ? display[x][y] : ' ';
       } // inner for
@@ -291,9 +295,10 @@ function printStats() {
 function bottomline() {
   cursor(1, 18);
   lprcat(`${player.getStatString()}\n`);
-
+ 
   for (var logindex = LOG_SAVE_SIZE - LOG_SIZE; logindex < LOG.length; logindex++) {
     // less pretty code but more efficient for amiga mode, especially in firefox
+    //lprcat(`index: ${logindex}, length: ${LOG.length}`);
     lprcat(`${LOG[logindex]}`);
     cltoeoln();
     lprcat(`\n`);
@@ -309,7 +314,12 @@ function botside() {
   botsideline(player.SPIRITPRO, `Spirit Pro`, line++, changedSpiritPro);
   botsideline(player.CHARMCOUNT, `Charm`, line++, changedCharmCount);
   botsideline(player.TIMESTOP, `Time Stop`, line++, changedTimeStop);
-  botsideline(player.HOLDMONST, `Hold Monst`, line++, changedHoldMonst);
+  var altStopLabel = player.STOPMONST ? `Stop Monst ` : `Hold Monst`;
+  botsideline(player.HOLDMONST, altStopLabel, line++, changedHoldMonst);
+  // JXK: Changed to both be on the same line to keep 
+  //      everything in a single list
+  //botsideline(player.HOLDMONST, `Hold Monst`, line++, changedHoldMonst);
+  //botsideline(player.STOPMONST, `Stop Monst`, line, changedStopMonst);
   botsideline(player.GIANTSTR, `Giant Str`, line++, changedGiantStr);
   botsideline(player.FIRERESISTANCE, `Fire Resit`, line++, changedFireResistance);
   botsideline(player.DEXCOUNT, `Dexterity`, line++, changedDexCount);
@@ -498,8 +508,11 @@ function moveplayer(dir) {
 
   /* prevent the player from moving onto a wall, or a closed door when
      in command mode, unless the character has Walk-Through-Walls.
+    
+     JXK: Extra change for forest so WTW does not work
    */
-  if ((item.matches(OCLOSEDDOOR) || item.matches(OWALL)) && player.WTW == 0) {
+  //if ((item.matches(OCLOSEDDOOR) || item.matches(OWALL)) && (player.WTW == 0 || level > VBOTTOM)) {
+  if ((item.matches(OCLOSEDDOOR) || item.matches(OWALL)) && ((player.WTW == 0 && player.INVUN == 0) || ((level > VBOTTOM) && (player.INVUN == 0)))) {
     nomove = 1;
     return (0);
   }
@@ -507,6 +520,12 @@ function moveplayer(dir) {
   if (item.matches(OHOMEENTRANCE)) {
     newcavelevel(0);
     moveNear(OENTRANCE, false);
+    return 0;
+  }
+
+  if (item.matches(OFORESTENTRANCE)) {
+    newcavelevel(0);
+    moveNear(OFOREST, false);
     return 0;
   }
 
@@ -713,10 +732,10 @@ function deleteLog() {
 
 /**
  * Uses canvas.measureText to compute and return the width of the given text of given font in pixels.
- * 
+ *
  * @param {String} text The text to be rendered.
  * @param {String} font The css font descriptor that text is to be rendered with (e.g. "bold 14px verdana").
- * 
+ *
  * @see https://stackoverflow.com/questions/118241/calculate-text-width-with-javascript/21015393#21015393
  */
 function getTextWidth(text, font) {
@@ -760,7 +779,7 @@ function onMouseClick(event) {
       // let offx = event.target.offsetLeft;
       // let offy = event.target.offsetTop;
       console.log(offx, offy);
-      
+
       let clickX = event.clientX - offx;
       let clickY = event.clientY - offy;
       // console.log(`clickX`, clickX, `clickY`, clickY);

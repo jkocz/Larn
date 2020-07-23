@@ -18,12 +18,14 @@ function open_something(direction) {
 
   if (!item) {
     updateLog(`  There is nothing to open!`);
+    nomove = 1;
     return 1;
   }
 
   if (item.matches(OOPENDOOR)) {
     updateLog(`  The door is already open!`);
     beep();
+    nomove = 1;
     return 1;
   } else if (item.matches(OCHEST)) {
     act_open_chest(x, y);
@@ -34,6 +36,7 @@ function open_something(direction) {
   } else {
     updateLog(`  You can't open that!`);
     beep();
+    nomove = 1;
     return 1;
   }
 
@@ -161,6 +164,7 @@ function close_something(direction) {
 
   if (!item) {
     updateLog(`  There is nothing to close!`);
+    nomove = 1;
     return 1;
   }
 
@@ -169,10 +173,12 @@ function close_something(direction) {
   */
   if (item.matches(OCLOSEDDOOR)) {
     updateLog(`  The door is already closed!`);
+    nomove = 1;
     beep();
   } else if (item.matches(OOPENDOOR)) {
     if (monsterAt(x, y)) {
       updateLog(`  There's a monster in the way!`);
+      nomove = 1;
       return;
     }
     setItem(x, y, createObject(OCLOSEDDOOR, 0));
@@ -184,6 +190,7 @@ function close_something(direction) {
 
   } else {
     updateLog(`  You can't close that!`);
+    nomove = 1;
     beep();
   }
   return 1;
@@ -288,8 +295,8 @@ function wish(key) {
 
   var spellIndex = learnSpell(newSpellCode);
   newSpellCode = null;
-
-  if (spellIndex >= 0) {
+  
+  if (spellIndex >= 0 && spellIndex <= 38) {
     updateLog(`Spell '<b>${spelcode[spellIndex]}</b>': ${spelname[spellIndex]}`);
     updateLog(`  ${speldescript[spellIndex]}${period}`);
   } else {

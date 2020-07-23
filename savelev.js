@@ -14,7 +14,7 @@ function saveGame(isCheckPoint) {
   try {
     var state = new GameState();
 
-    /* 
+    /*
       v304 -- i've decided to remove the automatic reloading checkpoint feature
       for accidentally closed windows because it's too easy to cheat.
       if a game is lost it still can be restored with the 'checkpoint command'
@@ -23,9 +23,9 @@ function saveGame(isCheckPoint) {
       error = localStorageSetObject(saveName, state);
     }
 
-    /* 
-      save checkpointbackup, or an emergency backup which can 
-      be restored via new wizard passwords 
+    /*
+      save checkpointbackup, or an emergency backup which can
+      be restored via new wizard passwords
     */
     localStorageSetObject(saveName + 'backup', state);
   } catch (error) {
@@ -63,7 +63,7 @@ function loadSavedGame(savedState, isCheckPoint) {
 
   loadState(savedState);
 
-  /* 
+  /*
     save game integrity check (mostly for development)
     1) stringify saved state
     2) stringify current state that was loaded from saved state
@@ -273,6 +273,8 @@ function loadPlayer(saved) {
   newPlayer.HASTESELF = saved.HASTESELF;
   newPlayer.AGGRAVATE = saved.AGGRAVATE;
   newPlayer.GLOBE = saved.GLOBE;
+  newPlayer.INVUN = saved.INVUN;
+  newPlayer.REBOUND = saved.REBOUND;
   newPlayer.TELEFLAG = saved.TELEFLAG;
   newPlayer.SCAREMONST = saved.SCAREMONST;
   newPlayer.AWARENESS = saved.AWARENESS;

@@ -1,11 +1,6 @@
 'use strict';
 
 
-
-
-
-
-
 var Monster = function Monster(char, desc, level, armorclass, damage, attack, intelligence, gold, hitpoints, experience, arg, awake, moved) {
   this.arg = arg;
 
@@ -57,9 +52,13 @@ function createMonster(monst) {
   }
 
   if (arg == MIMIC) {
+
+    // JXK: Double init? Not necessary? (Causes forest guardians to
+    //      have double items.
+    //monster.initInventory();
     monster.mimicarg = monst.mimicarg ? monst.mimicarg : createMimicArg();
     monster.mimiccounter = monst.mimiccounter ? monst.mimiccounter : 0;
-  } 
+  }
 
   return monster;
 }
@@ -131,7 +130,7 @@ Monster.prototype = {
         return `<font color='crimson'>${demonchar[this.arg - DEMONLORD]}</font>`;
       } 
       else {
-        if (show_color && monsterlist[monster].color) {
+        if (show_color && monsterlist[monster].color && monster_color) {
           return `<font color='${monsterlist[monster].color}'>${monsterlist[monster].char}</font>`;
         }
         else {
@@ -143,6 +142,10 @@ Monster.prototype = {
 
   isDemon: function () {
     return this.arg >= DEMONLORD;
+  },
+
+  isDemon: function () {
+    return (this.arg >= DEMONLORD && this.arg <= LUCIFER);
   },
 
   initInventory: function () {
@@ -171,6 +174,30 @@ Monster.prototype = {
       case LEPRECHAUN:
         if (rnd(101) >= 75) this.pickup(createGem());
         if (rnd(5) == 1) this.addInventory();
+        return;
+      case EARTHGUARDIAN:
+        this.pickup(createObject(OBOOK,41));
+        return;
+      case AIRGUARDIAN:
+        this.pickup(createObject(OBOOK,42));
+        return;
+      case FIREGUARDIAN:
+        this.pickup(createObject(OBOOK,43));
+        return;
+      case WATERGUARDIAN:
+        this.pickup(createObject(OBOOK,44));
+        return;
+      case TIMEGUARDIAN:
+        this.pickup(createObject(OBOOK,45));
+        return;
+      case ETHEREALGUARDIAN:
+        this.pickup(createObject(OBOOK,46));
+        return;
+      case APPRENTICE:
+        this.pickup(createObject(OBOOK,47));
+        return;
+      case MASTER:
+        this.pickup(createObject(OMARK));
         return;
     }
   },
@@ -258,6 +285,14 @@ Monster.prototype = {
       case DEMONLORD + 6:
       case DEMONPRINCE:
       case LUCIFER:
+      case EARTHGUARDIAN:
+      case AIRGUARDIAN:
+      case FIREGUARDIAN:
+      case WATERGUARDIAN:
+      case TIMEGUARDIAN:
+      case ETHEREALGUARDIAN:
+      case APPRENTICE:
+      case MASTER:
         return true;
       default:
         return false;
@@ -305,8 +340,14 @@ Monster.prototype = {
  */
 function randmonst() {
   if (player.TIMESTOP) return; /*  don't make monsters if time is stopped  */
+  if (FOREST && level > FBOTTOM) return; /* don't make monsters in endgame */
   if (--rmst <= 0) {
-    rmst = 120 - (level << 2);
+    if (FOREST && level > VBOTTOM) {
+      rmst = 120 - (VBOTTOM << 2)
+    }
+    else {
+      rmst = 120 - (level << 2);
+    }
     fillmonst(makemonst(level));
   }
 }
@@ -781,9 +822,50 @@ function hitplayer(x, y) {
     return;
   }
 
+  if ((level > VBOTTOM) && (monster.arg < DEMONLORD)) {
+    // monsters in the forest are tough! 
+    dam = Math.floor(dam * 3);
+  }
+
   if (((dam + bias) > player.AC) || (rnd(((player.AC > 0) ? player.AC : 1)) == 1)) {
-    updateLog(`  The ${monster} hit you${period}`);
+    if (!FOREST) {
+      updateLog(`  The ${monster} hit you${period}`);
+    }
+    else {
+      updateLog(`  The ${monster} hit you for ${dam} damage${period}`);
+    }
     playerHit = true;
+
+    /* if rebound is active */
+    if (player.REBOUND > 0) {
+      var reducedPercent = 0;
+      var monsterDamage = dam;
+      var reboundMod = 0.5 - rndDec();
+      if (reboundMod < 0) {
+          reboundMod = 0;
+      }
+      dam *= reboundMod;
+      reducedPercent = (1 - reboundMod) * 100;
+      updateLog(`Rebound reduces the damage you take by ${reducedPercent} percent`); 
+
+      monsterDamage = monsterDamage - dam;
+      monster.hitpoints -= monsterDamage;
+      updateLog(`The ${monster} was hit by the reflected attack`);
+      debug(`hitm(): ${monster.toString()} ${monster.hitpoints} / ${monsterlist[monster.arg].hitpoints}`);
+      if (monster.hitpoints <= 0) {
+        player.MONSTKILLED++;
+        updateLog(`  The ${monster} died!`);
+        if ((level > VBOTTOM) && (monster.arg < DEMONLORD)) {
+           //JXK: Raise for < DEMONLORD only?
+           player.raiseexperience((monster.experience)*3);
+        }
+        else {
+           player.raiseexperience(monster.experience);
+        } 
+        monster.dropInventory(x, y);
+        killMonster(x, y);
+      }
+    }
     if ((dam -= player.AC) < 0) dam = 0;
     if (dam > 0) {
       player.losehp(dam);
@@ -815,6 +897,15 @@ function hitmonster(x, y) {
     return;
   }
 
+  if (FOREST && monster.matches(POLINNEAUS)) {
+    if (!player.WIELD && player.INVUN) {
+      killMonster(x, y);
+      player.raiseexperience(monster.experience);
+      ocomplete();
+      return;
+    } 
+  }
+ 
   var blind = ifblind(x, y);
   var damage = 0;
   let hitMonster = false;
@@ -830,12 +921,23 @@ function hitmonster(x, y) {
   extra modifier is excessive
   */
   var difficultyModifier = 0 /* getDifficulty() */ ;
+  var drange = 0;
 
   if ((rnd(20) < hitSkill - difficultyModifier) || (rnd(71) < 5)) /* need at least random chance to hit */ {
     updateLog(`You hit the ${blind ? `monster` : monster}${period}`);
     hitMonster = true;
     damage = fullhit(1);
-    if (damage < 9999) damage = rnd(damage) + 1;
+
+    // JXK: This is so the lance values aren't reduced. 
+    //      Modified for forest to be an interval 10% of damage, rather than 
+    //      a random number from 1 - damage.
+    if (FOREST) {
+      drange = 0.1*damage;
+      if (damage < 9999) damage = rInterval(damage-drange, damage+drange);    
+    }
+    else {
+      if (damage < 9999) damage = rnd(damage) + 1;
+    } 
   } else {
     updateLog(`You missed the ${blind ? `monster` : monster}${period}`);
     hitMonster = false;
@@ -845,7 +947,7 @@ function hitmonster(x, y) {
     if (monster.matches(RUSTMONSTER) || monster.matches(DISENCHANTRESS) || monster.matches(CUBE)) {
       if (weapon && weapon.isWeapon()) {
         if (weapon.arg > -10) {
-          if (!weapon.matches(OSWORDofSLASHING)) /* 12.5.0 -- impervious to rust */ {
+          if (!weapon.matches(OSWORDofSLASHING) && !weapon.matches(OFLAWLESS)) /* 12.4.5 -- impervious to rust */ {
             updateLog(`  Your weapon is dulled by the ${monster}`);
             beep();
             weapon.arg--;
@@ -884,6 +986,7 @@ function hitmonster(x, y) {
 
   }
 
+  // JXK: Make elseif?
   if (!ULARN && monster.matches(VAMPIRE)) {
     if (monster.hitpoints > 0 && monster.hitpoints < 25) {
       player.level.monsters[x][y] = createMonster(BAT);
@@ -900,6 +1003,13 @@ function hitmonster(x, y) {
 
   if (ULARN && monster.matches(LEMMING)) {
     if (rnd(100) <= 40) createmonster(LEMMING);
+  }
+ 
+  if (FOREST && monster.matches(POLINNEAUS)) {
+    if (monster.hitpoints <= 0) {
+      createmonster(POLINNEAUS);
+      createmonster(POLINNEAUS);
+    }
   }
 }
 
@@ -925,6 +1035,7 @@ function hitm(x, y, damage) {
   lasthy = y;
   monster.awake = true; /* make sure hitting monst breaks stealth condition */
   player.updateHoldMonst(-player.HOLDMONST); /* hit a monster breaks hold monster spell  */
+  // JXK: STOPMONST Note: hitting a stopped monster (mst) does NOT break the monster out
 
   /* if a dragon and orb of dragon slaying */
   if (isCarrying(OORBOFDRAGON)) {
@@ -944,13 +1055,25 @@ function hitm(x, y, damage) {
   if (monster.hitpoints > monsterlist[monster.arg].hitpoints)
     monster.hitpoints = monsterlist[monster.arg].hitpoints;
 
+  if ((level > VBOTTOM) && (monster.arg < DEMONLORD)) {
+    // monsters in the forest are tough! 
+    damage = Math.floor(damage / 3);
+  }
+
   var hpoints = monster.hitpoints;
   monster.hitpoints -= damage;
+  //updateLog(`Damage: ${damage}, hitm(): ${monster.toString()} ${monster.hitpoints} / ${monsterlist[monster.arg].hitpoints}`);
   debug(`hitm(): ${monster.toString()} ${monster.hitpoints} / ${monsterlist[monster.arg].hitpoints}`);
   if (monster.hitpoints <= 0) {
     player.MONSTKILLED++;
     updateLog(`  The ${monster} died!`);
-    player.raiseexperience(monster.experience);
+    // monsters in the forest are tough... but they also give more experience
+    if ((level > VBOTTOM) && (monster.arg < DEMONLORD)) {
+      player.raiseexperience((monster.experience)*3);
+    }
+    else {
+      player.raiseexperience(monster.experience);
+    } 
     monster.dropInventory(x, y);
     killMonster(x, y);
 
@@ -1015,7 +1138,7 @@ function spattack(monster, attack, xx, yy) {
     }
   }
 
-  /* 12.5.0 - seems like this is missing from the original. updated to no special attack 
+  /* 12.5.0 - seems like this is missing from the original. updated to no special attack
      for naga with spirit protection, but leave at 50% if scarab of negate spirit (done in hitplayer())
   */
   if (ULARN && monster.matches(SPIRITNAGA)) {
@@ -1099,15 +1222,18 @@ function spattack(monster, attack, xx, yy) {
       // fall through
 
     case 3: // dragon
-      if (damage == null) {
+      if (damage == null) { 
         damage = rnd(20) + 25 - armorclass;
       }
-      if (player.FIRERESISTANCE) { 
+      if (player.FIRERESISTANCE) {
         updateLog(`The ${monster}'s flame doesn't faze you!`);
-      } 
-      else {
+      }
+      else { 
         updateLog(`The ${monster} breathes fire at you!`);
         player.losehp(damage);
+        if (FOREST) { 
+          updateLog(`You lost ${damage} hp`);
+        }
       }
       return 0;
 
@@ -1122,6 +1248,9 @@ function spattack(monster, attack, xx, yy) {
       updateLog(`The ${monster} blasts you with its cold breath${period}`);
       damage = rnd(15) + 18 - armorclass;
       player.losehp(damage);
+      if (FOREST) { 
+        updateLog(`You lost ${damage} hp`);
+      }
       return 0;
 
     case 6:
@@ -1145,6 +1274,9 @@ function spattack(monster, attack, xx, yy) {
       updateLog(`The ${monster} got you with a gusher!`);
       damage = rnd(15) + 25 - armorclass;
       player.losehp(damage);
+      if (FOREST) { 
+        updateLog(`You lost ${damage} hp`);
+      }
       return 0;
 
     case 8:
@@ -1229,6 +1361,9 @@ function spattack(monster, attack, xx, yy) {
       if (damage == null) damage = rnd(15) + 10 - armorclass;
       updateLog(`The ${monster} bit you!`);
       player.losehp(damage);
+      if (FOREST) { 
+        updateLog(`You lost ${damage} hp`);
+      }
       return 0;
 
   }

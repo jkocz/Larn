@@ -1,9 +1,10 @@
 'use strict';
 
-const VERSION = '12.5.0';
-const BUILD = '461';
+const VERSION = '13.0.0 (beta)';
+const BUILD = '012';
 
 var ULARN = false; // are we playing LARN or ULARN?
+var FOREST = false; // are we playing the FOREST?
 
 var DEBUG_STATS = false;
 var DEBUG_OUTPUT = false;
@@ -26,12 +27,15 @@ function play() {
   AWS.config.accessKeyId = "AWS_CONFIG_ACCESSKEYID";
   AWS.config.secretAccessKey = "AWS_CONFIG_SECRETACCESSKEY";
 
+  // JXK: removed for offline 
+  //      Offline flag for an if/else would be preferred.
+
   // real credentials are set here, and not committed
-  try {
-    initLambdaCredentials();
-  } catch (error) {
-    console.error(`not loading aws credentials: ${error}`);
-  }
+  //try {
+  //  initLambdaCredentials();
+  //} catch (error) {
+  //  console.error(`not loading aws credentials: ${error}`);
+  //}
 
   lambda = new AWS.Lambda({
     region: 'us-east-1',
@@ -81,6 +85,7 @@ function play() {
   no_intro = PARAMS.nointro ? PARAMS.nointro == `true` : false;
   mobile = PARAMS.mobile ? PARAMS.mobile == `true` : false;
   ULARN = PARAMS.ularn ? PARAMS.ularn == `true` : false;
+  FOREST = PARAMS.forest ? PARAMS.forest == `true` : false;
 
   setGameConfig();
 
@@ -123,7 +128,8 @@ function initKeyBindings() {
   Mousetrap.bind('@', mousetrap); // auto-pickup
   Mousetrap.bind('#', mousetrap); // inventory 
   Mousetrap.bind('{', mousetrap); // retro fonts
-  Mousetrap.bind('}', mousetrap); // classic/hack/amiga 
+  Mousetrap.bind('}', mousetrap); // classic/hack/amiga
+  Mousetrap.bind('|', mousetrap); // monster color
   Mousetrap.bind('?', mousetrap); // help
   Mousetrap.bind('_', mousetrap); // password
   Mousetrap.bind('-', mousetrap); // disarm 
@@ -176,7 +182,6 @@ function enableDebug() {
   Mousetrap.bind('alt+0', eventToggleDebugNoMonsters);
   Mousetrap.bind('alt+-', eventToggleDebugProximity);
 }
-
 
 
 function eventToggleDebugStats() {

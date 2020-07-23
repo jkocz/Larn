@@ -54,6 +54,7 @@ function regen() {
   if (player.SPIRITPRO)      player.updateSpiritPro(-1);
   if (player.CHARMCOUNT)     player.updateCharmCount(-1);
   if (player.HOLDMONST)      player.updateHoldMonst(-1);
+  if (player.STOPMONST)      player.updateStopMonst(-1);
   if (player.FIRERESISTANCE) player.updateFireResistance(-1);
   if (player.SCAREMONST)     player.updateScareMonst(-1);
   if (player.HASTESELF)      player.updateHasteSelf(-1);
@@ -68,6 +69,7 @@ function regen() {
   if (player.PROTECTIONTIME) player.updateProtectionTime(-1);
 
   if (player.GLOBE)          if (--player.GLOBE <= 0)          player.setMoreDefenses(player.MOREDEFENSES - 10);
+  if (player.INVUN)          if (--player.INVUN <= 0)          player.setMoreDefenses(player.MOREDEFENSES - 999);
   if (player.BLINDCOUNT)     if (--player.BLINDCOUNT <= 0)     updateLog(`The blindness lifts${period}`);
   if (player.CONFUSE)        if (--player.CONFUSE <= 0)        updateLog(`You regain your senses${period}`);
   if (player.HALFDAM)        if (--player.HALFDAM <= 0)        updateLog(`You now feel better${period}`);

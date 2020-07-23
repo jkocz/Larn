@@ -28,8 +28,8 @@ todo:
 
 - Navigator.cookieEnabled Read only
    Returns false if setting a cookie will be ignored and true otherwise.
-   if (!navigator.cookieEnabled) { 
-     // The browser does not support or is blocking cookies from being set. 
+   if (!navigator.cookieEnabled) {
+     // The browser does not support or is blocking cookies from being set.
    }
 - Navigator.onLine Read only
    Returns a Boolean indicating whether the browser is working online.
@@ -104,7 +104,7 @@ hardmode ideas:
 - altar donation aren't just 10%, min 50
 - stop time doesn't prevent falling in pits
 - demons don't respect stealth, hold is less effective
-- guardians are never asleep 
+- guardians are never asleep
 - reduce blessed ularn item sale prices
 
 
@@ -113,4 +113,3 @@ Jay@80.209.166.82 / 20200506 / Asdfgh01
 python -m SimpleHTTPServer 8000
 http://localhost:8000/larn_local.html
 file:///Users/jay/Dropbox/Desktop/LARN/JLarn/larn/larn_local.html?ularn=true
-
