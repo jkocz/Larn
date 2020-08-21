@@ -1068,8 +1068,6 @@ function readbook(book) {
   }
 
   if (FOREST) {
-    updateLog(`Forest level: ${level}, lev: ${lev}`);
-
     // book from Guardian is forced to be a specific spell
     if (lev > 40) {
       spellIndex = lev;
@@ -1082,7 +1080,6 @@ function readbook(book) {
       // and chests. 
       if (spellIndex < 39) {
         spRedo = rnd(100);
-        updateLog(`Forest redo: Spell index: ${spellIndex}, spRedo: ${spRedo}`);
         if (spRedo > 75) 
           spellIndex = 40;
         else if (spRedo > 50)
@@ -1091,7 +1088,6 @@ function readbook(book) {
     }
     else if (spellIndex > 38) {
       // forest spell outside the forest
-      updateLog(`Forest spell early redo: splev: ${splev[lev]}, spellIndex: ${spellIndex} `);
       readbook(book);
       return;
     }

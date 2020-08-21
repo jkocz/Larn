@@ -1232,7 +1232,7 @@ function spattack(monster, attack, xx, yy) {
         updateLog(`The ${monster} breathes fire at you!`);
         player.losehp(damage);
         if (FOREST) { 
-          updateLog(`You lost ${damage} hp`);
+          updateLog(`You were hit for ${damage} damage${period}`);
         }
       }
       return 0;
@@ -1249,7 +1249,7 @@ function spattack(monster, attack, xx, yy) {
       damage = rnd(15) + 18 - armorclass;
       player.losehp(damage);
       if (FOREST) { 
-        updateLog(`You lost ${damage} hp`);
+        updateLog(`You were hit for ${damage} damage${period}`);
       }
       return 0;
 
@@ -1275,7 +1275,7 @@ function spattack(monster, attack, xx, yy) {
       damage = rnd(15) + 25 - armorclass;
       player.losehp(damage);
       if (FOREST) { 
-        updateLog(`You lost ${damage} hp`);
+        updateLog(`You were hit for ${damage} damage${period}`);
       }
       return 0;
 
@@ -1362,7 +1362,7 @@ function spattack(monster, attack, xx, yy) {
       updateLog(`The ${monster} bit you!`);
       player.losehp(damage);
       if (FOREST) { 
-        updateLog(`You lost ${damage} hp`);
+        updateLog(`You were hit for ${damage} damage${period}`);
       }
       return 0;
 
