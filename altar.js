@@ -81,7 +81,31 @@ function act_donation_pray(offering) {
 
     if (ULARN) {
       // less than 10% of post offering gold 
-      if (offering < (player.GOLD / 10) && rnd(60) < 30) {
+      if (FOREST && offering >= 10000) {
+            enchantarmor(ENCH_ALTAR);
+            enchantarmor(ENCH_ALTAR);
+            enchantarmor(ENCH_ALTAR);
+            enchantarmor(ENCH_ALTAR);
+            enchantarmor(ENCH_ALTAR);
+            enchantarmor(ENCH_ALTAR);
+            enchantarmor(ENCH_ALTAR);
+            enchantarmor(ENCH_ALTAR);
+            enchantarmor(ENCH_ALTAR);
+            enchantarmor(ENCH_ALTAR);
+            enchweapon(ENCH_ALTAR);
+            enchweapon(ENCH_ALTAR);
+            enchweapon(ENCH_ALTAR);
+            enchweapon(ENCH_ALTAR);
+            enchweapon(ENCH_ALTAR);
+            enchweapon(ENCH_ALTAR);
+            enchweapon(ENCH_ALTAR);
+            enchweapon(ENCH_ALTAR);
+            enchweapon(ENCH_ALTAR);
+            enchweapon(ENCH_ALTAR);
+            updateLog(`Sometimes the Gods can be bought`);
+            return 1;
+      }
+      else if (offering < (player.GOLD / 10) && rnd(60) < 30) {
         updateLog(`Cheapskate! The Gods are insulted by such a tiny offering!`);
         forget(); /*  remember to destroy the altar   */
         // ularn does NOT appreciate cheapskates
@@ -102,41 +126,11 @@ function act_donation_pray(offering) {
           updateLog(`Thank you${period}`);
           return 1;
         } else if (p < 6) {
-          if (FOREST && offering >= 10000) {
-            updateLog(`Sometimes the Gods can be bought`);
             enchantarmor(ENCH_ALTAR);
             enchantarmor(ENCH_ALTAR);
-            enchantarmor(ENCH_ALTAR);
-            enchantarmor(ENCH_ALTAR);
-            enchantarmor(ENCH_ALTAR);
-            enchantarmor(ENCH_ALTAR);
-            enchantarmor(ENCH_ALTAR);
-            enchantarmor(ENCH_ALTAR);
-            enchantarmor(ENCH_ALTAR);
-            enchantarmor(ENCH_ALTAR);
-          }
-          else {
-            enchantarmor(ENCH_ALTAR);
-            enchantarmor(ENCH_ALTAR);
-          }
         } else if (p < 8) {
-          if (FOREST && offering >= 10000) {
-            updateLog(`Sometimes the Gods can be bought`);
             enchweapon(ENCH_ALTAR);
             enchweapon(ENCH_ALTAR);
-            enchweapon(ENCH_ALTAR);
-            enchweapon(ENCH_ALTAR);
-            enchweapon(ENCH_ALTAR);
-            enchweapon(ENCH_ALTAR);
-            enchweapon(ENCH_ALTAR);
-            enchweapon(ENCH_ALTAR);
-            enchweapon(ENCH_ALTAR);
-            enchweapon(ENCH_ALTAR);
-          }
-          else {
-            enchweapon(ENCH_ALTAR);
-            enchweapon(ENCH_ALTAR);
-          }
         } else {
           act_prayer_heard();
         }
