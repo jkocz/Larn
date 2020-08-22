@@ -130,6 +130,7 @@ function dndstore() {
 
   initpricelist();
 
+
   /*
    * Easter Egg #2 -- recreate the DOS Larn 12.0 experience for Rob
    */
@@ -1265,4 +1266,12 @@ function initpricelist() {
       dnd_item[i] = new DNDItem(tmp[0], tmp[1], tmp[2], tmp[3]);
     }
   }
+}
+
+// Do we want to be able to buy everything
+// before going into the forest?
+function incrementpricelist() {
+  for (var j = 0; j < STORE_INVENTORY.length; j++) {
+    dnd_item[j].qty++;
+  } 
 }

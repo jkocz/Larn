@@ -516,6 +516,9 @@ function makeobject(depth) {
   if (ULARN) {
     // only one of these per level
     var created = false;
+    // JXK: Moving OLSAYER to top of the list so that we don't not find it later due to already having
+    //      a special item created on the level.
+    created |= createArtifact(OSLAYER,          player.SLAY,         !created && depth >= 10 && rnd(100) > (85 - (depth - 10)));
     created |= createArtifact(OBRASSLAMP,       player.LAMP,         !created && rnd(120) < 8);
     created |= createArtifact(OWWAND,           player.WAND,         !created && rnd(120) < 8);
     created |= createArtifact(OORBOFDRAGON,     player.SLAYING,      !created && rnd(120) < 8);
@@ -528,7 +531,6 @@ function makeobject(depth) {
     created |= createArtifact(OHANDofFEAR,      player.HAND,         !created && rnd(120) < 8);
     created |= createArtifact(OORB,             player.ORB,          !created && rnd(120) < 8);
     created |= createArtifact(OELVENCHAIN,      player.ELVEN,        !created && rnd(120) < 8);
-    created |= createArtifact(OSLAYER,          player.SLAY,         !created && depth >= 10 && rnd(100) > (85 - (depth - 10)));
     created |= createArtifact(OVORPAL,          player.VORPAL,       !created && rnd(120) < 8);
     created |= createArtifact(OPSTAFF,          player.STAFF,        !created && depth >= 8 && rnd(100) > (85 - (depth - 10)));
     created |= createArtifact(OLIFEPRESERVER,   player.PRESERVER,    !created && depth >= 5 && rnd(120) < 8); // different than Ularn 1.6
