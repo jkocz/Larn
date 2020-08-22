@@ -57,11 +57,11 @@ function play() {
     /* warn the player that closing their window will kill the game.
      this is a bit annoying, and I'm tempted to get rid of it now
      that there are checkpoints in place */
-  if (location.hostname === 'localhost' || location.hostname === '') {
+  /*if (location.hostname === 'localhost' || location.hostname === '') {
     enableDebug();
   } else {
     window.onbeforeunload = confirmExit;
-  }
+  }*/
 
   // TODO: setup for not repainting in text mode
   // TODO: need to update io.js:os_put_font(), display.js:blt(), larn.js:play()
