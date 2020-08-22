@@ -140,6 +140,10 @@ function dndstore() {
     clear(); // this is the correct behaviour
   }
 
+  //if (player.hasPickedUpPotion && !DHEALTHY) {
+  //  storemessage(`Sorry friend, the shop is closed. It's time to go home now.`, 1500);
+  //  //nap(2000);
+  //  return 0;
   lprcat(`Welcome to the ${GAMENAME} Thrift Shoppe.  We stock many items explorers find useful\n`);
   lprcat(`in their adventures.  Feel free to browse to your hearts content.\n`);
   lprcat(`Also be advised, if you break 'em, you pay for 'em.`);
@@ -612,7 +616,7 @@ function parse_tradepost(key) {
   prevent players from selling things once they have found the potion
   to prevent them from racking up the scoreboard
   */
-  if (player.hasPickedUpPotion) {
+  if (player.hasPickedUpPotion && !DHEALTHY) {
     storemessage(`Sorry friend, the shop is closed. It's time to go home now.`, 1500);
     //nap(2000);
     return 0;

@@ -394,7 +394,7 @@ const OVORPAL = new DungeonObject(90, `)`, `)`, `)`, `darkorange`, BOLD, `the Vo
 const OSLAYER = new DungeonObject(91, `)`, `)`, `)`, `crimson`, BOLD, `Slayer`, CARRY);
 // FOREST
 const ODESTROYER = new DungeonObject(125, `)`, `)`, `)`, `gold`, BOLD, `The Destroyer`, CARRY);
-const OINFINITE = new DungeonObject(126, `)`, `)`, `)`, `darkgray`, BOLD, `Infinite Edge `, CARRY);
+const OINFINITE = new DungeonObject(126, `)`, `)`, `)`, `darkgray`, BOLD, `Infinite Edge`, CARRY);
 const OFLAWLESS = new DungeonObject(127, `)`, `)`, `)`, `black`, BOLD, `Flawless`, CARRY);
 
 // armour
