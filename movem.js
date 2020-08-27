@@ -739,7 +739,10 @@ function valid_monst_move(x, y, monster) {
   monster_special = (monster.matches(VAMPIRE)) && (item.matches(OMIRROR));
 
   // scary! -- jrp
-  if (ULARN) {
+  // JXK: Reverting this to not be able to walk through walls
+  //      in Forest. They stop guarding the item, and the player
+  //      cannot hit them while in a wall (potential bug?).
+  if (ULARN && !FOREST) {
     if (monster.matches(DEMONPRINCE) || monster.matches(LUCIFER)) {
       /* walls and closed doors are no hindrance to a demon prince or above */
       blocked = false;

@@ -141,10 +141,6 @@ Monster.prototype = {
   },
 
   isDemon: function () {
-    return this.arg >= DEMONLORD;
-  },
-
-  isDemon: function () {
     return (this.arg >= DEMONLORD && this.arg <= LUCIFER);
   },
 
