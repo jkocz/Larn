@@ -59,7 +59,10 @@ the user is actually standing at a set of up stairs.
 function act_up_stairs() {
   let deadend = level <= 1;               // no up on H, D1
   deadend |= level == MAXLEVEL;           // no up on V1
-  if (ULARN) deadend |= level == DBOTTOM; // no up on D15
+  // JXK: remove deadend for Forest. - Teleportation without 
+  // wtw spell is just making this a random event for 
+  // success even with low trapped in solid rock percentage
+  if (ULARN && !FOREST) deadend |= level == DBOTTOM; // no up on D15
   if (!deadend) {
     newcavelevel(level - 1);
   } else {
