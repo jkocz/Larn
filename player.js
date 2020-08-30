@@ -75,6 +75,7 @@ var Player = function Player() {
   this.GLOBE = 0;
   this.SCAREMONST = 0;
   this.HOLDMONST = 0;
+  this.STOPMONST = 0;
   this.TIMESTOP = 0;
   this.WTW = 0;
   this.ALTPRO = 0;
@@ -502,6 +503,19 @@ var Player = function Player() {
     }
     return this.HOLDMONST;
   };
+
+  this.updateStopMonst = function(x) {
+    var prev = this.STOPMONST;
+    this.STOPMONST = Math.max(0, this.STOPMONST + x);
+    changedStopMonst = getUpdateTime(prev, x, this.STOPMONST, changedStopMonst);
+
+    if (x > 0) {
+      lasthx = 0;
+      lasthy = 0;
+    }
+    return this.STOPMONST;
+  };
+
   this.updateGiantStr = function (x) {
     var prev = this.GIANTSTR;
     this.GIANTSTR = Math.max(0, this.GIANTSTR + x);
