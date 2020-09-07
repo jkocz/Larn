@@ -233,7 +233,26 @@ function enchantarmor(enchant_source) {
     armor.arg++;
     var armorMessage = (armor === player.SHIELD) ? `shield` : `armor`;
 
-    if (ULARN) {
+    // bring armor into same as weapons for improvments
+    // past 10
+    if (FOREST) {
+      // check for destruction at >= +10.
+      if (armor.arg >= 10 && rnd(10) <= 9) {
+        if (enchant_source == ENCH_ALTAR) {
+          armor.arg--;
+          updateLog(`Your ${armor.toString(true)} glows briefly${period}`);
+          return false;
+        } else {
+          destroyInventory(armor);
+          updateLog(`  Your ${armorMessage} vibrates violently and crumbles into dust!`);
+          return false;
+        }
+      } else {
+        updateLog(`  Your ${armorMessage} glows for a moment${period}`);
+        return true;
+      }
+    }
+    else if (ULARN) {
       // check for destruction at >= +10.
       if (armor.arg >= 10) {
         if (enchant_source == ENCH_ALTAR) {
