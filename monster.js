@@ -51,11 +51,7 @@ function createMonster(monst) {
     monster.initInventory();
   }
 
-  if (arg == MIMIC) {
-
-    // JXK: Double init? Not necessary? (Causes forest guardians to
-    //      have double items.
-    //monster.initInventory();
+  if (ULARN && arg == MIMIC) {
     monster.mimicarg = monst.mimicarg ? monst.mimicarg : createMimicArg();
     monster.mimiccounter = monst.mimiccounter ? monst.mimiccounter : 0;
   }
@@ -104,7 +100,7 @@ Monster.prototype = {
   getChar: function () {
     let monster = this.arg;
 
-    if (this.arg == MIMIC && this.mimicarg) {
+    if (ULARN && this.arg == MIMIC && this.mimicarg) {
       monster = this.mimicarg;
     }
 
@@ -1375,6 +1371,7 @@ function teleportMonster(x, y) {
   killMonster(x, y);
 
   let newMonster = fillmonst(oldMonster.arg);
+  if (!newMonster) return; // fillmonst failed, so bail out
 
   /* restore inventory & hp */
   newMonster.inventory = oldMonster.inventory;

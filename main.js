@@ -262,6 +262,7 @@ function initRB() {
   try {
     Rollbar.configure({
       payload: {
+        code_version: `${BUILD}`,
         environment: `${BUILD}`
       }
     });
