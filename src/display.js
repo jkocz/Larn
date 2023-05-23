@@ -41,7 +41,7 @@ function blt() {
     let divs = {};
     divs.LARN = document.getElementById(`LARN`).innerHTML;
     divs.STATS = document.getElementById(`STATS`).innerHTML;
-    recordFrame(divs, createLocalScore);
+    //recordFrame(divs, createLocalScore);
   }
 }
 
@@ -290,7 +290,7 @@ function setMode(amiga, retro, original) {
 
 }
 
-let styleUploaded = false;
+let styleUploaded = true; // JK: Defaulting to true for offline use
 
 
 
@@ -316,7 +316,6 @@ function computeSpriteWidth() {
 
   return spriteWidth;
 }
-
 
 
 function printStats() {

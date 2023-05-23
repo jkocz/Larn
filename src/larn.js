@@ -29,8 +29,8 @@ async function play() {
   console.log(`${gameID}`);
 
   // this role only has access to invoke the lambda score function 
-  AWS.config.accessKeyId = "AWS_CONFIG_ACCESSKEYID";
-  AWS.config.secretAccessKey = "AWS_CONFIG_SECRETACCESSKEY";
+  //AWS.config.accessKeyId = "AWS_CONFIG_ACCESSKEYID";
+  //AWS.config.secretAccessKey = "AWS_CONFIG_SECRETACCESSKEY";
 
   // JXK: removed for offline 
   //      Offline flag for an if/else would be preferred.
@@ -42,10 +42,10 @@ async function play() {
   //  console.error(`not loading aws credentials: ${error}`);
   //}
 
-  lambda = new AWS.Lambda({
-    region: 'us-east-1',
-    apiVersion: '2015-03-31'
-  });
+  //lambda = new AWS.Lambda({
+  //  region: 'us-east-1',
+  //  apiVersion: '2015-03-31'
+  //});
 
   initRB();
 
@@ -173,7 +173,7 @@ function initKeyBindings() {
 
 function enableDebug() {
   debug_used = 1;
-  document.body.style.backgroundColor = "#002222";
+  //document.body.style.backgroundColor = "#002222";
   console.log(`DEBUG_MODE: ON`);
   Mousetrap.bind('alt+`', eventToggleDebugStats);
   Mousetrap.bind('alt+1', eventToggleDebugOutput);

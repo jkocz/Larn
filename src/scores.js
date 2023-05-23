@@ -200,7 +200,7 @@ const MAX_SCORES_PER_PAGE = 18;
 const MAX_SCORES_TO_READ = 18 * 4;
 const MIN_TIME_PLAYED = 50;
 const ENDPOINT = 'test'; // 'score';
-var ONLINE = true;
+var ONLINE = false;
 
 
 let A, R, O; // saved state for exiting scoreboard
@@ -225,12 +225,20 @@ function loadScores(newScore, showWinners, showLosers) {
 
 function dbQueryHighScores(newScore, showWinners, showLosers) {
 
-  if (!navigator.onLine) {
-    ONLINE = false;
+  // JK: forcing offline
+  if (ONLINE==false) {
     let msg = `Offline: showing local scoreboard`;
     showLocalScoreBoard(newScore, showWinners, showLosers, 0, msg);
     return;
   }
+
+
+  /*if (!navigator.onLine) {
+    ONLINE = false;
+    let msg = `Offline: showing local scoreboard`;
+    showLocalScoreBoard(newScore, showWinners, showLosers, 0, msg);
+    return;
+  }*/
 
   var params = {
     FunctionName: ENDPOINT,

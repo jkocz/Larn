@@ -237,7 +237,7 @@ function initFS() {
     var gameNum = localStorageGetObject('gameNum', 0) + 1;
     localStorageSetObject('gameNum', gameNum);
     if (gameNum <= 5 || getDifficulty() > 4) {
-      dofs = true;
+      //dofs = true; // JK: force dofs to stay false
       console.log('dofs: ' + gameNum + ' ' + dofs + ' ' + getDifficulty());
     }
 

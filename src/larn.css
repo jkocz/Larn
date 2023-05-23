@@ -74,6 +74,7 @@ body {
 }
 
 div {
+    background-color: #000000;
     background-position: center center;
     background-size: 100% 100%;
     background-repeat: no-repeat;
@@ -123,6 +124,7 @@ mark {
 table,
 th,
 td {
+    background-color: #000000; 
     vertical-align: top;
     padding-top: 0px;
 }
