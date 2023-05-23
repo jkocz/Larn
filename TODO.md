@@ -1,39 +1,42 @@
+NOW: UPDATE npm run build to only make dist, make a build prod, beta, alpha
+
+- final frames are botched: https://larn.org/larn/tv/?gameid=ai2n1hrgnq
+- "V" to view conducts
+- show 'play again' link after death
+- add play options to larntv list
 
 Ularn 12.5.0:
 - check all 1.6.3 code
 - check scorePUT
 - change retro font cookie
-- update savegame test endpoint eventually
-- retro font mode isn't properly monospaced in mac/safari
 
 Ularn 12.5.1
 - search for ULARN TODO
 - eye of larn appraisal in bank
-- widget of spine tingling
-- lantern radiates light out from hero for x spaces?
 
 Ularn balance ideas:
 - crumble altars faster? 1/20?
 - make +9 items worth less? cap out around 116k (v3 chest in Larn)?
 
 todo:
+* IDEA: use createElement for all rendering?
+* find a better way to get ip addresses
 * help wiki (items/scrolls/potions/features/monsters/etc)
-- warn if changing names because it's annoying on the scoreboard
+* new video to add: https://larn.org/beta/tv/?gameid=lysnwvbhx8 
+  - diff 0 win with illiterate/thirsty conducts
+- update savegame test endpoint eventually
+- retro font mode isn't properly monospaced in mac/safari
+- re-add volcano sneak?
 - click / farlook to identify object (hack and classic mode)
 - mobile support
 - max diff 101
+- if error writing savegame due to space issues, delete all backup cookies
 
-- Navigator.cookieEnabled Read only
-   Returns false if setting a cookie will be ignored and true otherwise.
-   if (!navigator.cookieEnabled) {
-     // The browser does not support or is blocking cookies from being set.
-   }
 - Navigator.onLine Read only
    Returns a Boolean indicating whether the browser is working online.
    window.addEventListener('offline', function(e) { console.log('offline'); });
    window.addEventListener('online', function(e) { console.log('online'); });
 - async/await for keyboard input?
-- update babel to support async/await for nap()
 - amiga mode: unseen walls should be flat
 - check chrome audit tab
 - "sorry, no mobile" message for larn.html
@@ -47,6 +50,7 @@ todo:
 - cheater beater:
   - re-implement cheater checker from larn source
   - add filtering for cheater high scores
+  - silently don't record cheat high scores
   - another cheater: meesa/DooDoo
   - serverside known cheaters list
   - check fs for games from localhost/file:
@@ -71,25 +75,39 @@ extras:
 - give notification given when haste, aggravate monsters subsides (no?)
 - beep support
 - speedrun mode
-- repeat function
+- repeat function, especially at altars
 - move command
+- ularn: widget of spine tingling
+- ularn: lantern radiates light out from hero for x spaces?
+- conducts
+  - can test post game
+    x thirsty: never drink a potion
+    x illiterate: never read a book/scroll/fortune cookie
+    x spellbound: never cast a spell
+    x pacifist: never kill a monster
+  - needs extra code
+    - pacifist: no wielded weapon
+    - one direction: never go down a set of stairs twice (or re-enter volcano/dungeon)
+    - unbanked/cheapskate/goldless: never enter bank, store, thrift shop, school, use gold (no praying)
+    - jewleryless: never wear a ring / amulet
+    - racer: if you see downward stairs, you must take them
+  - need starting option:
+    - nudist: never wear armour (rings are ok)
+    - paci(fists): never wield a weapon
+    - zen: blind from birth (remove curse, school, cbl won't fix)
+    - aggravating: permanent aggravate monsters (and remove curse won't fix)
 
 bugs:
 * last hit monster still chases from a distance if dumb
-* larn (not ularn) post win: start with no spells, diff is still 0, next game has spells
-* lots of monsters walking through walls (fixed?)
-  - was this due to smart ripple[] not being cleared?
 * fall down pit, area around player isn't exposed
    - only when player doesn't fall down on the first 'try'
 * long user names aren't truncated on the start screen
-- brief flash of some other font when starting game
 - fix interactions between haste self / haste monster / half-speed monsters (check 1.6.3 hastestep)
   * HAS + PER bug slow monsters (H,x,r,etc) move every moves, or totally paralyzed?
   - monster.isSlow, and different way to decide when to move
   - half speed monster should move at full speed with haste monster on
 - closing a door (from on top of the door) when a monster is in the spot you were
   just in drops you back on the monsters spot. the monster reappears when you move.
-- can't load game stats from local scoreboard (can't find game sdkjfhsdfkj)
 - arrow buttons on help screen are truncated in amiga mode
 - amiga: you owe <strike>1234</strike> in taxes
 - amiga: gap between maze and spells isn't cleared on loading saved game
@@ -98,9 +116,12 @@ bugs:
   - black tile when opening door when blind
   - when blind, a monster from an unknown tile will reveal the tile its standing on during attack
   - when blind, killing a monster shouldn't reveal gold dropped, or anything else?
-  - rothe/poltergeist/vampire are born awake -> should they move during stealth?
+- rothe/poltergeist/vampire are born awake -> should they move during stealth?
 - monster movement isn't shown after falling asleep
 - casting sph twice in the same direction will always kill the player
+- While Haste Self is active, hitting a monster with a projectile causes said monster to move once at normal speed
+- game over scoreboard can't load current game (but can load all others) 
+  - it's because most recent game probably isn't a high score and isn't recorded in local winners/losers cache
 
 hardmode ideas:
 - can only wield actual weapons
@@ -110,10 +131,6 @@ hardmode ideas:
 - demons don't respect stealth, hold is less effective
 - guardians are never asleep
 - reduce blessed ularn item sale prices
-
-
-Jay@80.209.166.82 / 20200506 / Asdfgh01
-
-python -m SimpleHTTPServer 8000
-http://localhost:8000/larn_local.html
-file:///Users/jay/Dropbox/Desktop/LARN/JLarn/larn/larn_local.html?ularn=true
+- get potion -> permanent aggravate monsters (be sure to disable remove curse)
+- if aggravate always get gnome king at throne
+- curses last longer
