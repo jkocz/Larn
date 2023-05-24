@@ -524,12 +524,16 @@ function localWriteHighScore(newScore) {
 function dbWriteHighScore(newScore) {
 
   console.log(`dbWriteHighScore: ${newScore.gameID}`);
-
-  if (!navigator.onLine) {
-    console.log(`dbWriteHighScore: offline`);
-    ONLINE = false;
-    return;
+ // JK: forcing offline
+  if (ONLINE==false) {
+   console.log('dbWriteHighScore: offline');
+   return;
   }
+  //if (!navigator.onLine) {
+  //  console.log(`dbWriteHighScore: offline`);
+  //  ONLINE = false;
+  //  return;
+  //}
 
   var params = {
     FunctionName: ENDPOINT,

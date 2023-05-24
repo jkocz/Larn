@@ -61,7 +61,7 @@ async function play() {
 
   /* warn the player that closing their window will kill the game */
   if (location.hostname === 'localhost' || location.hostname === '') {
-    enableDebug();
+    //enableDebug();
   } else {
      window.onbeforeunload = confirmExit;
   }
